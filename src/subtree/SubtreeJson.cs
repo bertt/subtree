@@ -2,11 +2,11 @@
 {
     public class SubtreeJson
     {
-        public Buffer[] buffers { get; set; }
-        public Bufferview[] bufferViews { get; set; }
-        public Tileavailability tileAvailability { get; set; }
-        public Contentavailability[] contentAvailability { get; set; }
-        public Childsubtreeavailability childSubtreeAvailability { get; set; }
+        public Buffer[] buffers { get; set; } = null!;
+        public Bufferview[] bufferViews { get; set; } = null!;
+        public Tileavailability tileAvailability { get; set; } = null!;
+        public Contentavailability[] contentAvailability { get; set; } = null!;
+        public Childsubtreeavailability childSubtreeAvailability { get; set; } = null!;
     }
 
 }

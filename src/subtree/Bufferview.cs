@@ -6,5 +6,4 @@
         public int byteOffset { get; set; }
         public int byteLength { get; set; }
     }
-
 }

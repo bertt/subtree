@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace subtree
 {
@@ -19,6 +17,23 @@ namespace subtree
                 SubtreeJson = subtreeJson,
                 SubtreeBinary = subTreeBinary
             };
+
+            var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(subtree.SubtreeJson);
+            if(subtreeJsonObject != null)
+            {
+                subtree.TileAvailability = ToBitstream(subtreeJsonObject.bufferViews[subtreeJsonObject.tileAvailability.bitstream], subtree.SubtreeBinary);
+
+                var contentBitstream = subtreeJsonObject.contentAvailability.First().bitstream;
+                if (contentBitstream!= null)
+                {
+                    subtree.ContentAvailability = ToBitstream(subtreeJsonObject.bufferViews[(int)contentBitstream], subtree.SubtreeBinary);
+                }
+                if (subtreeJsonObject.childSubtreeAvailability.bitstream != null)
+                {
+                    subtree.ChildSubtreeAvailability = ToBitstream(subtreeJsonObject.bufferViews[(int)subtreeJsonObject.childSubtreeAvailability.bitstream], subtree.SubtreeBinary);
+                }
+            }
+
             return subtree;
         }
 
@@ -30,5 +45,19 @@ namespace subtree
                 return subtree;
             }
         }
+
+        private static List<BitArray> ToBitstream(Bufferview bufferView, byte[] subtreeBinary)
+        {
+            var slicedBytes = new Span<byte>(subtreeBinary).Slice(start: bufferView.byteOffset, length: bufferView.byteLength);
+            var result = new List<BitArray>();
+            foreach (var b in slicedBytes)
+            {
+                var bitArray = new BitArray(new byte[] { b });
+                result.Add(bitArray);
+            }
+
+            return result;
+        }
+
     }
 }

@@ -4,5 +4,4 @@
     {
         public int byteLength { get; set; }
     }
-
 }
