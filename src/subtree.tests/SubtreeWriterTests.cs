@@ -72,8 +72,23 @@ namespace subtree.tests
             var subtreeBytes = subtree.ToSubtreeBinary();
 
             // assert
-            Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.Length);
-            Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes));
+            Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
+            Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
+            Assert.IsTrue(subtreeBytes.subtreeJson.buffers.First().byteLength == 16);
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews.First().buffer== 0);
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews.First().byteOffset == 0);
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews.First().byteLength == 3);
+
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].byteLength == 8);
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].buffer == 0);
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].byteOffset == 8);
+            Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].byteLength == 8);
+            Assert.IsTrue(subtreeBytes.subtreeJson.tileAvailability.bitstream == 0);
+            Assert.IsTrue(subtreeBytes.subtreeJson.tileAvailability.availableCount== 7);
+            Assert.IsTrue(subtreeBytes.subtreeJson.contentAvailability[0].constant == 0);
+            Assert.IsTrue(subtreeBytes.subtreeJson.contentAvailability[0].availableCount == 0);
+            Assert.IsTrue(subtreeBytes.subtreeJson.childSubtreeAvailability.bitstream== 1);
+            Assert.IsTrue(subtreeBytes.subtreeJson.childSubtreeAvailability.availableCount == 8);
         }
     }
 }

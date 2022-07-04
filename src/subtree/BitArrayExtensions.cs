@@ -26,5 +26,10 @@ namespace subtree
             return bytes[0];
         }
 
+        public static int Count(this BitArray bitArray, bool whereClause= false)
+        {
+            return (from bool m in bitArray where m == whereClause select m).Count();
+        }
+
     }
 }

@@ -25,7 +25,6 @@ namespace subtree
 
             binaryWriter.Write(SubtreeHeader.AsBinary());
             binaryWriter.Write(Encoding.UTF8.GetBytes(subtreeJsonPadded));
-            // binaryWriter.Write(ToSubtreeBinary);
 
             binaryWriter.Flush();
             binaryWriter.Close();
@@ -33,37 +32,68 @@ namespace subtree
         }
 
 
-        public byte[] ToSubtreeBinary()
+        public (byte[] bytes, SubtreeJson subtreeJson) ToSubtreeBinary()
         {
-            var bytes = new List<byte>();
-            foreach (var tile in TileAvailability)
-            {
-                bytes.Add(tile.ToByte());
-            }
-            bytes = BufferPadding.AddBinaryPadding(bytes.ToArray()).ToList();
+            var substreamBinary = new List<Byte>();
+            var subtreeJson = new SubtreeJson();
+            var bufferViews = new List<Bufferview>();
+            var resultTileAvailability = HandleBitArrays(TileAvailability);
+            bufferViews.Add(resultTileAvailability.bufferView);
+            substreamBinary.AddRange(resultTileAvailability.bytes.ToArray());
+            subtreeJson.tileAvailability = new Tileavailability() { bitstream = 0, availableCount = resultTileAvailability.trueBits };
 
             if (ContentAvailability != null)
             {
-                foreach (var content in ContentAvailability)
-                {
-                    bytes.Add(content.ToByte());
-                }
-                bytes = BufferPadding.AddPadding(bytes.ToArray()).ToList();
+                // todo
+            }
+            else
+            {
+                subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { availableCount = 0, constant = 0 } }.ToArray();
             }
 
             if (ChildSubtreeAvailability != null)
             {
-                foreach (var childSubtree in ChildSubtreeAvailability)
-                {
-                    bytes.Add(childSubtree.ToByte());
-                }
-                bytes = BufferPadding.AddPadding(bytes.ToArray()).ToList();
+                var resultSubstreamAvailability = HandleBitArrays(ChildSubtreeAvailability);
+                var bufferView = resultSubstreamAvailability.bufferView;
+                bufferView.byteOffset = substreamBinary.Count;
+                subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { bitstream = bufferViews.Count, availableCount = resultSubstreamAvailability.trueBits };
+                bufferViews.Add(bufferView);
+                substreamBinary.AddRange(resultSubstreamAvailability.bytes.ToArray());
+            }
+            else
+            {
+                // todo
             }
 
-
-            var result = bytes.ToArray();
-            return result;
+            subtreeJson.buffers = new List<Buffer>() { new Buffer() { byteLength = substreamBinary.Count} }.ToArray();
+            subtreeJson.bufferViews = bufferViews.ToArray();
+            return (substreamBinary.ToArray(), subtreeJson);
         }
 
+        private static (List<byte> bytes, int trueBits, Bufferview bufferView) HandleBitArrays(List<BitArray> bitArrays)
+        {
+            var bytes = new List<byte>();
+            var trueBits = 0;
+            foreach (var bitArray in bitArrays)
+            {
+                var res = HandleBitArray(bitArray);
+                trueBits += res.trueBits;
+                bytes.AddRange(res.bytes);
+            }
+            var bufferView = new Bufferview() { buffer = 0, byteLength = bytes.Count, byteOffset = 0 };
+            bytes = BufferPadding.AddBinaryPadding(bytes.ToArray()).ToList();
+            return (bytes, trueBits, bufferView);
+        }
+
+
+        private static (List<byte> bytes, int trueBits, Bufferview bufferView) HandleBitArray(BitArray bitArray)
+        {
+            var bytes = new List<byte>();
+            var trueBits = 0;
+            trueBits += bitArray.Count(true);
+            bytes.Add(bitArray.ToByte());
+            var bufferView = new Bufferview() { buffer = 0, byteLength = bytes.Count, byteOffset = 0 };
+            return (bytes, trueBits, bufferView);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections;
 
 namespace subtree.tests
 {
@@ -16,6 +17,12 @@ namespace subtree.tests
             Assert.IsTrue(t_1 == "01001100");
             var t_2 = bitstreamTileAvailability[2].AsString();
             Assert.IsTrue(t_2 == "10000000");
+
+            var numOnes = (from bool m in bitstreamTileAvailability[0]
+                           where m
+                           select m).Count();
+
         }
+
     }
 }
