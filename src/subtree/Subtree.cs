@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System.Collections;
 using System.Text;
 
 namespace subtree
@@ -15,7 +16,11 @@ namespace subtree
 
         public byte[] ToBytes()
         {
-            var subtreeJsonPadded = BufferPadding.AddPadding(SubtreeJson);
+            var bin = ToSubtreeBinary();
+            var subtreeJsonPadded = BufferPadding.AddPadding(JsonConvert.SerializeObject(bin.subtreeJson, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            }));
             var subtreeBinaryPadded = BufferPadding.AddPadding(SubtreeBinary);
 
             var memoryStream = new MemoryStream();
@@ -25,6 +30,7 @@ namespace subtree
 
             binaryWriter.Write(SubtreeHeader.AsBinary());
             binaryWriter.Write(Encoding.UTF8.GetBytes(subtreeJsonPadded));
+            binaryWriter.Write(bin.bytes);
 
             binaryWriter.Flush();
             binaryWriter.Close();
@@ -44,7 +50,12 @@ namespace subtree
 
             if (ContentAvailability != null)
             {
-                // todo
+                var resultContentAvailability = HandleBitArrays(ContentAvailability);
+                var bufferView = resultContentAvailability.bufferView;
+                bufferView.byteOffset = substreamBinary.Count;
+                subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { bitstream = bufferViews.Count, availableCount = resultContentAvailability.trueBits };
+                bufferViews.Add(bufferView);
+                substreamBinary.AddRange(resultContentAvailability.bytes.ToArray());
             }
             else
             {
