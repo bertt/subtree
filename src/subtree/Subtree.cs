@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Text;
+
 namespace subtree
 {
     public class Subtree
@@ -13,9 +15,18 @@ namespace subtree
 
         public byte[] ToBytes()
         {
+            var subtreeJsonPadded = BufferPadding.AddPadding(SubtreeJson);
+            var subtreeBinaryPadded = BufferPadding.AddPadding(SubtreeBinary);
+
             var memoryStream = new MemoryStream();
             var binaryWriter = new BinaryWriter(memoryStream);
+            SubtreeHeader.JsonByteLength  = (ulong)subtreeJsonPadded.Length;
+            SubtreeHeader.BinaryByteLength = (ulong)subtreeBinaryPadded.Length;
+
             binaryWriter.Write(SubtreeHeader.AsBinary());
+            binaryWriter.Write(Encoding.UTF8.GetBytes(subtreeJsonPadded));
+            binaryWriter.Write(subtreeBinaryPadded);
+
             binaryWriter.Flush();
             binaryWriter.Close();
             return memoryStream.ToArray();
