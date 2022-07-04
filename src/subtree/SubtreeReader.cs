@@ -9,8 +9,8 @@ namespace subtree
         public static Subtree ReadSubtree(BinaryReader reader)
         {
             var subtreeHeader = new SubtreeHeader(reader);
-            var subtreeJson = Encoding.UTF8.GetString(reader.ReadBytes(subtreeHeader.JsonByteLength));
-            var subTreeBinary = reader.ReadBytes(subtreeHeader.BinaryByteLength);
+            var subtreeJson = Encoding.UTF8.GetString(reader.ReadBytes((int)subtreeHeader.JsonByteLength));
+            var subTreeBinary = reader.ReadBytes((int)subtreeHeader.BinaryByteLength);
             var subtree = new Subtree
             {
                 SubtreeHeader = subtreeHeader,
