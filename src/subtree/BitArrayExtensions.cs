@@ -5,7 +5,7 @@ namespace subtree
 {
     public static class BitArrayExtensions
     {
-        public static string Write(this BitArray bitArray)
+        public static string AsString(this BitArray bitArray)
         {
             var sb = new StringBuilder();
             foreach (var b in bitArray)
@@ -14,5 +14,17 @@ namespace subtree
             }
             return sb.ToString();
         }
+
+        public static byte ToByte(this BitArray bitArray)
+        {
+            if (bitArray.Count != 8)
+            {
+                throw new ArgumentException("bits");
+            }
+            byte[] bytes = new byte[1];
+            bitArray.CopyTo(bytes, 0);
+            return bytes[0];
+        }
+
     }
 }
