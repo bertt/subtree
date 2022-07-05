@@ -1,6 +1,6 @@
 ﻿namespace subtree
 {
-    public class Bufferview
+    public record Bufferview
     {
         public int buffer { get; set; }
         public int byteOffset { get; set; }

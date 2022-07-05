@@ -1,9 +1,14 @@
-﻿namespace subtree
+﻿using Newtonsoft.Json;
+
+namespace subtree
 {
-    public class Contentavailability
+    public record Contentavailability
     {
+        [JsonProperty(Order = 2)]
         public int availableCount { get; set; }
-        public int? constant { get; set; }
+        [JsonProperty(Order = 1)]
         public int? bitstream { get; set; }
+        [JsonProperty(Order = 3)]
+        public int? constant { get; set; }
     }
 }

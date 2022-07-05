@@ -1,6 +1,6 @@
 ﻿namespace subtree
 {
-    public class Buffer
+    public record Buffer
     {
         public int byteLength { get; set; }
     }

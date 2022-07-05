@@ -1,6 +1,6 @@
 ﻿namespace subtree
 {
-    public class Childsubtreeavailability
+    public record Childsubtreeavailability
     {
         public int? bitstream { get; set; }
         public int availableCount { get; set; }

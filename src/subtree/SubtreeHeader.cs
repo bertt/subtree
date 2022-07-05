@@ -1,9 +1,8 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace subtree
 {
-    public class SubtreeHeader: IEquatable<SubtreeHeader>
+    public record SubtreeHeader
     {
         public SubtreeHeader() {
             Magic = "subt";
@@ -35,11 +34,6 @@ namespace subtree
                 Concat(jsonByteLength).
                 Concat(binaryByteLength).
                 ToArray();
-        }
-
-        public bool Equals(SubtreeHeader? other)
-        {
-            return (Magic == other?.Magic && Version == other?.Version && JsonByteLength == other?.JsonByteLength && BinaryByteLength == other?.BinaryByteLength);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System.Collections;
 
@@ -48,6 +49,43 @@ namespace subtree.tests
             Assert.IsTrue(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
         }
 
+
+        [Test]
+        public void TestWriteSubtreeLevel3File()
+        {
+            // arrange
+            var file = @"testfixtures/3.5.0.subtree";
+            var subtreeBytes = File.ReadAllBytes(file);
+            var subtreefile = File.OpenRead(file);
+            var subtreeOriginal = SubtreeReader.ReadSubtree(subtreefile);
+
+            // create root subtree
+            var subtree = new Subtree();
+
+            // tile availability
+            var t0 = BitArrayCreator.FromString("11001011");
+            var t1 = BitArrayCreator.FromString("00000000");
+            var t2 = BitArrayCreator.FromString("00110000");
+            subtree.TileAvailability = new List<BitArray>() { t0, t1, t2 };
+
+            // subtree avaiability
+            var c0 = BitArrayCreator.FromString("00000011");
+            var c1 = BitArrayCreator.FromString("00000000");
+            var c2 = BitArrayCreator.FromString("00110000");
+
+            subtree.ContentAvailability = new List<BitArray>() { c0, c1, c2};
+
+            // act
+            var bytes = SubtreeWriter.ToBytes(subtree);
+            var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
+
+            // assert
+            Assert.IsTrue(bytes.Length == subtreeBytes.Length);
+            Assert.IsTrue(subtreeOriginal.SubtreeHeader.Equals(newSubtree.SubtreeHeader));
+            Assert.IsTrue(subtreeOriginal.SubtreeJson.Equals(newSubtree.SubtreeJson));
+            Assert.IsTrue(Enumerable.SequenceEqual(bytes, subtreeBytes));
+            Assert.IsTrue(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
+        }
 
         [Test]
         public void TestWriteHeader()

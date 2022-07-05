@@ -46,7 +46,7 @@ namespace subtree
                 var resultContentAvailability = HandleBitArrays(subtree.ContentAvailability);
                 var bufferView = resultContentAvailability.bufferView;
                 bufferView.byteOffset = substreamBinary.Count;
-                subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { bitstream = bufferViews.Count, availableCount = resultContentAvailability.trueBits };
+                subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { bitstream = bufferViews.Count, availableCount = resultContentAvailability.trueBits }}.ToArray();
                 bufferViews.Add(bufferView);
                 substreamBinary.AddRange(resultContentAvailability.bytes.ToArray());
             }
@@ -66,7 +66,7 @@ namespace subtree
             }
             else
             {
-                // todo
+                subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { availableCount = 0, constant = 0 };
             }
 
             subtreeJson.buffers = new List<Buffer>() { new Buffer() { byteLength = substreamBinary.Count } }.ToArray();

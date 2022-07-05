@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections;
+﻿using System.Collections;
 
 namespace subtree
 {
-    public class Subtree
+    public record Subtree
     {
         public Subtree()
         {

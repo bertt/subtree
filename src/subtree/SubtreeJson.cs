@@ -1,6 +1,6 @@
 ﻿namespace subtree
 {
-    public class SubtreeJson
+    public record SubtreeJson
     {
         public Buffer[] buffers { get; set; } = null!;
         public Bufferview[] bufferViews { get; set; } = null!;

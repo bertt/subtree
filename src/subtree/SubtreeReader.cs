@@ -29,10 +29,9 @@ namespace subtree
                     var bufferViewContent = subtreeJsonObject.bufferViews[(int)contentBitstream];
                     subtree.ContentAvailability = BitstreamReader.Read(subtree.SubtreeBinary, bufferViewContent.byteOffset, bufferViewContent.byteLength);
                 }
-                if (subtreeJsonObject.childSubtreeAvailability.bitstream != null)
+                if (subtreeJsonObject.childSubtreeAvailability != null && subtreeJsonObject.childSubtreeAvailability.bitstream != null)
                 {
                     var bufferViewChildsubtree = subtreeJsonObject.bufferViews[(int)subtreeJsonObject.childSubtreeAvailability.bitstream];
-
                     subtree.ChildSubtreeAvailability = BitstreamReader.Read(subtree.SubtreeBinary, bufferViewChildsubtree.byteOffset, bufferViewChildsubtree.byteLength);
                 }
             }
