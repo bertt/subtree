@@ -1,10 +1,54 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
+using System.Collections;
 
 namespace subtree.tests
 {
     public class SubtreeWriterTests
     {
+        [Test]
+        public void TestWriteSubtreeRootFile()
+        {
+            // arrange
+            var file = @"testfixtures/0.0.0.subtree";
+            var subtreeBytes = File.ReadAllBytes(file);
+            var subtreefile = File.OpenRead(file);
+            var subtreeOriginal = SubtreeReader.ReadSubtree(subtreefile);
+
+            // create root subtree
+            var subtree = new Subtree();
+
+            // tile availability
+            var t0 = BitArrayCreator.FromString("10110000");
+            var t1 = BitArrayCreator.FromString("01001100");
+            var t2 = BitArrayCreator.FromString("10000000");
+            subtree.TileAvailability = new List<BitArray>() { t0, t1, t2 };
+
+            // subtree avaiability
+            var c0 = BitArrayCreator.FromString("00000000");
+            var c1 = BitArrayCreator.FromString("00000000");
+            var c2 = BitArrayCreator.FromString("01100000");
+            var c3 = BitArrayCreator.FromString("00000110");
+            var c4 = BitArrayCreator.FromString("01100000");
+            var c5 = BitArrayCreator.FromString("00000110");
+            var c6 = BitArrayCreator.FromString("00000000");
+            var c7 = BitArrayCreator.FromString("00000000");
+
+            subtree.ChildSubtreeAvailability = new List<BitArray>() { c0, c1, c2, c3, c4, c5, c6, c7 };
+
+            // act
+            var bytes = SubtreeWriter.ToBytes(subtree);
+            var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
+
+            // assert
+            Assert.IsTrue(bytes.Length == subtreeBytes.Length);
+            Assert.IsTrue(subtreeOriginal.SubtreeHeader.Equals(newSubtree.SubtreeHeader));
+            Assert.IsTrue(subtreeOriginal.SubtreeJson.Equals(newSubtree.SubtreeJson));
+            Assert.IsTrue(Enumerable.SequenceEqual(bytes, subtreeBytes));
+            Assert.IsTrue(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
+        }
+
+
         [Test]
         public void TestWriteHeader()
         {
@@ -13,7 +57,7 @@ namespace subtree.tests
             var header = subtree.SubtreeHeader;
 
             // act
-            var headerBytes = subtree.ToBytes();
+            var headerBytes = SubtreeWriter.ToBytes(subtree);
             var stream = new MemoryStream(headerBytes);
             var reader = new BinaryReader(stream);
             var newHeader = new SubtreeHeader(reader);
@@ -69,7 +113,7 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // act
-            var subtreeBytes = subtree.ToSubtreeBinary();
+            var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
             // assert
             Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
@@ -99,7 +143,7 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // act
-            var subtreeBytes = subtree.ToSubtreeBinary();
+            var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
             // assert
             Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
@@ -114,7 +158,7 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // act
-            var subtreeBytes = subtree.ToSubtreeBinary();
+            var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
             // assert
             Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
@@ -130,7 +174,7 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // act
-            var subtreeBytes = subtree.ToSubtreeBinary();
+            var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
             // assert
             Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
@@ -145,7 +189,7 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // act
-            var subtreeBytes = subtree.ToSubtreeBinary();
+            var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
             // assert
             Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);

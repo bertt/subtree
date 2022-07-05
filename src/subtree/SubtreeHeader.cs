@@ -3,8 +3,13 @@ using System.Text;
 
 namespace subtree
 {
-    public class SubtreeHeader
+    public class SubtreeHeader: IEquatable<SubtreeHeader>
     {
+        public SubtreeHeader() {
+            Magic = "subt";
+            Version = 1;
+        }
+
         public SubtreeHeader(BinaryReader reader)
         {
             Magic = Encoding.UTF8.GetString(reader.ReadBytes(4));
@@ -30,6 +35,11 @@ namespace subtree
                 Concat(jsonByteLength).
                 Concat(binaryByteLength).
                 ToArray();
+        }
+
+        public bool Equals(SubtreeHeader? other)
+        {
+            return (Magic == other?.Magic && Version == other?.Version && JsonByteLength == other?.JsonByteLength && BinaryByteLength == other?.BinaryByteLength);
         }
     }
 }
