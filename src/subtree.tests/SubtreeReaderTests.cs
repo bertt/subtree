@@ -1,11 +1,34 @@
 ﻿using NUnit.Framework;
-using System.Collections;
-using System.Text;
+using Tedd;
 
 namespace subtree.tests
 {
     public class SubtreeReaderTests
     {
+        [Test]
+        public void MortonDecode()
+        {
+            // Take some numbers that illustrate well
+            var x = (UInt32)0b00000000_00000000;
+            var y = (UInt32)0b00000000_11111111;
+
+            // Encode
+            var result = MortonEncoding.Encode(x, y);
+
+            // Test that result is now: 0b10101010_10101010
+            var res = Convert.ToString(result, 2);
+            Assert.True(res.Equals("1010101010101010"));
+            //1010101010101010
+            //1010101010101010
+
+            // Decode
+            MortonEncoding.Decode(result, out var xBack, out var yBack);
+
+            // Test that we got back the same values as we started with
+            //Assert.Equals(x, xBack);
+            //Assert.Equals(y, yBack);
+        }
+
         [Test]
         public void ReadSubtreeTestLevel3_5_0()
         {
@@ -14,6 +37,7 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // tile availability
+            var sum = subtree.TileAvailability[0].Append(subtree.TileAvailability[1]);
             Assert.IsTrue(subtree.TileAvailability.Count == 3);
             var t_0 = subtree.TileAvailability[0].AsString();
             Assert.IsTrue(t_0 == "11001011");

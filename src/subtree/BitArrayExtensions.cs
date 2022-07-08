@@ -5,6 +5,27 @@ namespace subtree
 {
     public static class BitArrayExtensions
     {
+        public static BitArray Append(this BitArray current, BitArray after)
+        {
+            var bools = new bool[current.Count + after.Count];
+            current.CopyTo(bools, 0);
+            after.CopyTo(bools, current.Count);
+            return new BitArray(bools);
+        }
+        public static uint ToUint(this BitArray input)
+        {
+            uint result = 0;
+            uint bitCount = 1;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i]) result |= bitCount;
+
+                bitCount = bitCount << 1;
+            }
+
+            return result;
+        }
         public static string AsString(this BitArray bitArray)
         {
             var sb = new StringBuilder();
