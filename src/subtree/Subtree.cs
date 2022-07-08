@@ -13,8 +13,8 @@ namespace subtree
         public string SubtreeJson { get; set; } = null!;
         public byte[] SubtreeBinary { get; set; } = null!;
 
-        public List<BitArray>? ChildSubtreeAvailability { get; set; }
-        public List<BitArray> TileAvailability { get; set; } = null!;
-        public List<BitArray>? ContentAvailability { get; set; }
+        public BitArray? ChildSubtreeAvailability { get; set; }
+        public BitArray TileAvailability { get; set; } = null!;
+        public BitArray? ContentAvailability { get; set; }
     }
 }

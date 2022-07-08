@@ -37,24 +37,13 @@ namespace subtree.tests
             var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
             // tile availability
-            var sum = subtree.TileAvailability[0].Append(subtree.TileAvailability[1]);
-            Assert.IsTrue(subtree.TileAvailability.Count == 3);
-            var t_0 = subtree.TileAvailability[0].AsString();
-            Assert.IsTrue(t_0 == "11001011");
-            var t_1 = subtree.TileAvailability[1].AsString();
-            Assert.IsTrue(t_1 == "00000000");
-            var t_2 = subtree.TileAvailability[2].AsString();
-            Assert.IsTrue(t_2 == "00110000");
+            var t_0 = subtree.TileAvailability.AsString();
+            Assert.IsTrue(t_0 == "110010110000000000110000");
 
             // content availability
             if (subtree.ContentAvailability != null){
-                Assert.IsTrue(subtree.ContentAvailability.Count == 3);
-                var c_0 = subtree.ContentAvailability[0].AsString();
-                Assert.IsTrue(c_0 == "00000011");
-                var c_1 = subtree.ContentAvailability[1].AsString();
-                Assert.IsTrue(c_1 == "00000000");
-                var c_2 = subtree.ContentAvailability[2].AsString();
-                Assert.IsTrue(c_2 == "00110000");
+                var c_0 = subtree.ContentAvailability.AsString();
+                Assert.IsTrue(c_0 == "000000110000000000110000");
             }
 
             // Child Subtree Availability:
@@ -74,12 +63,8 @@ namespace subtree.tests
             Assert.IsTrue(subtree.SubtreeBinary.Length == 16);
 
             // tile availability
-            var t_0 = subtree.TileAvailability[0].AsString();
-            Assert.IsTrue(t_0 == "10110000");
-            var t_1 = subtree.TileAvailability[1].AsString();
-            Assert.IsTrue(t_1 == "01001100");
-            var t_2 = subtree.TileAvailability[2].AsString();
-            Assert.IsTrue(t_2 == "10000000");
+            var t_0 = subtree.TileAvailability.AsString();
+            Assert.IsTrue(t_0 == "101100000100110010000000");
 
             // content availability
             Assert.IsTrue(subtree.ContentAvailability == null);
@@ -87,22 +72,8 @@ namespace subtree.tests
             // Child Subtree Availability:
             if(subtree.ChildSubtreeAvailability != null)
             {
-                var c_0 = subtree.ChildSubtreeAvailability[0].AsString();
-                Assert.IsTrue(c_0 == "00000000");
-                var c_1 = subtree.ChildSubtreeAvailability[1].AsString();
-                Assert.IsTrue(c_1 == "00000000");
-                var c_2 = subtree.ChildSubtreeAvailability[2].AsString();
-                Assert.IsTrue(c_2 == "01100000");
-                var c_3 = subtree.ChildSubtreeAvailability[3].AsString();
-                Assert.IsTrue(c_3 == "00000110");
-                var c_4 = subtree.ChildSubtreeAvailability[4].AsString();
-                Assert.IsTrue(c_4 == "01100000");
-                var c_5 = subtree.ChildSubtreeAvailability[5].AsString();
-                Assert.IsTrue(c_5 == "00000110");
-                var c_6 = subtree.ChildSubtreeAvailability[6].AsString();
-                Assert.IsTrue(c_6 == "00000000");
-                var c_7 = subtree.ChildSubtreeAvailability[7].AsString();
-                Assert.IsTrue(c_7 == "00000000");
+                var c_0 = subtree.ChildSubtreeAvailability.AsString();
+                Assert.IsTrue(c_0 == "0000000000000000011000000000011001100000000001100000000000000000");
             }
         }
 

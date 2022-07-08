@@ -36,14 +36,14 @@ namespace subtree
             var substreamBinary = new List<byte>();
             var subtreeJson = new SubtreeJson();
             var bufferViews = new List<Bufferview>();
-            var resultTileAvailability = HandleBitArrays(subtree.TileAvailability);
+            var resultTileAvailability = HandleBitArray(subtree.TileAvailability);
             bufferViews.Add(resultTileAvailability.bufferView);
             substreamBinary.AddRange(resultTileAvailability.bytes.ToArray());
             subtreeJson.tileAvailability = new Tileavailability() { bitstream = 0, availableCount = resultTileAvailability.trueBits };
 
             if (subtree.ContentAvailability != null)
             {
-                var resultContentAvailability = HandleBitArrays(subtree.ContentAvailability);
+                var resultContentAvailability = HandleBitArray(subtree.ContentAvailability);
                 var bufferView = resultContentAvailability.bufferView;
                 bufferView.byteOffset = substreamBinary.Count;
                 subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { bitstream = bufferViews.Count, availableCount = resultContentAvailability.trueBits }}.ToArray();
@@ -57,7 +57,7 @@ namespace subtree
 
             if (subtree.ChildSubtreeAvailability != null)
             {
-                var resultSubstreamAvailability = HandleBitArrays(subtree.ChildSubtreeAvailability);
+                var resultSubstreamAvailability = HandleBitArray(subtree.ChildSubtreeAvailability);
                 var bufferView = resultSubstreamAvailability.bufferView;
                 bufferView.byteOffset = substreamBinary.Count;
                 subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { bitstream = bufferViews.Count, availableCount = resultSubstreamAvailability.trueBits };
@@ -74,29 +74,15 @@ namespace subtree
             return (substreamBinary.ToArray(), subtreeJson);
         }
 
-        private static (List<byte> bytes, int trueBits, Bufferview bufferView) HandleBitArrays(List<BitArray> bitArrays)
-        {
-            var bytes = new List<byte>();
-            var trueBits = 0;
-            foreach (var bitArray in bitArrays)
-            {
-                var res = HandleBitArray(bitArray);
-                trueBits += res.trueBits;
-                bytes.AddRange(res.bytes);
-            }
-            bytes = BufferPadding.AddBinaryPadding(bytes.ToArray()).ToList();
-            var bufferView = new Bufferview() { buffer = 0, byteLength = bitArrays.Count, byteOffset = 0 };
-            return (bytes, trueBits, bufferView);
-        }
-
         private static (List<byte> bytes, int trueBits, Bufferview bufferView) HandleBitArray(BitArray bitArray)
         {
-            var bytes = new List<byte>();
             var trueBits = 0;
             trueBits += bitArray.Count(true);
-            bytes.Add(bitArray.ToByte());
-            var bufferView = new Bufferview() { buffer = 0, byteLength = bytes.Count, byteOffset = 0 };
-            return (bytes, trueBits, bufferView);
+            var bits = bitArray.ToByteArray();
+            var bytes = BufferPadding.AddBinaryPadding(bits);
+
+            var bufferView = new Bufferview() { buffer = 0, byteLength = bits.Length, byteOffset = 0 };
+            return (bytes.ToList(), trueBits, bufferView);
         }
     }
 }

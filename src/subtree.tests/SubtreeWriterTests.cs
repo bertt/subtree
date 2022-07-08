@@ -1,11 +1,37 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Collections;
+using Tedd;
 
 namespace subtree.tests
 {
     public class SubtreeWriterTests
     {
+        [Test]
+        public void TestMorton()
+        {
+            // Take some numbers that illustrate well
+            var x = (uint)0b0000000000000000;
+            var y = (uint)0b0000000011111111;
+
+            // Encode
+            var result = MortonEncoding.Encode(x, y);
+
+            // Test that result is now: 0b10101010_10101010
+            Assert.AreEqual("1010101010101010", Convert.ToString(result, 2));
+
+            // Decode
+            MortonEncoding.Decode(result, out var xBack, out var yBack);
+
+            // 101100000100110010000000
+            MortonEncoding.Decode((uint)0b0111, out var xBack1, out var yBack1);
+
+
+            // Test that we got back the same values as we started with
+            Assert.AreEqual(x, xBack);
+            Assert.AreEqual(y, yBack);
+        }
+
         [Test]
         public void TestWriteSubtreeRootFile()
         {
@@ -18,23 +44,13 @@ namespace subtree.tests
             // create root subtree
             var subtree = new Subtree();
 
-            // tile availability
-            var t0 = BitArrayCreator.FromString("10110000");
-            var t1 = BitArrayCreator.FromString("01001100");
-            var t2 = BitArrayCreator.FromString("10000000");
-            subtree.TileAvailability = new List<BitArray>() { t0, t1, t2 };
+            // tile availability (101100000100110010000000)
+            var t0 = BitArrayCreator.FromString("101100000100110010000000");
+            subtree.TileAvailability = t0;
 
             // subtree avaiability
-            var c0 = BitArrayCreator.FromString("00000000");
-            var c1 = BitArrayCreator.FromString("00000000");
-            var c2 = BitArrayCreator.FromString("01100000");
-            var c3 = BitArrayCreator.FromString("00000110");
-            var c4 = BitArrayCreator.FromString("01100000");
-            var c5 = BitArrayCreator.FromString("00000110");
-            var c6 = BitArrayCreator.FromString("00000000");
-            var c7 = BitArrayCreator.FromString("00000000");
-
-            subtree.ChildSubtreeAvailability = new List<BitArray>() { c0, c1, c2, c3, c4, c5, c6, c7 };
+            var c0 = BitArrayCreator.FromString("0000000000000000011000000000011001100000000001100000000000000000");
+            subtree.ChildSubtreeAvailability =c0;
 
             // act
             var bytes = SubtreeWriter.ToBytes(subtree);
@@ -62,17 +78,14 @@ namespace subtree.tests
             var subtree = new Subtree();
 
             // tile availability
-            var t0 = BitArrayCreator.FromString("11001011");
-            var t1 = BitArrayCreator.FromString("00000000");
-            var t2 = BitArrayCreator.FromString("00110000");
-            subtree.TileAvailability = new List<BitArray>() { t0, t1, t2 };
+            var t0 = BitArrayCreator.FromString("110010110000000000110000");
+            subtree.TileAvailability = t0;
 
             // subtree avaiability
-            var c0 = BitArrayCreator.FromString("00000011");
+            var c0 = BitArrayCreator.FromString("000000110000000000110000");
             var c1 = BitArrayCreator.FromString("00000000");
             var c2 = BitArrayCreator.FromString("00110000");
-
-            subtree.ContentAvailability = new List<BitArray>() { c0, c1, c2};
+            subtree.ContentAvailability = c0;
 
             // act
             var bytes = SubtreeWriter.ToBytes(subtree);

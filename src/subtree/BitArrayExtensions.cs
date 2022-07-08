@@ -5,6 +5,12 @@ namespace subtree
 {
     public static class BitArrayExtensions
     {
+        public static byte[] ToByteArray(this BitArray bits)
+        {
+            byte[] ret = new byte[(bits.Length - 1) / 8 + 1];
+            bits.CopyTo(ret, 0);
+            return ret;
+        }
         public static BitArray Append(this BitArray current, BitArray after)
         {
             var bools = new bool[current.Count + after.Count];

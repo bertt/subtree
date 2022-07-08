@@ -24,13 +24,7 @@ void Info(Options options)
     Console.WriteLine("Bitstream: " + subtreeJsonObject?.tileAvailability.bitstream);
     Console.WriteLine("Available: " + subtreeJsonObject?.tileAvailability.availableCount);
 
-    Console.WriteLine("Availability: ");
-
-    foreach (var t in subtree.TileAvailability)
-    {
-        Console.WriteLine(" - " + t.AsString());
-    }
-
+    Console.WriteLine("Availability: " + subtree.TileAvailability.AsString());
 
     Console.WriteLine("2] Content availability: ");
     if (subtreeJsonObject?.contentAvailability is not null)
@@ -43,16 +37,12 @@ void Info(Options options)
             }
             Console.WriteLine("available: " + contentAvailability.availableCount);
 
-            Console.WriteLine("Availability: ");
         }
     }
 
     if (subtree.ContentAvailability != null)
     {
-        foreach (var t in subtree.ContentAvailability)
-        {
-            Console.WriteLine(" - " + t.AsString());
-        }
+        Console.WriteLine("Availability: " + subtree.ContentAvailability.AsString());
     }
 
 
@@ -65,9 +55,6 @@ void Info(Options options)
 
     if (subtree.ChildSubtreeAvailability != null)
     {
-        foreach (var t in subtree.ChildSubtreeAvailability)
-        {
-            Console.WriteLine(" - " + t.AsString());
-        }
+        Console.WriteLine("Availability: " + subtree.ChildSubtreeAvailability.AsString());
     }
 }
