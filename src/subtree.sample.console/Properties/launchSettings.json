@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "subtree.sample.console": {
+      "commandName": "Project",
+      "commandLineArgs": "- i 0.0.0.subtree"
+    }
+  }
+}

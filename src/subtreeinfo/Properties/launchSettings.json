@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "subtreeinfo": {
+      "commandName": "Project",
+      "commandLineArgs": "-i ./testfixtures/3.4.1.subtree\r\n"
+    }
+  }
+}

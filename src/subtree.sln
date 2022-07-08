@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{9884DA6D-D5E
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "subtree.sample.console", "subtree.sample.console\subtree.sample.console.csproj", "{035AE3E6-E1D1-4C09-8F9B-A52E41CBBEA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "subtreeinfo", "subtreeinfo\subtreeinfo.csproj", "{035AE3E6-E1D1-4C09-8F9B-A52E41CBBEA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

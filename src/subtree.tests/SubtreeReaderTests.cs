@@ -15,21 +15,21 @@ namespace subtree.tests
 
             // tile availability
             Assert.IsTrue(subtree.TileAvailability.Count == 3);
-            var t_0 = GetBits(subtree.TileAvailability[0]);
+            var t_0 = subtree.TileAvailability[0].AsString();
             Assert.IsTrue(t_0 == "11001011");
-            var t_1 = GetBits(subtree.TileAvailability[1]);
+            var t_1 = subtree.TileAvailability[1].AsString();
             Assert.IsTrue(t_1 == "00000000");
-            var t_2 = GetBits(subtree.TileAvailability[2]);
+            var t_2 = subtree.TileAvailability[2].AsString();
             Assert.IsTrue(t_2 == "00110000");
 
             // content availability
             if (subtree.ContentAvailability != null){
                 Assert.IsTrue(subtree.ContentAvailability.Count == 3);
-                var c_0 = GetBits(subtree.ContentAvailability[0]);
+                var c_0 = subtree.ContentAvailability[0].AsString();
                 Assert.IsTrue(c_0 == "00000011");
-                var c_1 = GetBits(subtree.ContentAvailability[1]);
+                var c_1 = subtree.ContentAvailability[1].AsString();
                 Assert.IsTrue(c_1 == "00000000");
-                var c_2 = GetBits(subtree.ContentAvailability[2]);
+                var c_2 = subtree.ContentAvailability[2].AsString();
                 Assert.IsTrue(c_2 == "00110000");
             }
 
@@ -50,11 +50,11 @@ namespace subtree.tests
             Assert.IsTrue(subtree.SubtreeBinary.Length == 16);
 
             // tile availability
-            var t_0 = GetBits(subtree.TileAvailability[0]);
+            var t_0 = subtree.TileAvailability[0].AsString();
             Assert.IsTrue(t_0 == "10110000");
-            var t_1 = GetBits(subtree.TileAvailability[1]);
+            var t_1 = subtree.TileAvailability[1].AsString();
             Assert.IsTrue(t_1 == "01001100");
-            var t_2 = GetBits(subtree.TileAvailability[2]);
+            var t_2 = subtree.TileAvailability[2].AsString();
             Assert.IsTrue(t_2 == "10000000");
 
             // content availability
@@ -63,33 +63,24 @@ namespace subtree.tests
             // Child Subtree Availability:
             if(subtree.ChildSubtreeAvailability != null)
             {
-                var c_0 = GetBits(subtree.ChildSubtreeAvailability[0]);
+                var c_0 = subtree.ChildSubtreeAvailability[0].AsString();
                 Assert.IsTrue(c_0 == "00000000");
-                var c_1 = GetBits(subtree.ChildSubtreeAvailability[1]);
+                var c_1 = subtree.ChildSubtreeAvailability[1].AsString();
                 Assert.IsTrue(c_1 == "00000000");
-                var c_2 = GetBits(subtree.ChildSubtreeAvailability[2]);
+                var c_2 = subtree.ChildSubtreeAvailability[2].AsString();
                 Assert.IsTrue(c_2 == "01100000");
-                var c_3 = GetBits(subtree.ChildSubtreeAvailability[3]);
+                var c_3 = subtree.ChildSubtreeAvailability[3].AsString();
                 Assert.IsTrue(c_3 == "00000110");
-                var c_4 = GetBits(subtree.ChildSubtreeAvailability[4]);
+                var c_4 = subtree.ChildSubtreeAvailability[4].AsString();
                 Assert.IsTrue(c_4 == "01100000");
-                var c_5 = GetBits(subtree.ChildSubtreeAvailability[5]);
+                var c_5 = subtree.ChildSubtreeAvailability[5].AsString();
                 Assert.IsTrue(c_5 == "00000110");
-                var c_6 = GetBits(subtree.ChildSubtreeAvailability[6]);
+                var c_6 = subtree.ChildSubtreeAvailability[6].AsString();
                 Assert.IsTrue(c_6 == "00000000");
-                var c_7 = GetBits(subtree.ChildSubtreeAvailability[7]);
+                var c_7 = subtree.ChildSubtreeAvailability[7].AsString();
                 Assert.IsTrue(c_7 == "00000000");
             }
         }
 
-        private static string GetBits(BitArray bits)
-        {
-            var sb = new StringBuilder();
-            foreach (var b in bits)
-            {
-                sb.Append((bool)b ? "1" : "0");
-            }
-            return sb.ToString();
-        }
     }
 }
