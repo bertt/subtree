@@ -81,10 +81,8 @@ namespace subtree.tests
             var t0 = BitArrayCreator.FromString("110010110000000000110000");
             subtree.TileAvailability = t0;
 
-            // subtree avaiability
+            // content availability
             var c0 = BitArrayCreator.FromString("000000110000000000110000");
-            var c1 = BitArrayCreator.FromString("00000000");
-            var c2 = BitArrayCreator.FromString("00110000");
             subtree.ContentAvailability = c0;
 
             // act

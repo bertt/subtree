@@ -40,7 +40,8 @@ void WriteRootTileSample(){
     var t0 = BitArrayCreator.FromString("1");
     subtree.TileAvailability = t0;
 
-    subtree.ContentAvailability = t0;
+    var t1 = BitArrayCreator.FromString("1");
+    subtree.ContentAvailability = t1;
 
     var bytes = SubtreeWriter.ToBytes(subtree);
     File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
