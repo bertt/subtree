@@ -5,38 +5,35 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<PackAsTool>true</PackAsTool>
-	<ToolCommandName>subtreeinfo</ToolCommandName>
-	<PackageOutputPath>./nupkg</PackageOutputPath>
-	<AssemblyVersion>1.0.1</AssemblyVersion>
-	<FileVersion>1.0.1</FileVersion>
-	<Version>1.0.1</Version>
-
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.7.0-preview1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\subtree\subtree.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="testfixtures\0.0.0.subtree">
+    <None Update="content\box_0__0_0.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.4.1.subtree">
+    <None Update="content\box_1__0_0.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.5.0.subtree">
+    <None Update="content\box_1__0_1.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.6.3.subtree">
+    <None Update="content\box_1__1_0.glb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.7.2.subtree">
+    <None Update="content\box_1__1_1.glb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="content\content_0__0_0.glb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="tileset.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

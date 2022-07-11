@@ -13,6 +13,5 @@ namespace subtree.tests
             var t_0 = bitstreamTileAvailability.AsString();
             Assert.IsTrue(t_0 == "101100000100110010000000");
         }
-
     }
 }
