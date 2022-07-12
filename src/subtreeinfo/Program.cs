@@ -24,7 +24,10 @@ void Info(Options options)
     Console.WriteLine("Bitstream: " + subtreeJsonObject?.tileAvailability.bitstream);
     Console.WriteLine("Available: " + subtreeJsonObject?.tileAvailability.availableCount);
 
-    Console.WriteLine("Availability: " + subtree.TileAvailability.AsString());
+    var tileAvailability = subtree.TileAvailability.AsString();
+
+
+    Console.WriteLine("Availability: " + tileAvailability);
 
     Console.WriteLine("2] Content availability: ");
     if (subtreeJsonObject?.contentAvailability is not null)

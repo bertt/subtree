@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using System.Collections;
 
 namespace subtree.tests
 {

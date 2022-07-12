@@ -10,12 +10,12 @@
     "geometricError" : 32.0,
     "refine" : "ADD",
     "content" : {
-      "uri" : "content/box_{level}__{x}_{y}.glb"
+      "uri" : "content/content_{level}__{x}_{y}.glb"
     },
     "implicitTiling" : {
       "subdivisionScheme" : "QUADTREE",
-      "subtreeLevels" : 1,
-      "availableLevels" : 1,
+      "subtreeLevels" : 3,
+      "availableLevels" : 6,
       "subtrees" : {
         "uri" : "subtrees/{level}.{x}.{y}.subtree"
       }
