@@ -33,16 +33,3 @@ void WriteLevel1Sample()
     File.WriteAllBytes($"subtrees/3.6.3.subtree", byteslevel1);
     File.WriteAllBytes($"subtrees/3.7.2.subtree", byteslevel1);
 }
-
-void WriteRootTileSample(){
-    var subtree = new Subtree();
-    var t0 = BitArrayCreator.FromString("1");
-    subtree.TileAvailability = t0;
-
-    var t1 = BitArrayCreator.FromString("1");
-    subtree.ContentAvailability = t1;
-
-    var bytes = SubtreeWriter.ToBytes(subtree);
-    File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
-}
-
