@@ -7,17 +7,16 @@
             return ((1 << (2 * level)) - 1) / 3;
         }
 
-        public static int GetMaxLevel(string availability)
+        public static int GetNumberOfLevels(string availability)
         {
             var level = 0;
             var l = availability.Length;
-            while (LevelOffset.GetLevelOffset(level) < l)
+            while (GetLevelOffset(level) < l)
             {
                 level++;
             }
 
             return level - 1;
         }
-
     }
 }

@@ -9,6 +9,5 @@ namespace subtree
             var slicedBytes = new Span<byte>(subtreeBinary).Slice(start: offset, length: length);
             return new BitArray(slicedBytes.ToArray());
         }
-
     }
 }

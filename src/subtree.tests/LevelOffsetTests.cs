@@ -17,15 +17,15 @@ namespace subtree.tests
         public void TileAvailabilityTests()
         {
             var contentavailability = "101100000100110010000000";
-            var l = LevelOffset.GetMaxLevel(contentavailability);
+            var l = LevelOffset.GetNumberOfLevels(contentavailability);
             Assert.IsTrue(l==3);
 
             contentavailability = "1";
-            l = LevelOffset.GetMaxLevel(contentavailability);
+            l = LevelOffset.GetNumberOfLevels(contentavailability);
             Assert.IsTrue(l == 0);
 
             contentavailability = "11100";
-            l = LevelOffset.GetMaxLevel(contentavailability);
+            l = LevelOffset.GetNumberOfLevels(contentavailability);
             Assert.IsTrue(l == 1);
         }
     }
