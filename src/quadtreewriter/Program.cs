@@ -36,8 +36,10 @@ static void GenerateGlbFromDatabase()
     Console.WriteLine("Geometries: " + geoms.Count);
     var triangles = GetTriangles(geoms);
     Console.WriteLine("Triangles: " + triangles.Count);
-    var bytes = GlbCreator.GetGlb(triangles);
-    File.WriteAllBytes("content/0_0_0.glb", bytes);
+    var b3dm = B3dmCreator.GetB3dm(triangles);
+    var bytes = b3dm.ToBytes();
+
+    File.WriteAllBytes("content/0_0_0.b3dm", bytes);
 }
 
 static List<quadtreewriter.Triangle> GetTriangles(List<Geometry> geoms)

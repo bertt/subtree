@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="b3dm-tile" Version="0.14.0" />
     <PackageReference Include="Npgsql" Version="7.0.0-preview.6" />
     <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0020" />
     <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />

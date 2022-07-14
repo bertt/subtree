@@ -37,10 +37,8 @@ void Info(Options options)
             if (contentAvailability.constant != 0)
             {
                 Console.WriteLine("bitstream: " + contentAvailability.bitstream);
-
             }
             Console.WriteLine("available: " + contentAvailability.availableCount);
-
         }
     }
 
@@ -48,8 +46,6 @@ void Info(Options options)
     {
         Console.WriteLine("Availability: " + subtree.ContentAvailability.AsString());
         PrintAvailability(subtree.ContentAvailability.AsString());
-
-
     }
 
     Console.WriteLine("3] Child subtree availability: ");

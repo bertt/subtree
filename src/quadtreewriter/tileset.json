@@ -23,7 +23,7 @@
     "geometricError": 32.0,
     "refine": "ADD",
     "content": {
-      "uri": "content/{level}_{x}_{y}.glb"
+      "uri": "content/{level}_{x}_{y}.b3dm"
     },
     "implicitTiling": {
       "subdivisionScheme": "QUADTREE",

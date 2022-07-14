@@ -10,13 +10,34 @@
         public static int GetNumberOfLevels(string availability)
         {
             var level = 0;
-            var l = availability.Length;
-            while (GetLevelOffset(level) < l)
+            var length = availability.Length;
+            var cont = true;
+
+            while (cont)
             {
-                level++;
+                var offset = GetLevelOffset(level);
+                var offsetnext = GetLevelOffset(level + 1);
+
+                if(offset<length && offsetnext > length)
+                {
+                    cont = false;
+                }
+                else
+                {
+                    var bits = availability.Substring(offset, offsetnext- offset);
+                    var bitarray = BitArrayCreator.FromString(bits);
+                    if (bitarray.Count(true) == 0)
+                    {
+                        cont = false;
+                    }
+                    else
+                    {
+                        level++;
+                    }
+                }
             }
 
-            return level - 1;
+            return level;
         }
     }
 }
