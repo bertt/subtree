@@ -23,12 +23,12 @@
     "geometricError": 32.0,
     "refine": "ADD",
     "content": {
-      "uri": "content/{level}_{x}_{y}.b3dm"
+      "uri": "content/{level}_{x}_{y}.glb"
     },
     "implicitTiling": {
       "subdivisionScheme": "QUADTREE",
-      "subtreeLevels": 1,
-      "availableLevels": 1,
+      "subtreeLevels": 2,
+      "availableLevels" : 500,
       "subtrees": {
         "uri": "subtrees/{level}_{x}_{y}.subtree"
       }

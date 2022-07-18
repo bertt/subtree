@@ -27,15 +27,6 @@ namespace subtree.tests
             contentavailability = "10000000";
             l = LevelOffset.GetNumberOfLevels(contentavailability);
             Assert.IsTrue(l == 1);
-
-            //contentavailability = "11100";
-            //l = LevelOffset.GetNumberOfLevels(contentavailability);
-            //Assert.IsTrue(l == 1);
-
-            //contentavailability = "11000000";
-            //l = LevelOffset.GetNumberOfLevels(contentavailability);
-            //Assert.IsTrue(l == 2);
-
         }
     }
 }

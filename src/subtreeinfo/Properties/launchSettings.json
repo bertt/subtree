@@ -2,7 +2,7 @@
   "profiles": {
     "subtreeinfo": {
       "commandName": "Project",
-      "commandLineArgs": "-i ./testfixtures/test/0_0_0.subtree\r\n"
+      "commandLineArgs": "-i ./testfixtures/0.0.0.subtree\r\n"
     }
   }
 }

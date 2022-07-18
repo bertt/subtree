@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\subtree\subtree.csproj" />
+    <ProjectReference Include="..\..\src\subtree\subtree.csproj" />
   </ItemGroup>
 
   <ItemGroup>

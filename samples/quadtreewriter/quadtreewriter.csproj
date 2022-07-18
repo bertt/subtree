@@ -8,16 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="content\**" />
+    <EmbeddedResource Remove="content\**" />
+    <None Remove="content\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="tileset.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="content\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\subtree\subtree.csproj" />
+    <ProjectReference Include="..\..\src\subtree\subtree.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@
             return ((1 << (2 * level)) - 1) / 3;
         }
 
-        public static int GetNumberOfLevels(string availability)
+        public static int GetNumberOfLevels(string availability, bool isContentAvailability = false)
         {
             var level = 0;
             var length = availability.Length;
@@ -26,9 +26,16 @@
                 {
                     var bits = availability.Substring(offset, offsetnext- offset);
                     var bitarray = BitArrayCreator.FromString(bits);
-                    if (bitarray.Count(true) == 0)
+                    if (!isContentAvailability)
                     {
-                        cont = false;
+                        if (bitarray.Count(true) == 0)
+                        {
+                            cont = false;
+                        }
+                        else
+                        {
+                            level++;
+                        }
                     }
                     else
                     {
