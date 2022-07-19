@@ -20,10 +20,10 @@
         6077.698
       ]
     },
-    "geometricError": 32.0,
+    "geometricError": 512.0,
     "refine": "ADD",
     "content": {
-      "uri": "content/{level}_{x}_{y}.glb"
+      "uri": "content/test_{level}_{x}_{y}.glb"
     },
     "implicitTiling": {
       "subdivisionScheme": "QUADTREE",

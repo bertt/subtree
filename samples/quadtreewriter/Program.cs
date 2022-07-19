@@ -5,7 +5,6 @@ using subtree;
 using System.Diagnostics;
 using Wkx;
 
-
 var table = "delaware_buildings";
 
 var tileAvailability = "11111";
@@ -15,8 +14,8 @@ var subtreeAvailability = "1000000";
 var stopwatch = new Stopwatch();
 stopwatch.Start();
 
-byte[] subtreebytes = GetSubtreeBytes(tileAvailability, contentAvailability);
-File.WriteAllBytes("subtrees/0_0_0.subtree", subtreebytes);
+//byte[] subtreebytes = GetSubtreeBytes(tileAvailability, contentAvailability);
+//File.WriteAllBytes("subtrees/0_0_0.subtree", subtreebytes);
 
 var connectionString = "Host=::1;Username=postgres;Database=postgres;Port=5432;password=postgres";
 var conn = new NpgsqlConnection(connectionString);
@@ -52,8 +51,8 @@ for (var z= 0;z <= maxAvailableLevel; z++)
 var morton = availabilitylevels.ToMortonIndex();
 Console.WriteLine("Morton index: " + morton);
 
-subtreebytes = GetSubtreeBytes(morton, morton);
-File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
+var subtreebytes = GetSubtreeBytes(morton, morton);
+// File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
 
 var s = 0;
 

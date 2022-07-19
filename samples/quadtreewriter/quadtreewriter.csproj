@@ -17,6 +17,9 @@
     <None Update="index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="subtrees\0_0_0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="tileset.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
