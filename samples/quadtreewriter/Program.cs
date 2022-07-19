@@ -23,6 +23,10 @@ var bbox3d = GetBBox3D(conn);
 var epsg = 4978;
 var geometry_column = "geom_triangle";
 
+
+// var bits = "01111000";
+
+
 Console.WriteLine("bbox 3d: " + bbox3d);
 var bbox = new BoundingBox(bbox3d.XMin, bbox3d.YMin, bbox3d.XMax, bbox3d.YMax);
 
@@ -50,6 +54,12 @@ for (var z= 0;z <= maxAvailableLevel; z++)
 }
 var morton = availabilitylevels.ToMortonIndex();
 Console.WriteLine("Morton index: " + morton);
+
+// 00000001000010001011000001110000011101001000001010000111100101111000011010000000000000000000000000000000000000000111100000000000000000000000000001111000000001111000000000000000000001111000011110000000000000000000000000000000000001111111100001111000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000
+var bit1 = BitArrayCreator.FromString(morton);
+var b = bit1.ToByteArray();
+
+File.WriteAllBytes("subtrees/availability.bin", b);
 
 var subtreebytes = GetSubtreeBytes(morton, morton);
 // File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
