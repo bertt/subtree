@@ -34,7 +34,7 @@
 const tileset = viewer.scene.primitives.add(
   new Cesium.Cesium3DTileset({
     url: "tileset.json",
-    debugShowBoundingVolume: true,
+    //debugShowBoundingVolume: true,
   })
 );
 //tileset.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
@@ -107,7 +107,7 @@ handler.setInputAction(function (movement) {
 
   const screenX = movement.endPosition.x;
   const screenY = movement.endPosition.y;
-  showTooltip(screenX, screenY, tooltipText);
+  // showTooltip(screenX, screenY, tooltipText);
 }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
 // Zoom to the tileset, with a small offset so that it

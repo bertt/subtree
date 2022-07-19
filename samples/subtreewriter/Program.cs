@@ -7,9 +7,9 @@ void WriteLevel2Sample()
 {
     var subtree_root = new Subtree();
     // 1-0110-0000100110010000-000
-    var t0_root = BitArrayCreator.FromString("11111");
+    var t0_root = BitArrayCreator.FromString("110010110000000000110000");
     subtree_root.TileAvailability = t0_root;
-    subtree_root.ContentAvailability= BitArrayCreator.FromString("01111"); ;
+    subtree_root.ContentAvailability= BitArrayCreator.FromString("000000110000000000110000");
 
     // 00000000-00000000-01100000-00000110-01100000-00000110-00000000-00000000 (8 bytes)
     // var s0_root = BitArrayCreator.FromString("0000000000000000011000000000011001100000000001100000000000000000");
