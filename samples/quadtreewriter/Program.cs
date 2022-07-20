@@ -158,7 +158,6 @@ static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, Boundin
 static byte[] GetSubtreeBytes(string contentAvailability, string subtreeAvailability = null)
 {
     var subtree_root = new Subtree();
-    // var t0_root = BitArrayCreator.FromString(tileAvailability);
     subtree_root.TileAvailabiltyConstant = 1;
 
     var s0_root = BitArrayCreator.FromString(contentAvailability);

@@ -4,6 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/bertt/subtree</PackageProjectUrl>
+    <Description>Reader/writer for 3D TIles Subtree binary format</Description>
+    <RepositoryUrl>https://github.com/bertt/subtree</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>3dtiles implicit subtree</PackageTags>
+    <Company>Bert Temme</Company>
+    <Authors>Bert Temme</Authors>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
