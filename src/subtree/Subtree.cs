@@ -7,6 +7,8 @@ namespace subtree
         public Subtree()
         {
             SubtreeHeader = new SubtreeHeader();
+            TileAvailabiltyConstant = 0;
+            ContentAvailabiltyConstant = 0;
         }
 
         public SubtreeHeader SubtreeHeader { get; set; } = null!;
@@ -15,8 +17,12 @@ namespace subtree
 
         public BitArray? ChildSubtreeAvailability { get; set; }
         public BitArray TileAvailability { get; set; } = null!;
-        public BitArray? ContentAvailability { get; set; }
 
+        public int TileAvailabiltyConstant { get; set; }
+
+        public BitArray? ContentAvailability { get; set; } = null!;
+
+        public int ContentAvailabiltyConstant { get; set; }
         public List<string> GetExpectedSubtreeFiles()
         {
             var subtreefiles = new List<string>();

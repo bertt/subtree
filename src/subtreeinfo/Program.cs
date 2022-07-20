@@ -26,22 +26,23 @@ void Info(Options options)
         Console.WriteLine("1] Tile availability: ");
         Console.WriteLine("Bitstream: " + subtreeJsonObject?.tileAvailability.bitstream);
         Console.WriteLine("Available: " + subtreeJsonObject?.tileAvailability.availableCount);
+        Console.WriteLine("Constant: " + subtreeJsonObject?.tileAvailability.constant);
 
-        var tileAvailability = subtree.TileAvailability.AsString();
+        if (subtree.TileAvailability != null)
+        {
+            var tileAvailability = subtree.TileAvailability.AsString();
 
-        Console.WriteLine("Availability: " + tileAvailability);
-        PrintAvailability(tileAvailability);
-
+            Console.WriteLine("Availability: " + tileAvailability);
+            PrintAvailability(tileAvailability);
+        }
         Console.WriteLine("2] Content availability: ");
         if (subtreeJsonObject?.contentAvailability is not null)
         {
             foreach (var contentAvailability in subtreeJsonObject.contentAvailability)
             {
-                if (contentAvailability.constant != 0)
-                {
-                    Console.WriteLine("bitstream: " + contentAvailability.bitstream);
-                }
-                Console.WriteLine("available: " + contentAvailability.availableCount);
+                Console.WriteLine("Bitstream: " + contentAvailability.bitstream);
+                Console.WriteLine("Constant: " + contentAvailability.constant);
+                Console.WriteLine("Available: " + contentAvailability.availableCount);
             }
         }
 
@@ -91,8 +92,6 @@ static void PrintAvailability(string availability, bool isContentAvailability = 
         PrintBitArray2D(availabilityArray);
     }
 }
-
-
 
 static void PrintBitArray2D(BitArray2D bitArray2D)
 {

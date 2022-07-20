@@ -8,5 +8,4 @@
         public Contentavailability[] contentAvailability { get; set; } = null!;
         public Childsubtreeavailability childSubtreeAvailability { get; set; } = null!;
     }
-
 }

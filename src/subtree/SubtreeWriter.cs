@@ -25,7 +25,6 @@ namespace subtree
             binaryWriter.Write(Encoding.UTF8.GetBytes(subtreeJsonPadded));
             binaryWriter.Write(bin.bytes);
 
-            //binaryWriter.Flush();
             binaryWriter.Close();
             var arr = memoryStream.ToArray();
             return arr;
@@ -36,10 +35,18 @@ namespace subtree
             var substreamBinary = new List<byte>();
             var subtreeJson = new SubtreeJson();
             var bufferViews = new List<Bufferview>();
-            var resultTileAvailability = HandleBitArray(subtree.TileAvailability);
-            bufferViews.Add(resultTileAvailability.bufferView);
-            substreamBinary.AddRange(resultTileAvailability.bytes.ToArray());
-            subtreeJson.tileAvailability = new Tileavailability() { bitstream = 0, availableCount = resultTileAvailability.trueBits };
+
+            if (subtree.TileAvailability != null)
+            {
+                var resultTileAvailability = HandleBitArray(subtree.TileAvailability);
+                bufferViews.Add(resultTileAvailability.bufferView);
+                substreamBinary.AddRange(resultTileAvailability.bytes.ToArray());
+                subtreeJson.tileAvailability = new Tileavailability() { bitstream = 0, availableCount = resultTileAvailability.trueBits };
+            }
+            else
+            {
+                subtreeJson.tileAvailability = new Tileavailability() { constant = subtree.TileAvailabiltyConstant};
+            }
 
             if (subtree.ContentAvailability != null)
             {
@@ -52,7 +59,7 @@ namespace subtree
             }
             else
             {
-                subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { availableCount = 0, constant = 0 } }.ToArray();
+                subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { constant = subtree.ContentAvailabiltyConstant } }.ToArray();
             }
 
             if (subtree.ChildSubtreeAvailability != null)
@@ -66,7 +73,7 @@ namespace subtree
             }
             else
             {
-                subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { availableCount = 0, constant = 0 };
+                subtreeJson.childSubtreeAvailability = new Childsubtreeavailability() { constant = 0 };
             }
 
             subtreeJson.buffers = new List<Buffer>() { new Buffer() { byteLength = substreamBinary.Count } }.ToArray();

@@ -19,7 +19,6 @@ namespace subtree.tests
 
             Assert.IsTrue(availabilityLevel1.ToMortonIndex() == "1000");
             Assert.IsTrue(availabilityLevels.ToMortonIndex() == "01000");
-
         }
     }
 }

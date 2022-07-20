@@ -20,15 +20,29 @@ namespace subtree
             var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(subtree.SubtreeJson);
             if(subtreeJsonObject != null)
             {
-                var bufferViewTileAvailability = subtreeJsonObject.bufferViews[subtreeJsonObject.tileAvailability.bitstream];
-                subtree.TileAvailability = BitstreamReader.Read(subtree.SubtreeBinary, bufferViewTileAvailability.byteOffset, bufferViewTileAvailability.byteLength);
+                if (subtreeJsonObject.tileAvailability != null && subtreeJsonObject.tileAvailability.bitstream != null)
+                {
+                    var bufferViewTileAvailability = subtreeJsonObject.bufferViews[(int)subtreeJsonObject.tileAvailability.bitstream];
+                    subtree.TileAvailability = BitstreamReader.Read(subtree.SubtreeBinary, bufferViewTileAvailability.byteOffset, bufferViewTileAvailability.byteLength);
+                }
+                else
+                {
+                    subtree.TileAvailabiltyConstant = (int)subtreeJsonObject.tileAvailability.constant;
+                }
 
+                // todo: implement multiple content (do not use first() here)...
                 var contentBitstream = subtreeJsonObject.contentAvailability.First().bitstream;
                 if (contentBitstream!= null)
                 {
                     var bufferViewContent = subtreeJsonObject.bufferViews[(int)contentBitstream];
                     subtree.ContentAvailability = BitstreamReader.Read(subtree.SubtreeBinary, bufferViewContent.byteOffset, bufferViewContent.byteLength);
                 }
+                else
+                {
+                    // todo: implement multiple content (do not use first() here)...
+                    subtree.ContentAvailabiltyConstant= (int)subtreeJsonObject.contentAvailability.First().constant;
+                }
+
                 if (subtreeJsonObject.childSubtreeAvailability != null && subtreeJsonObject.childSubtreeAvailability.bitstream != null)
                 {
                     var bufferViewChildsubtree = subtreeJsonObject.bufferViews[(int)subtreeJsonObject.childSubtreeAvailability.bitstream];

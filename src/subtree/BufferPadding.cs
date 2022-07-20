@@ -22,7 +22,6 @@ namespace subtree
             return result;
         }
 
-
         public static byte[] AddBinaryPadding(byte[] bytes, int offset = 0)
         {
             var remainder = (offset + bytes.Length) % boundary;
@@ -30,7 +29,6 @@ namespace subtree
             var res = bytes.Concat(GetByteArray(padding));
             return res.ToArray();
         }
-
         public static byte[] GetByteArray(int length)
         {
             var arr = new byte[length];
@@ -40,6 +38,5 @@ namespace subtree
             }
             return arr;
         }
-
     }
 }

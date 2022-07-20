@@ -32,6 +32,24 @@ namespace subtree.tests
         }
 
         [Test]
+        public void TestWriteSubtreeRootwithConstants()
+        {
+            // create root subtree
+            var subtree = new Subtree();
+
+            subtree.TileAvailabiltyConstant= 1;
+
+            // act
+            var bytes = SubtreeWriter.ToBytes(subtree);
+            File.WriteAllBytes(@"d:\aaa\test.subtree", bytes);
+            var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
+
+            // assert
+            Assert.IsTrue(newSubtree.TileAvailability == null);
+            Assert.IsTrue(newSubtree.TileAvailabiltyConstant == 1);
+        }
+
+        [Test]
         public void TestWriteSubtreeRootFile()
         {
             // arrange
@@ -62,7 +80,6 @@ namespace subtree.tests
             Assert.IsTrue(Enumerable.SequenceEqual(bytes, subtreeBytes));
             Assert.IsTrue(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
         }
-
 
         [Test]
         public void TestWriteSubtreeLevel3File()

@@ -6,26 +6,14 @@ using System.Diagnostics;
 using Wkx;
 
 var table = "delaware_buildings";
-
-var tileAvailability = "11111";
-var contentAvailability = "01111";
-var subtreeAvailability = "1000000";
-
 var stopwatch = new Stopwatch();
 stopwatch.Start();
-
-//byte[] subtreebytes = GetSubtreeBytes(tileAvailability, contentAvailability);
-//File.WriteAllBytes("subtrees/0_0_0.subtree", subtreebytes);
 
 var connectionString = "Host=::1;Username=postgres;Database=postgres;Port=5432;password=postgres";
 var conn = new NpgsqlConnection(connectionString);
 var bbox3d = GetBBox3D(conn);
 var epsg = 4978;
 var geometry_column = "geom_triangle";
-
-
-// var bits = "01111000";
-
 
 Console.WriteLine("bbox 3d: " + bbox3d);
 var bbox = new BoundingBox(bbox3d.XMin, bbox3d.YMin, bbox3d.XMax, bbox3d.YMax);
@@ -41,28 +29,12 @@ Console.WriteLine(stopwatch.ElapsedMilliseconds / 1000 + "s");
 var maxAvailableLevel = tiles.Max(x => x.Z);
 Console.WriteLine("Max available level: " + maxAvailableLevel);
 
-var availabilitylevels = new AvailabilityLevels();
-for (var z= 0;z <= maxAvailableLevel; z++)
-{
-    var levelTiles = tiles.Where(tile => tile.Z == z && tile.Available);
-    var availabilityLevel = new AvailabilityLevel(z);
-    foreach (var levelTile in levelTiles)
-    {
-        availabilityLevel.BitArray2D.Set(levelTile.X, levelTile.Y, true);
-    }
-    availabilitylevels.Add(availabilityLevel);
-}
-var morton = availabilitylevels.ToMortonIndex();
+// sample: 00000001000010001011000001110000011101001000001010000111100101111000011010000000000000000000000000000000000000000111100000000000000000000000000001111000000001111000000000000000000001111000011110000000000000000000000000000000000001111111100001111000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000
+string morton = MortonIndex.GetMortonIndex(tiles);
 Console.WriteLine("Morton index: " + morton);
 
-// 00000001000010001011000001110000011101001000001010000111100101111000011010000000000000000000000000000000000000000111100000000000000000000000000001111000000001111000000000000000000001111000011110000000000000000000000000000000000001111111100001111000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000
-var bit1 = BitArrayCreator.FromString(morton);
-var b = bit1.ToByteArray();
-
-File.WriteAllBytes("subtrees/availability.bin", b);
-
-var subtreebytes = GetSubtreeBytes(morton, morton);
-// File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
+var subtreebytes = GetSubtreeBytes(morton);
+File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
 
 var s = 0;
 
@@ -72,7 +44,7 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
     var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometry_column, new Point(bbox.XMin, bbox.YMin), new Point(bbox.XMax, bbox.YMax), epsg, "");
 
     Console.WriteLine($"Features of tile {tile.Z},{tile.X},{tile.Y}: " + numberOfFeatures);
-    if(numberOfFeatures == 0)
+    if (numberOfFeatures == 0)
     {
         var t2 = new Tile(tile.Z, tile.X, tile.Y);
         t2.Available = false;
@@ -96,7 +68,7 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
 
                 var bboxQuad = new BoundingBox(xstart, ystart, xend, yend);
 
-                var new_tile = new Tile(tile.Z + 1, tile.X*2 + x, tile.Y*2 + y);
+                var new_tile = new Tile(tile.Z + 1, tile.X * 2 + x, tile.Y * 2 + y);
                 generateTiles(table, conn, epsg, geometry_column, bboxQuad, maxFeaturesPerTile, new_tile, tiles);
             }
         }
@@ -114,25 +86,11 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
     return tiles;
 }
 
-
-
-
-
 static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, BoundingBox bbox, int epsg)
 {
-    //var translation = bbox3d.GetCenter().ToVector();
-    //var boundingboxAllFeatures = BoundingBoxCalculator.TranslateRotateX(bbox3d, Reverse(translation), Math.PI / 2);
-    //var box = boundingboxAllFeatures.GetBox();
-
     var geoms = GetGeometries(conn, table, bbox, epsg);
-
-    //Console.WriteLine("Geometries: " + geoms.Count);
     var triangles = GetTriangles(geoms);
-    //Console.WriteLine("Triangles: " + triangles.Count);
     var bytes = GlbCreator.GetGlb(triangles);
-
-    // var b3dm = B3dmCreator.GetB3dm(triangles);
-    // var bytes = b3dm.ToBytes();
     return bytes;
 }
 
@@ -197,11 +155,11 @@ static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, Boundin
     return geometries;
 }
 
-static byte[] GetSubtreeBytes(string tileAvailability, string contentAvailability, string subtreeAvailability = null)
+static byte[] GetSubtreeBytes(string contentAvailability, string subtreeAvailability = null)
 {
     var subtree_root = new Subtree();
-    var t0_root = BitArrayCreator.FromString(tileAvailability);
-    subtree_root.TileAvailability = t0_root;
+    // var t0_root = BitArrayCreator.FromString(tileAvailability);
+    subtree_root.TileAvailabiltyConstant = 1;
 
     var s0_root = BitArrayCreator.FromString(contentAvailability);
     subtree_root.ContentAvailability = s0_root;
@@ -215,4 +173,3 @@ static byte[] GetSubtreeBytes(string tileAvailability, string contentAvailabilit
     var subtreebytes = SubtreeWriter.ToBytes(subtree_root);
     return subtreebytes;
 }
-

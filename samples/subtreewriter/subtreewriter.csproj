@@ -141,6 +141,9 @@
     <None Update="index.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="subtrees\placeholder.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="tileset.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
