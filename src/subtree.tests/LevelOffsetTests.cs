@@ -11,6 +11,7 @@ namespace subtree.tests
             Assert.IsTrue(LevelOffset.GetLevelOffset(1) == 1);
             Assert.IsTrue(LevelOffset.GetLevelOffset(2) == 5);
             Assert.IsTrue(LevelOffset.GetLevelOffset(3) == 21);
+            Assert.IsTrue(LevelOffset.GetLevelOffset(4) == 85);
         }
 
         [Test]

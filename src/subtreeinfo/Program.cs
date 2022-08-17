@@ -48,7 +48,7 @@ void Info(Options options)
 
         if (subtree.ContentAvailability != null)
         {
-            Console.WriteLine("Availability: " + subtree.ContentAvailability.AsString());
+            // Console.WriteLine("Availability: " + subtree.ContentAvailability.AsString());
             PrintAvailability(subtree.ContentAvailability.AsString(), true);
         }
         Console.WriteLine();
@@ -81,13 +81,38 @@ static void PrintAvailability(string availability, bool isContentAvailability = 
     var l = LevelOffset.GetNumberOfLevels(availability, isContentAvailability);
     Console.WriteLine("Number of levels: " + l);
 
+    var total = 0;
+
     for (int i = 0; i < l; i++)
     {
-        Console.WriteLine("Level: " + i);
         var offset = LevelOffset.GetLevelOffset(i);
         var offset1 = LevelOffset.GetLevelOffset(i + 1);
         var levelAvailability = availability.Substring(offset, offset1 - offset);
+        var ba = BitArrayCreator.FromString(levelAvailability);
+        total += ba.Count(true);
+        var available = ba.Count(true);
+        var tot = ba.Count;
+        
+        Console.WriteLine($"Level: {i}, available {available}/{tot}");
+    }
+    Console.WriteLine($"Total: {total}");
 
+    var maxLevel = l;
+    if (l > 4)
+    {
+        maxLevel = 4;
+        Console.WriteLine($"Printing level 0-{maxLevel} of {l}...");
+    }
+    else
+    {
+        Console.WriteLine($"Printing level 0-{maxLevel}...");
+    }
+    Console.WriteLine("");
+    for(var j = 0; j < maxLevel; j++)
+    {
+        var offset = LevelOffset.GetLevelOffset(j);
+        var offset1 = LevelOffset.GetLevelOffset(j + 1);
+        var levelAvailability = availability.Substring(offset, offset1 - offset);
         var availabilityArray = BitArray2DCreator.GetBitArray2D(levelAvailability);
         PrintBitArray2D(availabilityArray);
     }
