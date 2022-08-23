@@ -9,9 +9,9 @@
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>subtreeinfo</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
-	<AssemblyVersion>1.0.5</AssemblyVersion>
-	<FileVersion>1.0.5</FileVersion>
-	<Version>1.0.5</Version>
+	<AssemblyVersion>1.0.6</AssemblyVersion>
+	<FileVersion>1.0.6</FileVersion>
+	<Version>1.0.6</Version>
 
   </PropertyGroup>
 
@@ -41,6 +41,9 @@
     </None>
     <None Update="testfixtures\large.subtree">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\subtree_with_tileavailability.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="testfixtures\test\0_0_0.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
