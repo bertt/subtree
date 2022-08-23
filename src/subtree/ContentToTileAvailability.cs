@@ -18,29 +18,23 @@
 
             for (var l = maxLevelNumber; l > 0; l--)
             {
-                var currentContentLevel = contentAvailabilitylevels.Where(z => z.Level == maxLevelNumber).FirstOrDefault();
-                var currentTileLevel = tileAvailabilitylevels.Where(z => z.Level == maxLevelNumber).FirstOrDefault();
-                var parentTileLevel = tileAvailabilitylevels.Where(z => z.Level == maxLevelNumber - 1).FirstOrDefault();
-                if (currentContentLevel.BitArray2D.IsAvailable())
+                var currentContentLevel = contentAvailabilitylevels.Where(z => z.Level == l).FirstOrDefault();
+                var currentTileLevel = tileAvailabilitylevels.Where(z => z.Level == l).FirstOrDefault();
+                var parentTileLevel = tileAvailabilitylevels.Where(z => z.Level == l - 1).FirstOrDefault();
+                var w = currentTileLevel.BitArray2D.GetWidth();
+                var h = currentTileLevel.BitArray2D.GetHeight();
+
+                for (var x = 0; x < w; x++)
                 {
-                    var w = currentContentLevel.BitArray2D.GetWidth();
-                    var h = currentContentLevel.BitArray2D.GetHeight();
-
-                    for (var x = 0; x < w; x++)
+                    for (var y = 0; y < h; y++)
                     {
-                        for (var y = 0; y < h; y++)
+                        if (currentContentLevel.BitArray2D.Get(x, y) || currentTileLevel.BitArray2D.Get(x, y))
                         {
-                            if (currentContentLevel.BitArray2D.Get(x, y))
-                            {
-                                if (l == maxLevelNumber)
-                                {
-                                    currentTileLevel?.BitArray2D.Set(x, y, true);
-                                }
-                                var parentX = x >> 1;
-                                var parentY = y >> 1;
+                            currentTileLevel?.BitArray2D.Set(x, y, true);
+                            var parentX = x >> 1;
+                            var parentY = y >> 1;
 
-                                parentTileLevel?.BitArray2D.Set(parentX, parentY, true);
-                            }
+                            parentTileLevel?.BitArray2D.Set(parentX, parentY, true);
                         }
                     }
                 }

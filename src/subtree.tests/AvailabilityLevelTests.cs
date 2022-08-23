@@ -5,6 +5,32 @@ namespace subtree.tests
     public class AvailabilityLevelTests
     {
         [Test]
+        public void TileAvailabilityToContentAvailabilityTest2()
+        {
+            // arrange
+            var level0 = new AvailabilityLevel(0);
+            var level1 = new AvailabilityLevel(1);
+            level1.BitArray2D.Set(1, 0, true);
+            level1.BitArray2D.Set(1, 1, true);
+            var level2 = new AvailabilityLevel(2);
+            level2.BitArray2D.Set(0, 0, true);
+            level2.BitArray2D.Set(0, 3, true);
+
+            var contentAvailabilitylevels = new AvailabilityLevels() { level0, level1, level2 };
+            var mortonContent = contentAvailabilitylevels.ToMortonIndex();
+            Assert.IsTrue(mortonContent == "001011000000000100000");
+            // act
+            AvailabilityLevels tileAvailabilitylevels = ContentToTileAvailability.GetTileAvailabilityLevels(contentAvailabilitylevels);
+
+            // assert
+            var mortenTileAvailability = tileAvailabilitylevels.ToMortonIndex();
+            Assert.IsTrue(mortenTileAvailability == "111111000000000100000");
+        }
+
+
+
+
+        [Test]
         public void TileAvailabilityToContentAvailabilityTest1()
         {
             // arrange
