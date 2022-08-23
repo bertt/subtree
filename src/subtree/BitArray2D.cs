@@ -33,5 +33,10 @@ namespace subtree
 
         public int GetWidth() { return _dimension1; }
         public int GetHeight() { return _dimension2; }
+
+        public bool IsAvailable()
+        {
+            return _array.OfType<bool>().Count(p => p) > 0;
+        }
     }
 }

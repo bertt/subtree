@@ -12,12 +12,13 @@ namespace subtree.tests
             t.Available = true;
 
             // act
-            var mortonIndex = MortonIndex.GetMortonIndex(new List<Tile> { t });
-            var mortonIndexBytes = MortonIndex.GetMortonIndexAsBytes(new List<Tile> { t });
+            var mortonIndices = MortonIndex.GetMortonIndices(new List<Tile> { t });
+            var mortonIndicesBytes = MortonIndex.GetMortonIndexAsBytes(new List<Tile> { t });
 
             // assert
-            Assert.IsTrue(mortonIndex == "1");
-            Assert.IsTrue(mortonIndexBytes.Length == 1);
+            Assert.IsTrue(mortonIndices.tileAvailability == "1");
+            Assert.IsTrue(mortonIndices.contentAvailability == "1");
+            Assert.IsTrue(mortonIndicesBytes.tileAvailability.Length == 1);
         }
     }
 }

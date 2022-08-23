@@ -50,6 +50,7 @@ Level: 2
 
 2] Content availability:
 available: 0
+
 3] Child subtree availability:
 bitstream: 1
 available: 8
@@ -81,4 +82,11 @@ File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 
 https://bertt.github.io/subtree/samples/roottile
 
+## History
+
+2022-08-23: Version 1.1 - add tileAvailability
+
+2022-07-20: Version 1.0.1
+
+2022-07-20: Version 1.0
 

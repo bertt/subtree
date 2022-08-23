@@ -30,10 +30,10 @@ var maxAvailableLevel = tiles.Max(x => x.Z);
 Console.WriteLine("Max available level: " + maxAvailableLevel);
 
 // sample: 00000001000010001011000001110000011101001000001010000111100101111000011010000000000000000000000000000000000000000111100000000000000000000000000001111000000001111000000000000000000001111000011110000000000000000000000000000000000001111111100001111000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000
-string morton = MortonIndex.GetMortonIndex(tiles);
-Console.WriteLine("Morton index: " + morton);
+var mortonIndices = MortonIndex.GetMortonIndices(tiles);
+Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 
-var subtreebytes = GetSubtreeBytes(morton);
+var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability);
 File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
 
 var s = 0;

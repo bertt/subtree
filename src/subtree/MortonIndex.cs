@@ -2,9 +2,10 @@
 {
     public static class MortonIndex
     {
-        public static string GetMortonIndex(List<Tile> tiles)
+        public static (string tileAvailability, string contentAvailability) GetMortonIndices(List<Tile> tiles)
         {
-            var availabilitylevels = new AvailabilityLevels();
+            var contentAvailabilitylevels = new AvailabilityLevels();
+
             var maxZ = tiles.Max(t => t.Z);
             for (var z = 0; z <= maxZ; z++)
             {
@@ -14,19 +15,22 @@
                 {
                     availabilityLevel.BitArray2D.Set(levelTile.X, levelTile.Y, true);
                 }
-                availabilitylevels.Add(availabilityLevel);
+                contentAvailabilitylevels.Add(availabilityLevel);
             }
-            var morton = availabilitylevels.ToMortonIndex();
-            return morton;
+
+
+            var tileAvailability = ContentToTileAvailability.GetTileAvailabilityLevels(contentAvailabilitylevels);
+            var mortonContent = contentAvailabilitylevels.ToMortonIndex();
+            return (tileAvailability.ToMortonIndex(), contentAvailabilitylevels.ToMortonIndex());
         }
 
 
-        public static byte[] GetMortonIndexAsBytes(List<Tile> tiles)
+        public static (byte[] tileAvailability, byte[] contentAvailability) GetMortonIndexAsBytes(List<Tile> tiles)
         {
-            var mortonIndex = GetMortonIndex(tiles);
-            var bit1 = BitArrayCreator.FromString(mortonIndex);
-            var b = bit1.ToByteArray();
-            return b;
+            var mortonIndices = GetMortonIndices(tiles);
+            var bitsTileAvailability = BitArrayCreator.FromString(mortonIndices.tileAvailability).ToByteArray();
+            var bitsContentAvailability = BitArrayCreator.FromString(mortonIndices.contentAvailability).ToByteArray();
+            return (bitsTileAvailability, bitsContentAvailability);
         }
     }
 }
