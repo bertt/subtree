@@ -4,7 +4,9 @@ Reader/writer for Subtree binary format:
 
 Specs: https://github.com/CesiumGS/3d-tiles/tree/draft-1.1/specification/ImplicitTiling#implicittiling-subtree-binary-format
 
+## Tool subtreeinfo
 
+see https://github.com/bertt/subtree/blob/main/src/subtreeinfo/README.md
 
 ## Samples code 
 
@@ -20,8 +22,6 @@ subtree.ContentAvailability = t0;
 var bytes = SubtreeWriter.ToBytes(subtree);
 File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 ```
-
-https://bertt.github.io/subtree/samples/roottile
 
 ## History
 
