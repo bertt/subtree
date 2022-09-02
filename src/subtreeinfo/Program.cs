@@ -16,6 +16,9 @@ void Info(Options options)
 
     if (File.Exists(options.Input))
     {
+        var scheme = options.SubdivisonScheme;
+        Console.WriteLine($"Subdivision scheme: {scheme}");
+
         var subtreefile = File.OpenRead(options.Input);
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         Console.WriteLine("Header magic: " + subtree.SubtreeHeader.Magic);
@@ -31,9 +34,7 @@ void Info(Options options)
         if (subtree.TileAvailability != null)
         {
             var tileAvailability = subtree.TileAvailability.AsString();
-
-            Console.WriteLine("Availability: " + tileAvailability);
-            PrintAvailability(tileAvailability);
+            PrintAvailability(tileAvailability,  scheme);
         }
         Console.WriteLine("2] Content availability: ");
         if (subtreeJsonObject?.contentAvailability is not null)
@@ -49,7 +50,7 @@ void Info(Options options)
         if (subtree.ContentAvailability != null)
         {
             // Console.WriteLine("Availability: " + subtree.ContentAvailability.AsString());
-            PrintAvailability(subtree.ContentAvailability.AsString(), true);
+            PrintAvailability(subtree.ContentAvailability.AsString(), scheme);
         }
         Console.WriteLine();
         Console.WriteLine("3] Child subtree availability: ");
@@ -76,17 +77,17 @@ void Info(Options options)
 }
 
 
-static void PrintAvailability(string availability, bool isContentAvailability = false)
+static void PrintAvailability(string availability, ImplicitSubdivisionScheme scheme=ImplicitSubdivisionScheme.Quadtree)
 {
-    var l = LevelOffset.GetNumberOfLevels(availability, isContentAvailability);
+    var l = LevelOffset.GetNumberOfLevels(availability, scheme);
     Console.WriteLine("Number of levels: " + l);
 
     var total = 0;
 
     for (int i = 0; i < l; i++)
     {
-        var offset = LevelOffset.GetLevelOffset(i);
-        var offset1 = LevelOffset.GetLevelOffset(i + 1);
+        var offset = LevelOffset.GetLevelOffset(i, scheme);
+        var offset1 = LevelOffset.GetLevelOffset(i + 1, scheme);
         var levelAvailability = availability.Substring(offset, offset1 - offset);
         var ba = BitArrayCreator.FromString(levelAvailability);
         total += ba.Count(true);
@@ -97,24 +98,28 @@ static void PrintAvailability(string availability, bool isContentAvailability = 
     }
     Console.WriteLine($"Total: {total}");
 
-    var maxLevel = l;
-    if (l > 4)
+
+    if(scheme == ImplicitSubdivisionScheme.Quadtree)
     {
-        maxLevel = 4;
-        Console.WriteLine($"Printing level 0-{maxLevel} of {l}...");
-    }
-    else
-    {
-        Console.WriteLine($"Printing level 0-{maxLevel}...");
-    }
-    Console.WriteLine("");
-    for(var j = 0; j < maxLevel; j++)
-    {
-        var offset = LevelOffset.GetLevelOffset(j);
-        var offset1 = LevelOffset.GetLevelOffset(j + 1);
-        var levelAvailability = availability.Substring(offset, offset1 - offset);
-        var availabilityArray = BitArray2DCreator.GetBitArray2D(levelAvailability);
-        PrintBitArray2D(availabilityArray);
+        var maxLevel = l;
+        if (l > 4)
+        {
+            maxLevel = 4;
+            Console.WriteLine($"Printing level 0-{maxLevel} of {l}...");
+        }
+        else
+        {
+            Console.WriteLine($"Printing level 0-{maxLevel}...");
+        }
+        Console.WriteLine("");
+        for (var j = 0; j < maxLevel; j++)
+        {
+            var offset = LevelOffset.GetLevelOffset(j);
+            var offset1 = LevelOffset.GetLevelOffset(j + 1);
+            var levelAvailability = availability.Substring(offset, offset1 - offset);
+            var availabilityArray = BitArray2DCreator.GetBitArray2D(levelAvailability);
+            PrintBitArray2D(availabilityArray);
+        }
     }
 }
 

@@ -15,6 +15,16 @@ namespace subtree.tests
         }
 
         [Test]
+        public void LevelOffsetTestOctree()
+        {
+            Assert.IsTrue(LevelOffset.GetLevelOffset(0, ImplicitSubdivisionScheme.Octree) == 0);
+            Assert.IsTrue(LevelOffset.GetLevelOffset(1, ImplicitSubdivisionScheme.Octree) == 1);
+            Assert.IsTrue(LevelOffset.GetLevelOffset(2, ImplicitSubdivisionScheme.Octree) == 9);
+            Assert.IsTrue(LevelOffset.GetLevelOffset(3, ImplicitSubdivisionScheme.Octree) == 73);
+            Assert.IsTrue(LevelOffset.GetLevelOffset(4, ImplicitSubdivisionScheme.Octree) == 585);
+        }
+
+        [Test]
         public void TileAvailabilityTests()
         {
             var contentavailability = "101100000100110010000000";

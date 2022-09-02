@@ -84,6 +84,8 @@ https://bertt.github.io/subtree/samples/roottile
 
 ## History
 
+2022-09-02: Version 1.2 - add octree subdivision scheme support in subtreeInfo
+
 2022-08-23: Version 1.1 - add tileAvailability
 
 2022-07-20: Version 1.0.1

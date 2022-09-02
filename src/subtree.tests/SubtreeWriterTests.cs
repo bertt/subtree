@@ -259,5 +259,23 @@ namespace subtree.tests
             Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
             Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
         }
+
+        [Test]
+        public void SimpleSubtreeFile()
+        {
+            var tiles = new List<Tile>() { new Tile(0, 0, 0) };
+
+            var subtree_root = new Subtree();
+            var tileavailiability = BitArrayCreator.FromString("1");
+
+            subtree_root.TileAvailability = tileavailiability;
+
+            var s0_root = BitArrayCreator.FromString("1");
+            subtree_root.ContentAvailability = s0_root;
+
+            var subtreebytes = SubtreeWriter.ToBytes(subtree_root);
+
+            File.WriteAllBytes(@"0_0_0.subtree", subtreebytes);
+        }
     }
 }

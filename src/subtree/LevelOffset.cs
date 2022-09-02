@@ -2,12 +2,15 @@
 {
     public static class LevelOffset
     {
-        public static int GetLevelOffset(int level)
+        public static int GetLevelOffset(int level, ImplicitSubdivisionScheme scheme =ImplicitSubdivisionScheme.Quadtree)
         {
-            return ((1 << (2 * level)) - 1) / 3;
+            var result = scheme == ImplicitSubdivisionScheme.Quadtree ?
+                ((1 << (2 * level)) - 1) / 3 :
+                ((1 << (3 * level)) - 1) / 7;
+            return result;
         }
 
-        public static int GetNumberOfLevels(string availability, bool isContentAvailability = false)
+        public static int GetNumberOfLevels(string availability, ImplicitSubdivisionScheme scheme = ImplicitSubdivisionScheme.Quadtree)
         {
             var level = 0;
             var length = availability.Length;
@@ -15,8 +18,8 @@
 
             while (cont)
             {
-                var offset = GetLevelOffset(level);
-                var offsetnext = GetLevelOffset(level + 1);
+                var offset = GetLevelOffset(level, scheme);
+                var offsetnext = GetLevelOffset(level + 1, scheme);
 
                 if(offset<length && offsetnext > length)
                 {
@@ -26,16 +29,9 @@
                 {
                     var bits = availability.Substring(offset, offsetnext- offset);
                     var bitarray = BitArrayCreator.FromString(bits);
-                    if (!isContentAvailability)
+                    if (bitarray.Count(true) == 0)
                     {
-                        if (bitarray.Count(true) == 0)
-                        {
-                            cont = false;
-                        }
-                        else
-                        {
-                            level++;
-                        }
+                        cont = false;
                     }
                     else
                     {
