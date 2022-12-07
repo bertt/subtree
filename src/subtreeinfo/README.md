@@ -17,7 +17,7 @@ Sample:
 
 
 ```
-$ subtreeinfo -i -i ./testfixtures/0.0.0.subtree
+$ subtreeinfo -i ./testfixtures/0.0.0.subtree
 
 Subtree info
 Action: Info
@@ -59,4 +59,8 @@ Availability: 0000000000000000011000000000011001100000000001100000000000000000
 0-0-0-0-0-1-0-0;
 ```
 
-2022-09-02: Version 1.2 - add octree subdivision scheme support (parameter s, default Quadtree)
+## History
+
+2022-09-02: Version 1.1 - add octree subdivision scheme support (parameter s, default Quadtree)
+
+2022-07-11: Version 1.0
