@@ -4,9 +4,13 @@ Reader/writer for Subtree binary format:
 
 Specs: https://github.com/CesiumGS/3d-tiles/tree/draft-1.1/specification/ImplicitTiling#implicittiling-subtree-binary-format
 
+NuGet: https://www.nuget.org/packages/subtree
+
 ## Tool subtreeinfo
 
 see https://github.com/bertt/subtree/blob/main/src/subtreeinfo/README.md
+
+NuGet: https://www.nuget.org/packages/subtreeinfo
 
 ## Samples code 
 
