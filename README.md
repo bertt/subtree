@@ -23,7 +23,7 @@ File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 
 ## History
 
-2022-12-22: Version 1.1.1: Adding method SubtreeWriter.ToBytes(string tileAvailability, string contentAvailability, string subtreeAvailability = null)
+2022-12-22: Version 1.2: Adding method SubtreeWriter.ToBytes(string tileAvailability, string contentAvailability, string subtreeAvailability = null)
 
 2022-08-23: Version 1.1 - add tileAvailability
 
