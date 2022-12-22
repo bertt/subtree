@@ -1,7 +1,6 @@
-﻿namespace subtree
+﻿namespace subtree;
+
+public enum ImplicitSubdivisionScheme
 {
-    public enum ImplicitSubdivisionScheme
-    {
-        Quadtree, Octree
-    }
+    Quadtree, Octree
 }

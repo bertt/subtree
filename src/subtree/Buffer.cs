@@ -1,7 +1,6 @@
-﻿namespace subtree
+﻿namespace subtree;
+
+public record Buffer
 {
-    public record Buffer
-    {
-        public int byteLength { get; set; }
-    }
+    public int byteLength { get; set; }
 }

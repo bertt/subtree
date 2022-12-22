@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 
-namespace subtree
+namespace subtree;
+
+public static class BitstreamReader
 {
-    public static class BitstreamReader
+    public static BitArray Read(byte[] subtreeBinary, int offset, int length)
     {
-        public static BitArray Read(byte[] subtreeBinary, int offset, int length)
-        {
-            var slicedBytes = new Span<byte>(subtreeBinary).Slice(start: offset, length: length);
-            return new BitArray(slicedBytes.ToArray());
-        }
+        var slicedBytes = new Span<byte>(subtreeBinary).Slice(start: offset, length: length);
+        return new BitArray(slicedBytes.ToArray());
     }
 }

@@ -1,46 +1,45 @@
-﻿namespace subtree
+﻿namespace subtree;
+
+public static class LevelOffset
 {
-    public static class LevelOffset
+    public static int GetLevelOffset(int level, ImplicitSubdivisionScheme scheme =ImplicitSubdivisionScheme.Quadtree)
     {
-        public static int GetLevelOffset(int level, ImplicitSubdivisionScheme scheme =ImplicitSubdivisionScheme.Quadtree)
-        {
-            var result = scheme == ImplicitSubdivisionScheme.Quadtree ?
-                ((1 << (2 * level)) - 1) / 3 :
-                ((1 << (3 * level)) - 1) / 7;
-            return result;
-        }
+        var result = scheme == ImplicitSubdivisionScheme.Quadtree ?
+            ((1 << (2 * level)) - 1) / 3 :
+            ((1 << (3 * level)) - 1) / 7;
+        return result;
+    }
 
-        public static int GetNumberOfLevels(string availability, ImplicitSubdivisionScheme scheme = ImplicitSubdivisionScheme.Quadtree)
-        {
-            var level = 0;
-            var length = availability.Length;
-            var cont = true;
+    public static int GetNumberOfLevels(string availability, ImplicitSubdivisionScheme scheme = ImplicitSubdivisionScheme.Quadtree)
+    {
+        var level = 0;
+        var length = availability.Length;
+        var cont = true;
 
-            while (cont)
+        while (cont)
+        {
+            var offset = GetLevelOffset(level, scheme);
+            var offsetnext = GetLevelOffset(level + 1, scheme);
+
+            if(offset<length && offsetnext > length)
             {
-                var offset = GetLevelOffset(level, scheme);
-                var offsetnext = GetLevelOffset(level + 1, scheme);
-
-                if(offset<length && offsetnext > length)
+                cont = false;
+            }
+            else
+            {
+                var bits = availability.Substring(offset, offsetnext- offset);
+                var bitarray = BitArrayCreator.FromString(bits);
+                if (bitarray.Count(true) == 0)
                 {
                     cont = false;
                 }
                 else
                 {
-                    var bits = availability.Substring(offset, offsetnext- offset);
-                    var bitarray = BitArrayCreator.FromString(bits);
-                    if (bitarray.Count(true) == 0)
-                    {
-                        cont = false;
-                    }
-                    else
-                    {
-                        level++;
-                    }
+                    level++;
                 }
             }
-
-            return level;
         }
+
+        return level;
     }
 }
