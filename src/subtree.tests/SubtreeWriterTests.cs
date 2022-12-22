@@ -277,5 +277,12 @@ namespace subtree.tests
 
             File.WriteAllBytes(@"0_0_0.subtree", subtreebytes);
         }
+
+        [Test]
+        public void SimpleSubtreeFileWriter()
+        {
+            var subtreeBytes = SubtreeWriter.ToBytes("1", "1");
+            Assert.IsTrue(subtreeBytes.Length > 0);
+        }
     }
 }
