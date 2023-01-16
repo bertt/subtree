@@ -1,33 +1,9 @@
 ﻿using NUnit.Framework;
-using Tedd;
 
 namespace subtree.tests;
 
 public class SubtreeReaderTests
 {
-    [Test]
-    public void MortonDecode()
-    {
-        // Take some numbers that illustrate well
-        var x = (UInt32)0b00000000_00000000;
-        var y = (UInt32)0b00000000_11111111;
-
-        // Encode
-        var result = MortonEncoding.Encode(x, y);
-
-        // Test that result is now: 0b10101010_10101010
-        var res = Convert.ToString(result, 2);
-        Assert.True(res.Equals("1010101010101010"));
-        //1010101010101010
-        //1010101010101010
-
-        // Decode
-        MortonEncoding.Decode(result, out var xBack, out var yBack);
-
-        // Test that we got back the same values as we started with
-        //Assert.Equals(x, xBack);
-        //Assert.Equals(y, yBack);
-    }
 
     [Test]
     public void ReadSubtreeTestLevel3_5_0()

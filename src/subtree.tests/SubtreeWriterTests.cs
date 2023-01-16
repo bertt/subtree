@@ -1,36 +1,10 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
-using Tedd;
 
 namespace subtree.tests;
 
 public class SubtreeWriterTests
 {
-    [Test]
-    public void TestMorton()
-    {
-        // Take some numbers that illustrate well
-        var x = (uint)0b0000000000000000;
-        var y = (uint)0b0000000011111111;
-
-        // Encode
-        var result = MortonEncoding.Encode(x, y);
-
-        // Test that result is now: 0b10101010_10101010
-        Assert.AreEqual("1010101010101010", Convert.ToString(result, 2));
-
-        // Decode
-        MortonEncoding.Decode(result, out var xBack, out var yBack);
-
-        // 101100000100110010000000
-        MortonEncoding.Decode((uint)0b0111, out var xBack1, out var yBack1);
-
-
-        // Test that we got back the same values as we started with
-        Assert.AreEqual(x, xBack);
-        Assert.AreEqual(y, yBack);
-    }
-
     [Test]
     public void TestWriteSubtreeRootwithConstants()
     {

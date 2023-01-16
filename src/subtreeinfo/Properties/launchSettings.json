@@ -3,6 +3,15 @@
     "subtreeinfo": {
       "commandName": "Project",
       "commandLineArgs": "-i ./testfixtures/0.0.0.subtree"
+    },
+    "subtreeinfoCesiumsample": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\SparseImplicitQuadtree\\subtrees\\3.2.7.subtree"
+    },
+    "subtreePg2b3dmsample": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\dev\\github.com\\geodan\\pg2b3dm\\src\\pg2b3dm\\bin\\Debug\\net6.0\\output\\subtrees\\0_0_0.subtree"
     }
+
   }
 }

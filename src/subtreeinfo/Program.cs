@@ -33,6 +33,7 @@ void Info(Options options)
 
         if (subtree.TileAvailability != null)
         {
+            Console.WriteLine("Lenght: " + subtree.TileAvailability.Length);
             var tileAvailability = subtree.TileAvailability.AsString();
             PrintAvailability(tileAvailability,  scheme);
         }
@@ -49,7 +50,7 @@ void Info(Options options)
 
         if (subtree.ContentAvailability != null)
         {
-            // Console.WriteLine("Availability: " + subtree.ContentAvailability.AsString());
+            Console.WriteLine("Length: " + subtree.ContentAvailability.Length);
             PrintAvailability(subtree.ContentAvailability.AsString(), scheme);
         }
         Console.WriteLine();

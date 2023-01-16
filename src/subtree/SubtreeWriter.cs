@@ -9,9 +9,9 @@ public static class SubtreeWriter
     public static byte[] ToBytes(string tileAvailability, string contentAvailability, string subtreeAvailability = null)
     {
         var subtree_root = new Subtree();
-        var tileavailiability = BitArrayCreator.FromString(tileAvailability);
+        var tileavailability = BitArrayCreator.FromString(tileAvailability);
 
-        subtree_root.TileAvailability = tileavailiability;
+        subtree_root.TileAvailability = tileavailability;
 
         var s0_root = BitArrayCreator.FromString(contentAvailability);
         subtree_root.ContentAvailability = s0_root;

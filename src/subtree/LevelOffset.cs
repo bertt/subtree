@@ -27,16 +27,7 @@ public static class LevelOffset
             }
             else
             {
-                var bits = availability.Substring(offset, offsetnext- offset);
-                var bitarray = BitArrayCreator.FromString(bits);
-                if (bitarray.Count(true) == 0)
-                {
-                    cont = false;
-                }
-                else
-                {
-                    level++;
-                }
+                level++;
             }
         }
 

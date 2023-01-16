@@ -37,6 +37,6 @@ public class LevelOffsetTests
 
         contentavailability = "10000000";
         l = LevelOffset.GetNumberOfLevels(contentavailability);
-        Assert.IsTrue(l == 1);
+        Assert.IsTrue(l == 2);
     }
 }

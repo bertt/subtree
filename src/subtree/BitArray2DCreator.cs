@@ -21,7 +21,7 @@ public class BitArray2DCreator
         return result;
     }
 
-    private static int GetWidth(string mortonIndex)
+    public static int GetWidth(string mortonIndex)
     {
         var length = mortonIndex.Length;
         var size = Math.Sqrt(length);
