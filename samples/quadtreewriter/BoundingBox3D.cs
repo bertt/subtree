@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Globalization;
+﻿using System.Globalization;
 using Wkx;
 
 namespace quadtreewriter;
@@ -47,8 +46,6 @@ public class BoundingBox3D
     public double ZMin { get; set; }
     public double ZMax { get; set; }
 
-    public string Id { get; set; }
-
     public Point GetCenter()
     {
         var x = (XMax + XMin) / 2;
@@ -67,7 +64,6 @@ public class BoundingBox3D
         res.XMax = XMax;
         res.YMax = ZMax;
         res.ZMax = YMax * -1;
-        res.Id = Id;
         return res;
     }
 
@@ -81,7 +77,6 @@ public class BoundingBox3D
         res.XMax = XMax;
         res.YMax = ZMax * -1;
         res.ZMax = YMax;
-        res.Id = Id;
         return res;
     }
 

@@ -6,7 +6,7 @@
     },
     "subtreeinfoCesiumsample": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\SparseImplicitQuadtree\\subtrees\\3.2.7.subtree"
+      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\SparseImplicitQuadtree\\subtrees\\0.0.0.subtree"
     },
     "subtreePg2b3dmsample": {
       "commandName": "Project",

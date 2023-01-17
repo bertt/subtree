@@ -38,4 +38,32 @@ public sealed class BitArray2D
     {
         return _array.OfType<bool>().Count(p => p) > 0;
     }
+
+    public int Count(bool whereClause = false)
+    {
+        return _array.Count(whereClause);
+    }
+
+    public List<string> GetAvailableFiles(int rootZ = 0, int rootX = 0, int rootY = 0)
+    {
+        var level = Level.GetLevel(GetHeight() * GetWidth());
+        var newLevel = rootZ + level;
+        var baseX = rootX * 2 * level;
+        var baseY = rootY * 2 * level;
+
+        var availableFiles = new List<string>();
+
+        for (var x = 0; x < GetWidth(); x++)
+        {
+            for (var y = 0; y < GetHeight(); y++)
+            {
+                if (Get(x, y))
+                {
+                    availableFiles.Add($"{newLevel}.{baseX + x}.{baseY + y}");
+                }
+            }
+        }
+
+        return availableFiles;
+    }
 }

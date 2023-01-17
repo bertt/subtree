@@ -50,10 +50,11 @@ public class SubtreeReaderTests
         {
             var c_0 = subtree.ChildSubtreeAvailability.AsString();
             Assert.IsTrue(c_0 == "0000000000000000011000000000011001100000000001100000000000000000");
-        }
 
-        var expectedSubtreeFiles = subtree.GetExpectedSubtreeFiles();
-        Assert.IsTrue(expectedSubtreeFiles.Count() == 8);
+            var childSubtreeAvailability = BitArray2DCreator.GetBitArray2D(subtree.ChildSubtreeAvailability.AsString());
+            var expectedSubtreeFiles = childSubtreeAvailability.GetAvailableFiles();
+            Assert.IsTrue(expectedSubtreeFiles.Count() == 8);
+        }
     }
 
 }

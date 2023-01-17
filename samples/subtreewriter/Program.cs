@@ -2,6 +2,7 @@
 
 Console.WriteLine("Hello, World!");
 WriteLevel2Sample();
+WriteLevel1Sample();
 
 void WriteLevel2Sample()
 {

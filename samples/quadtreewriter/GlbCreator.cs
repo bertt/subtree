@@ -10,7 +10,7 @@ namespace quadtreewriter;
 
 public static class GlbCreator
 {
-    public static byte[] GetGlb(List<Triangle> triangles, string copyright = "")
+    public static byte[]? GetGlb(List<Triangle> triangles, string copyright = "")
     {
         var color = "#D94F33"; // "#bb3333";
         var rgb = ColorTranslator.FromHtml(color);

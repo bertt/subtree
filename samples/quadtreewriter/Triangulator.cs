@@ -28,7 +28,7 @@ public static class Triangulator
     }
 
 
-    public static Triangle GetTriangle(Polygon geometry)
+    public static Triangle? GetTriangle(Polygon geometry)
     {
         var triangle = ToTriangle(geometry);
 

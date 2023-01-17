@@ -33,7 +33,7 @@ void Info(Options options)
 
         if (subtree.TileAvailability != null)
         {
-            Console.WriteLine("Lenght: " + subtree.TileAvailability.Length);
+            Console.WriteLine("Length: " + subtree.TileAvailability.Length + " bits");
             var tileAvailability = subtree.TileAvailability.AsString();
             PrintAvailability(tileAvailability,  scheme);
         }
@@ -50,8 +50,19 @@ void Info(Options options)
 
         if (subtree.ContentAvailability != null)
         {
-            Console.WriteLine("Length: " + subtree.ContentAvailability.Length);
-            PrintAvailability(subtree.ContentAvailability.AsString(), scheme);
+            Console.WriteLine("Length: " + subtree.ContentAvailability.Length + " bits");
+            var content = subtree.ContentAvailability.AsString();
+            PrintAvailability(content, scheme);
+
+            var files = new List<string>();
+            var level = LevelOffset.GetNumberOfLevels(content, scheme);
+            for(var l = 0; l < level; l++)
+            {
+                var ba = Availability.GetLevel(content, l);
+                // to get absolute tiles when using multiple subtree change following call:
+                files.AddRange(ba.GetAvailableFiles(0, 0, 0));
+            }
+            Console.WriteLine($"Tiles expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
         }
         Console.WriteLine();
         Console.WriteLine("3] Child subtree availability: ");
@@ -66,9 +77,12 @@ void Info(Options options)
         if (subtree.ChildSubtreeAvailability != null)
         {
             Console.WriteLine("Availability: " + subtree.ChildSubtreeAvailability.AsString());
+            var level = Level.GetLevel(subtree.ChildSubtreeAvailability.Length);
+            Console.WriteLine($"Level for subtree files: {level}");
             var childSubtreeAvailability = BitArray2DCreator.GetBitArray2D(subtree.ChildSubtreeAvailability.AsString());
             PrintBitArray2D(childSubtreeAvailability);
-            Console.WriteLine("Subtree files expected: " + String.Join(',', subtree.GetExpectedSubtreeFiles()));
+            var files = childSubtreeAvailability.GetAvailableFiles();
+            Console.WriteLine($"Subtree files expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
         }
     }
     else
@@ -76,7 +90,6 @@ void Info(Options options)
         Console.WriteLine($"Subtree file {options.Input} does not exist.");
     }
 }
-
 
 static void PrintAvailability(string availability, ImplicitSubdivisionScheme scheme=ImplicitSubdivisionScheme.Quadtree)
 {
@@ -87,15 +100,12 @@ static void PrintAvailability(string availability, ImplicitSubdivisionScheme sch
 
     for (int i = 0; i < l; i++)
     {
-        var offset = LevelOffset.GetLevelOffset(i, scheme);
-        var offset1 = LevelOffset.GetLevelOffset(i + 1, scheme);
-        var levelAvailability = availability.Substring(offset, offset1 - offset);
-        var ba = BitArrayCreator.FromString(levelAvailability);
-        total += ba.Count(true);
-        var available = ba.Count(true);
-        var tot = ba.Count;
+        var ba = Availability.GetLevel(availability, i);
+        var levelAvailable = ba.Count(true);
+        var levelTotal = ba.GetWidth() * ba.GetHeight();
+        total += levelTotal;
         
-        Console.WriteLine($"Level: {i}, available {available}/{tot}");
+        Console.WriteLine($"Level: {i}, available {levelAvailable}/{levelTotal}");
     }
     Console.WriteLine($"Total: {total}");
 
@@ -106,11 +116,11 @@ static void PrintAvailability(string availability, ImplicitSubdivisionScheme sch
         if (l > 4)
         {
             maxLevel = 4;
-            Console.WriteLine($"Printing level 0-{maxLevel} of {l}...");
+            Console.WriteLine($"Printing level [0..{maxLevel-1}] of {l}...");
         }
         else
         {
-            Console.WriteLine($"Printing level 0-{maxLevel}...");
+            Console.WriteLine($"Printing level [0..{maxLevel-1}]...");
         }
         Console.WriteLine("");
         for (var j = 0; j < maxLevel; j++)

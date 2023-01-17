@@ -36,8 +36,7 @@ Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability);
 File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
 
-var s = 0;
-
+Console.WriteLine("Subtree file is written, en d of program");
 
 static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometry_column, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
 {
@@ -107,13 +106,6 @@ static List<quadtreewriter.Triangle> GetTriangles(List<Geometry> geoms)
 
     return triangleCollection;
 }
-
-static double[] Reverse(double[] translation)
-{
-    var res = new double[] { translation[0] * -1, translation[1] * -1, translation[2] * -1 };
-    return res;
-}
-
 
 static BoundingBox3D GetBBox3D(NpgsqlConnection conn)
 {
