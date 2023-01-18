@@ -1,6 +1,4 @@
-﻿using Wkx;
-
-namespace subtree;
+﻿namespace subtree;
 
 public class Tile
 {
@@ -11,13 +9,12 @@ public class Tile
         Y = y;
     }
 
-    public Tile(int z, int x, int y, bool available): this(z, x, y)
+    public Tile(int z, int x, int y, bool available) : this(z, x, y)
     {
         Available = available;
     }
 
     public string ContentUri { get; set; }
-    public BoundingBox BoundingBox { get; set; }
     public int Lod { get; set; }
 
     public int Z { get; set; }
@@ -37,12 +34,15 @@ public class Tile
 
     public List<Tile> Children { get; set; }
 
-    public bool HasChild(Tile other) {
+    public double[] BoundingBox { get; set; }
+
+    public bool HasChild(Tile other)
+    {
         var ld = other.Z - this.Z;
         return
             other.X >= this.X * 2 * ld &&
-            other.X < (this.X+1) * 2 * ld &&
+            other.X < (this.X + 1) * 2 * ld &&
             other.Y >= this.Y * 2 * ld &&
-            other.Y < (this.Y+1) * 2 * ld;
+            other.Y < (this.Y + 1) * 2 * ld;
     }
 }

@@ -23,6 +23,8 @@ File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 
 ## History
 
+2023-01-17: Version 1.3.1: Remvoing dependecy wkx 
+
 2023-01-17: Version 1.3: Adding suport for multiple subtree files
 
 2022-12-22: Version 1.2: Adding method SubtreeWriter.ToBytes(string tileAvailability, string contentAvailability, string subtreeAvailability = null)

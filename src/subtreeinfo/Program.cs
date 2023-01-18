@@ -5,6 +5,7 @@ using subtreeinfo;
 
 Parser.Default.ParseArguments<Options>(args).WithParsed(o =>
 {
+    var t = new Tile(0, 0, 0);
     Info(o);
 });
 
@@ -93,6 +94,7 @@ void Info(Options options)
 
 static void PrintAvailability(string availability, ImplicitSubdivisionScheme scheme=ImplicitSubdivisionScheme.Quadtree)
 {
+
     var l = LevelOffset.GetNumberOfLevels(availability, scheme);
     Console.WriteLine("Number of levels: " + l);
 
