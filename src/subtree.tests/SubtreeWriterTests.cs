@@ -252,6 +252,28 @@ public class SubtreeWriterTests
         File.WriteAllBytes(@"0_0_0.subtree", subtreebytes);
     }
 
+
+    [Test]
+    public void SimpleSubtreeFileWithContentNull()
+    {
+        var tiles = new List<Tile>() { new Tile(0, 0, 0) };
+
+        var subtree_root = new Subtree();
+        var tileavailiability = BitArrayCreator.FromString("1");
+
+        subtree_root.TileAvailability = tileavailiability;
+
+        var s0_root = BitArrayCreator.FromString("1");
+        subtree_root.ContentAvailability = null;
+        // subtree_root.ChildSubtreeAvailability = "1000";
+        var childSubtreeAvailability = "1000";
+
+        var subtreebytes = SubtreeWriter.ToBytes("11000", subtreeAvailability:childSubtreeAvailability);
+
+        File.WriteAllBytes(@"0_0_0.subtree", subtreebytes);
+    }
+
+
     [Test]
     public void SimpleSubtreeFileWriter()
     {

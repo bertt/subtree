@@ -6,23 +6,26 @@ namespace subtree;
 
 public static class SubtreeWriter
 {
-    public static byte[] ToBytes(string tileAvailability, string contentAvailability, string subtreeAvailability = null)
+    public static byte[] ToBytes(string tileAvailability, string? contentAvailability =null, string? subtreeAvailability = null)
     {
-        var subtree_root = new Subtree();
+        var subtree = new Subtree();
         var tileavailability = BitArrayCreator.FromString(tileAvailability);
 
-        subtree_root.TileAvailability = tileavailability;
+        subtree.TileAvailability = tileavailability;
 
-        var s0_root = BitArrayCreator.FromString(contentAvailability);
-        subtree_root.ContentAvailability = s0_root;
+        if(contentAvailability!= null)
+        {
+            var s0_root = BitArrayCreator.FromString(contentAvailability);
+            subtree.ContentAvailability = s0_root;
+        }
 
         if (subtreeAvailability != null)
         {
             var c0_root = BitArrayCreator.FromString(subtreeAvailability);
-            subtree_root.ChildSubtreeAvailability = c0_root;
+            subtree.ChildSubtreeAvailability = c0_root;
         }
 
-        var subtreebytes = ToBytes(subtree_root);
+        var subtreebytes = ToBytes(subtree);
         return subtreebytes;
     }
 
