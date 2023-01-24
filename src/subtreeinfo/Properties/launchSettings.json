@@ -6,17 +6,22 @@
     },
     "subtreeinfoCesiumsample": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\SparseImplicitQuadtree\\subtrees\\3.0.5.subtree"
+      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\SparseImplicitQuadtree\\subtrees\\0.0.0.subtree"
     },
     "subtreePg2b3dmsample": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\dev\\github.com\\geodan\\pg2b3dm\\src\\pg2b3dm\\bin\\Debug\\net6.0\\output\\subtrees\\0_0_0.subtree"
+      "commandLineArgs": "-i D:\\dev\\github.com\\geodan\\pg2b3dm\\src\\pg2b3dm\\bin\\Debug\\net6.0\\output\\subtrees\\1_0_0.subtree"
     },
     "subtreeCustomTest": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\aaa\\subtreetest\\0.0.0.subtree"
+      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\subtree\\samples\\subtreewriter\\bin\\Debug\\net6.0\\subtrees\\1.0.0.subtree"
+    },
+    "subtreeCesiumdemos": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\subtrees\\level1\\subtrees\\1.0.0.subtree"
     }
+
+
+
   }
 }
-
-// D:\aaa\subtreetest\0.0.0.subtree

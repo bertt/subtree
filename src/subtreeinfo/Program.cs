@@ -36,6 +36,7 @@ void Info(Options options)
         {
             Console.WriteLine("Length: " + subtree.TileAvailability.Length + " bits");
             var tileAvailability = subtree.TileAvailability.AsString();
+            //Console.WriteLine($"TileAvailability: {tileAvailability}"); 
             PrintAvailability(tileAvailability,  scheme);
         }
         Console.WriteLine("2] Content availability: ");
@@ -51,6 +52,7 @@ void Info(Options options)
 
         if (subtree.ContentAvailability != null)
         {
+            //Console.WriteLine($"ContentAvailability: {subtree.ContentAvailability.AsString()}");
             Console.WriteLine("Length: " + subtree.ContentAvailability.Length + " bits");
             var content = subtree.ContentAvailability.AsString();
             PrintAvailability(content, scheme);
@@ -61,7 +63,7 @@ void Info(Options options)
             {
                 var ba = Availability.GetLevel(content, l);
                 // to get absolute tiles when using multiple subtree change following call:
-                files.AddRange(ba.GetAvailableFiles(0, 0, 0));
+                files.AddRange(ba.GetAvailableFiles(1, 0, 0));
             }
             Console.WriteLine($"Tiles expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
         }
