@@ -1,4 +1,4 @@
-﻿{
+{
   "asset" : {
     "version" : "1.1"
   },
@@ -14,7 +14,7 @@
     },
     "implicitTiling" : {
       "subdivisionScheme" : "QUADTREE",
-      "subtreeLevels" : 1,
+      "subtreeLevels" : 2,
       "availableLevels" : 6,
       "subtrees" : {
         "uri" : "subtrees/{level}.{x}.{y}.subtree"

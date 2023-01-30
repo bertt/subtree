@@ -80,9 +80,9 @@ void WriteLevel4Sample()
 
     var subtree = new Subtree();
 
-    subtree.TileAvailability = BitArrayCreator.FromString("1");
+    subtree.TileAvailability = BitArrayCreator.FromString("1100");
     // why this first content must be one?
-    subtree.ContentAvailability = BitArrayCreator.FromString("1");
+    subtree.ContentAvailability = BitArrayCreator.FromString("0100");
     var byteslevel1 = SubtreeWriter.ToBytes(subtree);
     File.WriteAllBytes($"subtrees/1.0.0.subtree", byteslevel1);
     //File.WriteAllBytes($"subtrees/1.0.1.subtree", byteslevel1);
