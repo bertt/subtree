@@ -1,5 +1,4 @@
 ﻿namespace subtree;
-
 public class Tile
 {
     public Tile(int z, int x, int y)
@@ -36,13 +35,22 @@ public class Tile
 
     public double[] BoundingBox { get; set; }
 
+    public Tile Parent()
+    {
+        return new Tile(Z > 0 ? Z - 1 : Z, X >> 1, Y >> 1);
+    }
+
     public bool HasChild(Tile other)
     {
-        var ld = other.Z - this.Z;
-        return
-            other.X >= this.X * 2 * ld &&
-            other.X < (this.X + 1) * 2 * ld &&
-            other.Y >= this.Y * 2 * ld &&
-            other.Y < (this.Y + 1) * 2 * ld;
+        if (Z >= other.Z) return false;
+        var ld = other.Z - Z;
+
+        var parent = other.Parent();
+        for (var i = 0; i < ld - 1; ++i)
+        {
+            parent = parent.Parent();
+        }
+
+        return X == parent.X && Y == parent.Y && Z == parent.Z;
     }
 }
