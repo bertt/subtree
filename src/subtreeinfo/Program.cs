@@ -63,7 +63,7 @@ void Info(Options options)
             {
                 var ba = Availability.GetLevel(content, l);
                 // to get absolute tiles when using multiple subtree change following call:
-                files.AddRange(ba.GetAvailableFiles(1, 0, 0));
+                files.AddRange(ba.GetAvailableFiles(0, 0, 0));
             }
             Console.WriteLine($"Tiles expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
         }
