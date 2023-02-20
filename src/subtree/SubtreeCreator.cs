@@ -48,12 +48,9 @@ public static class SubtreeCreator
                 {
                     var t = new Tile(subtreeLevel, x, y);
                     var subtreeTiles = GetSubtreeTiles(tiles, t);
-                    if (subtreeTiles != null)
-                    {
-                        var mortonIndicesSubtree = MortonIndex.GetMortonIndices(subtreeTiles);
-                        var subtreebytes = SubtreeWriter.ToBytes(Fill(mortonIndicesSubtree.tileAvailability, availabilityLength), Fill(mortonIndicesSubtree.contentAvailability, availabilityLength));
-                        subtreeFiles.Add(t, subtreebytes);
-                    }
+                    var mortonIndicesSubtree = MortonIndex.GetMortonIndices(subtreeTiles);
+                    var subtreebytes = SubtreeWriter.ToBytes(Fill(mortonIndicesSubtree.tileAvailability, availabilityLength), Fill(mortonIndicesSubtree.contentAvailability, availabilityLength));
+                    subtreeFiles.Add(t, subtreebytes);
                 }
             }
         }
@@ -73,22 +70,25 @@ public static class SubtreeCreator
         var res = new List<Tile>();
         var rootTile = new Tile(0, 0, 0);
         var subtreeTile = tiles.Where(x => x.Z == tile.Z && x.X == tile.X && x.Y == tile.Y).FirstOrDefault();
-        if (subtreeTile != null)
+        if(subtreeTile!= null)
         {
             rootTile.Available = subtreeTile.Available;
             res.Add(rootTile);
-
-            var children = tiles.Where(x => tile.HasChild(x));
-            foreach (var child in children)
-            {
-                var rel = GetRelativeTile(tile, child);
-                rel.Available = child.Available;
-                res.Add(rel);
-            }
-
-            return res;
         }
-        return null;
+        else
+        {
+            res.Add(new Tile(0, 0, 0) { Available=false});
+        }
+
+        var children = tiles.Where(x => tile.HasChild(x));
+        foreach (var child in children)
+        {
+            var rel = GetRelativeTile(tile, child);
+            rel.Available = child.Available;
+            res.Add(rel);
+        }
+
+        return res;
     }
 
     public static Tile GetRelativeTile(Tile from, Tile to)
