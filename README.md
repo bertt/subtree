@@ -23,6 +23,8 @@ File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 
 ## History
 
+2023-02-21: Version 1.4.3: Change error handling
+
 2023-02-20: Version 1.4.1, 1.4.2: Add error handling
 
 2023-02-16: Version 1.4: Add implicit tiling subtre file functionality

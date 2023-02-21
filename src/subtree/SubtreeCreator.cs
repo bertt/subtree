@@ -70,15 +70,8 @@ public static class SubtreeCreator
         var res = new List<Tile>();
         var rootTile = new Tile(0, 0, 0);
         var subtreeTile = tiles.Where(x => x.Z == tile.Z && x.X == tile.X && x.Y == tile.Y).FirstOrDefault();
-        if(subtreeTile!= null)
-        {
-            rootTile.Available = subtreeTile.Available;
-            res.Add(rootTile);
-        }
-        else
-        {
-            res.Add(new Tile(0, 0, 0) { Available=false});
-        }
+        rootTile.Available = subtreeTile.Available;
+        res.Add(rootTile);
 
         var children = tiles.Where(x => tile.HasChild(x));
         foreach (var child in children)
