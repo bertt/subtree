@@ -19,6 +19,10 @@
     "subtreeCesiumdemos": {
       "commandName": "Project",
       "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\subtrees\\level1\\subtrees\\1.0.0.subtree"
+    },
+    "ImplicitHeightSemantics": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\dev\\github.com\\raokiey\\nijigasaki-virtual-location-map\\App\\Specs\\Data\\Cesium3DTiles\\Metadata\\ImplicitGeometricErrorSemantics\\0.0.0.subtree"
     }
 
 

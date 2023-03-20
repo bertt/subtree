@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Cesium.js"></script>
-    <link href="https://cesium.com/downloads/cesiumjs/releases/1.95/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.103/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.103/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
     <style>
         html, body, #cesiumContainer {
@@ -34,7 +34,8 @@
 const tileset = viewer.scene.primitives.add(
   new Cesium.Cesium3DTileset({
     url: "tileset.json",
-    debugShowBoundingVolume: true,
+      debugShowBoundingVolume: true,
+      debugShowGeometricError: true
   })
 );
 tileset.modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
@@ -115,7 +116,7 @@ handler.setInputAction(function (movement) {
 const offset = new Cesium.HeadingPitchRange(
   Cesium.Math.toRadians(-45.0),
   Cesium.Math.toRadians(-45.0),
-  80.0
+  10.0
 );
 viewer.zoomTo(tileset, offset);
     </script>
