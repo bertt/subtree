@@ -1,5 +1,5 @@
-﻿
-namespace subtree;
+﻿namespace subtree;
+
 public class Boundingvolume
 {
     private double[] _region;
@@ -11,7 +11,7 @@ public class Boundingvolume
         }
         set
         {
-            _region = value.Select(d => Math.Round(d, 5)).ToArray();
+            _region = value;
         }
     }
 }
