@@ -20,9 +20,9 @@ public class Tile
     public int X { get; set; }
     public int Y { get; set; }
 
-    public double ZMin { get; set; }
+    public double? ZMin { get; set; }
 
-    public double ZMax { get; set; }
+    public double? ZMax { get; set; }
     public List<Tile> GetChildren()
     {
         var t1 = new Tile(X * 2, Y * 2, Z + 1);
