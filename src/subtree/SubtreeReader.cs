@@ -17,7 +17,8 @@ public static class SubtreeReader
             SubtreeBinary = subTreeBinary
         };
 
-        var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(subtree.SubtreeJson);
+        var json = subtree.SubtreeJson;
+        var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(json);
         if(subtreeJsonObject != null)
         {
             if (subtreeJsonObject.tileAvailability != null && subtreeJsonObject.tileAvailability.bitstream != null)

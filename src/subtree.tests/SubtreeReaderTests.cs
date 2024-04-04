@@ -1,9 +1,20 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace subtree.tests;
 
 public class SubtreeReaderTests
 {
+    // from https://github.com/CesiumGS/cesium/tree/main/Specs/Data/Cesium3DTiles/Metadata/ImplicitSubtreeMetadata/subtrees
+    [Test]
+    public void ReadImplicitSubtreeWithMetadataJson()
+    {
+        var json = File.ReadAllText(@"testfixtures/implicitsubtree/0.0.0.json");
+        // var subtree = SubtreeReader.ReadSubtree(subtreefile);
+        var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(json);
+
+        Assert.IsTrue(subtreeJsonObject.subtreeMetadata != null);
+    }
 
     [Test]
     public void ReadSubtreeTestLevel3_5_0()
