@@ -7,11 +7,11 @@ public class LevelTests
     [Test]
     public void AllLevelTests()
     {
-        Assert.AreEqual(Level.GetLevel(1), 0);
-        Assert.AreEqual(Level.GetLevel(4), 1);
-        Assert.AreEqual(Level.GetLevel(16), 2);
-        Assert.AreEqual(Level.GetLevel(64), 3);
-        Assert.AreEqual(Level.GetLevel(256), 4);
-        Assert.AreEqual(Level.GetLevel(1024), 5);
+        Assert.That(0, Is.EqualTo(Level.GetLevel(1)));
+        Assert.That(1, Is.EqualTo(Level.GetLevel(4)));
+        Assert.That(2, Is.EqualTo(Level.GetLevel(16)));
+        Assert.That(3, Is.EqualTo(Level.GetLevel(64)));
+        Assert.That(4, Is.EqualTo(Level.GetLevel(256)));
+        Assert.That(5, Is.EqualTo(Level.GetLevel(1024)));
     }
 }

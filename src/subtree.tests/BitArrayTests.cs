@@ -8,8 +8,8 @@ public class BitArrayTests
     public void TestBitArrayFromString()
     {
         var ba = BitArrayCreator.FromString("10110000");
-        Assert.IsTrue(ba.Length == 8);
-        Assert.IsTrue(ba[0]);
-        Assert.IsFalse(ba[1]);
+        Assert.That(ba.Length == 8);
+        Assert.That(ba[0]);
+        Assert.That(!ba[1]);
     }
 }

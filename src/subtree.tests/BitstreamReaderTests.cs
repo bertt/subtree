@@ -11,6 +11,6 @@ public class BitstreamReaderTests
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         var bitstreamTileAvailability = BitstreamReader.Read(subtree.SubtreeBinary, 0, 3);
         var t_0 = bitstreamTileAvailability.AsString();
-        Assert.IsTrue(t_0 == "101100000100110010000000");
+        Assert.That(t_0 == "101100000100110010000000");
     }
 }

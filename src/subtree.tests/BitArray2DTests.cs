@@ -15,10 +15,10 @@ public class BitArray2DTests
         var ba = new BitArray2D(2, 2);
         ba.Set(0, 0, true);
 
-        Assert.IsTrue(ba.IsAvailable());
+        Assert.That(ba.IsAvailable());
 
         ba.Set(0, 0, false);
-        Assert.IsFalse(ba.IsAvailable());
+        Assert.That(!ba.IsAvailable());
 
     }
 }

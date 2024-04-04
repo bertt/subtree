@@ -18,13 +18,13 @@ public class AvailabilityLevelTests
 
         var contentAvailabilitylevels = new AvailabilityLevels() { level0, level1, level2 };
         var mortonContent = contentAvailabilitylevels.ToMortonIndex();
-        Assert.IsTrue(mortonContent == "001011000000000100000");
+        Assert.That(mortonContent == "001011000000000100000");
         // act
         AvailabilityLevels tileAvailabilitylevels = ContentToTileAvailability.GetTileAvailabilityLevels(contentAvailabilitylevels);
 
         // assert
         var mortenTileAvailability = tileAvailabilitylevels.ToMortonIndex();
-        Assert.IsTrue(mortenTileAvailability == "111111000000000100000");
+        Assert.That(mortenTileAvailability == "111111000000000100000");
     }
 
 
@@ -44,9 +44,9 @@ public class AvailabilityLevelTests
 
         // assert
         var tileAvailabilityLevel0 = tileAvailabilitylevels.Where(z => z.Level == 0).FirstOrDefault();
-        Assert.IsTrue(tileAvailabilityLevel0.BitArray2D.IsAvailable());
+        Assert.That(tileAvailabilityLevel0.BitArray2D.IsAvailable());
         var res = tileAvailabilitylevels.ToMortonIndex();
-        Assert.IsTrue(res == "1");
+        Assert.That(res == "1");
     }
 
     [Test]
@@ -65,9 +65,9 @@ public class AvailabilityLevelTests
 
         // assert
         var tileAvailabilityLevel0 = tileAvailabilitylevels.Where(z => z.Level == 0).FirstOrDefault();
-        Assert.IsTrue(tileAvailabilityLevel0.BitArray2D.IsAvailable());
+        Assert.That(tileAvailabilityLevel0.BitArray2D.IsAvailable());
         var res = tileAvailabilitylevels.ToMortonIndex();
-        Assert.IsTrue(res == "11000");
+        Assert.That(res == "11000");
     }
 
 
@@ -83,7 +83,7 @@ public class AvailabilityLevelTests
         availabilityLevel1.BitArray2D.Set(0, 0, true);
         availabilityLevels.Add(availabilityLevel1);
 
-        Assert.IsTrue(availabilityLevel1.ToMortonIndex() == "1000");
-        Assert.IsTrue(availabilityLevels.ToMortonIndex() == "01000");
+        Assert.That(availabilityLevel1.ToMortonIndex() == "1000");
+        Assert.That(availabilityLevels.ToMortonIndex() == "01000");
     }
 }

@@ -20,10 +20,10 @@ public class AvailabilitySummaryTests
         // get level 1, bit 1..4 (1001)
         var level = Availability.GetLevel(availability, 1);
 
-        Assert.IsTrue(level.Get(0,0));
-        Assert.IsFalse(level.Get(0, 1));
-        Assert.IsTrue(level.Get(1, 1));
-        Assert.IsFalse(level.Get(1, 0));
+        Assert.That(level.Get(0,0));
+        Assert.That(!level.Get(0, 1));
+        Assert.That(level.Get(1, 1));
+        Assert.That(!level.Get(1, 0));
 
     }
 

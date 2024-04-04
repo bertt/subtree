@@ -11,9 +11,9 @@ public class BitstreamWriterTests
         var b0 = "10110000";
         BitArray bitArray = GetBitArray(b0);
 
-        Assert.IsTrue(bitArray.Length == 8);
-        Assert.IsTrue(bitArray[0] == true);
-        Assert.IsTrue(bitArray[1] == false);
+        Assert.That(bitArray.Length == 8);
+        Assert.That(bitArray[0] == true);
+        Assert.That(bitArray[1] == false);
     }
 
     private static BitArray GetBitArray(string b0)

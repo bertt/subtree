@@ -19,8 +19,8 @@ public class SubtreeWriterTests
         var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
 
         // assert
-        Assert.IsTrue(newSubtree.TileAvailability == null);
-        Assert.IsTrue(newSubtree.TileAvailabiltyConstant == 1);
+        Assert.That(newSubtree.TileAvailability == null);
+        Assert.That(newSubtree.TileAvailabiltyConstant == 1);
     }
 
     [Test]
@@ -48,11 +48,11 @@ public class SubtreeWriterTests
         var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
 
         // assert
-        Assert.IsTrue(bytes.Length == subtreeBytes.Length);
-        Assert.IsTrue(subtreeOriginal.SubtreeHeader.Equals(newSubtree.SubtreeHeader));
-        Assert.IsTrue(subtreeOriginal.SubtreeJson.Equals(newSubtree.SubtreeJson));
-        Assert.IsTrue(Enumerable.SequenceEqual(bytes, subtreeBytes));
-        Assert.IsTrue(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
+        Assert.That(bytes.Length == subtreeBytes.Length);
+        Assert.That(subtreeOriginal.SubtreeHeader.Equals(newSubtree.SubtreeHeader));
+        Assert.That(subtreeOriginal.SubtreeJson.Equals(newSubtree.SubtreeJson));
+        Assert.That(Enumerable.SequenceEqual(bytes, subtreeBytes));
+        Assert.That(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
     }
 
     [Test]
@@ -80,11 +80,11 @@ public class SubtreeWriterTests
         var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
 
         // assert
-        Assert.IsTrue(bytes.Length == subtreeBytes.Length);
-        Assert.IsTrue(subtreeOriginal.SubtreeHeader.Equals(newSubtree.SubtreeHeader));
-        Assert.IsTrue(subtreeOriginal.SubtreeJson.Equals(newSubtree.SubtreeJson));
-        Assert.IsTrue(Enumerable.SequenceEqual(bytes, subtreeBytes));
-        Assert.IsTrue(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
+        Assert.That(bytes.Length == subtreeBytes.Length);
+        Assert.That(subtreeOriginal.SubtreeHeader.Equals(newSubtree.SubtreeHeader));
+        Assert.That(subtreeOriginal.SubtreeJson.Equals(newSubtree.SubtreeJson));
+        Assert.That(Enumerable.SequenceEqual(bytes, subtreeBytes));
+        Assert.That(Enumerable.SequenceEqual(subtreeOriginal.SubtreeBinary, newSubtree.SubtreeBinary));
     }
 
     [Test]
@@ -101,10 +101,10 @@ public class SubtreeWriterTests
         var newHeader = new SubtreeHeader(reader);
 
         // assert
-        Assert.IsTrue(header.Magic == newHeader.Magic);
-        Assert.IsTrue(header.Version == newHeader.Version);
-        Assert.IsTrue(header.JsonByteLength == newHeader.JsonByteLength);
-        Assert.IsTrue(header.BinaryByteLength == newHeader.BinaryByteLength);
+        Assert.That(header.Magic == newHeader.Magic);
+        Assert.That(header.Version == newHeader.Version);
+        Assert.That(header.JsonByteLength == newHeader.JsonByteLength);
+        Assert.That(header.BinaryByteLength == newHeader.BinaryByteLength);
     }
 
     [Test]
@@ -123,8 +123,8 @@ public class SubtreeWriterTests
 
 
         // assert
-        Assert.IsTrue(subtree.SubtreeJson.Length == result.Length);
-        Assert.IsTrue(subtree.SubtreeJson == result);
+        Assert.That(subtree.SubtreeJson.Length == result.Length);
+        Assert.That(subtree.SubtreeJson == result);
     }
 
     private static SubtreeJson GetSubtreeJson()
@@ -154,23 +154,23 @@ public class SubtreeWriterTests
         var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
         // assert
-        Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
-        Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
-        Assert.IsTrue(subtreeBytes.subtreeJson.buffers.First().byteLength == 16);
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews.First().buffer == 0);
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews.First().byteOffset == 0);
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews.First().byteLength == 3);
+        Assert.That(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
+        Assert.That(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
+        Assert.That(subtreeBytes.subtreeJson.buffers.First().byteLength == 16);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews.First().buffer == 0);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews.First().byteOffset == 0);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews.First().byteLength == 3);
 
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].byteLength == 8);
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].buffer == 0);
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].byteOffset == 8);
-        Assert.IsTrue(subtreeBytes.subtreeJson.bufferViews[1].byteLength == 8);
-        Assert.IsTrue(subtreeBytes.subtreeJson.tileAvailability.bitstream == 0);
-        Assert.IsTrue(subtreeBytes.subtreeJson.tileAvailability.availableCount == 7);
-        Assert.IsTrue(subtreeBytes.subtreeJson.contentAvailability[0].constant == 0);
-        Assert.IsTrue(subtreeBytes.subtreeJson.contentAvailability[0].availableCount == 0);
-        Assert.IsTrue(subtreeBytes.subtreeJson.childSubtreeAvailability.bitstream == 1);
-        Assert.IsTrue(subtreeBytes.subtreeJson.childSubtreeAvailability.availableCount == 8);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews[1].byteLength == 8);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews[1].buffer == 0);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews[1].byteOffset == 8);
+        Assert.That(subtreeBytes.subtreeJson.bufferViews[1].byteLength == 8);
+        Assert.That(subtreeBytes.subtreeJson.tileAvailability.bitstream == 0);
+        Assert.That(subtreeBytes.subtreeJson.tileAvailability.availableCount == 7);
+        Assert.That(subtreeBytes.subtreeJson.contentAvailability[0].constant == 0);
+        Assert.That(subtreeBytes.subtreeJson.contentAvailability[0].availableCount == 0);
+        Assert.That(subtreeBytes.subtreeJson.childSubtreeAvailability.bitstream == 1);
+        Assert.That(subtreeBytes.subtreeJson.childSubtreeAvailability.availableCount == 8);
     }
 
     [Test]
@@ -184,8 +184,8 @@ public class SubtreeWriterTests
         var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
         // assert
-        Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
-        Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
+        Assert.That(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
+        Assert.That(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
     }
 
     [Test]
@@ -199,8 +199,8 @@ public class SubtreeWriterTests
         var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
         // assert
-        Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
-        Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
+        Assert.That(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
+        Assert.That(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
     }
 
 
@@ -215,8 +215,8 @@ public class SubtreeWriterTests
         var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
         // assert
-        Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
-        Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
+        Assert.That(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
+        Assert.That(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
     }
 
     [Test]
@@ -230,8 +230,8 @@ public class SubtreeWriterTests
         var subtreeBytes = SubtreeWriter.ToSubtreeBinary(subtree);
 
         // assert
-        Assert.IsTrue(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
-        Assert.IsTrue(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
+        Assert.That(subtree.SubtreeBinary.Length == subtreeBytes.bytes.Length);
+        Assert.That(Enumerable.SequenceEqual(subtree.SubtreeBinary, subtreeBytes.bytes));
     }
 
     [Test]
@@ -278,6 +278,6 @@ public class SubtreeWriterTests
     public void SimpleSubtreeFileWriter()
     {
         var subtreeBytes = SubtreeWriter.ToBytes("1", "1");
-        Assert.IsTrue(subtreeBytes.Length > 0);
+        Assert.That(subtreeBytes.Length > 0);
     }
 }

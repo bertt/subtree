@@ -16,8 +16,8 @@ public class MortonIndexTests
         var mortonIndicesBytes = MortonIndex.GetMortonIndexAsBytes(new List<Tile> { t });
 
         // assert
-        Assert.IsTrue(mortonIndices.tileAvailability == "1");
-        Assert.IsTrue(mortonIndices.contentAvailability == "1");
-        Assert.IsTrue(mortonIndicesBytes.tileAvailability.Length == 1);
+        Assert.That(mortonIndices.tileAvailability == "1");
+        Assert.That(mortonIndices.contentAvailability == "1");
+        Assert.That(mortonIndicesBytes.tileAvailability.Length == 1);
     }
 }
