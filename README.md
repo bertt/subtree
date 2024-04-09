@@ -23,6 +23,8 @@ File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 
 ## History
 
+2023-04-09: version 1.4.7: no rounding of bounding volume box
+
 2023-04-04: Version 1.4.5, 1.4.6: Add ZMin and ZMax as Tile properties
 
 2023-02-21: Version 1.4.3, 1.4.4: Change error handling
