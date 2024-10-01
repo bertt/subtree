@@ -12,7 +12,7 @@ stopwatch.Start();
 var connectionString = "Host=::1;Username=postgres;Database=postgres;Port=5432;password=postgres";
 var conn = new NpgsqlConnection(connectionString);
 var bbox3d = GetBBox3D(conn);
-var epsg = 4978;
+var epsg = 4326;
 var geometry_column = "geom_triangle";
 
 Console.WriteLine("bbox 3d: " + bbox3d);

@@ -3,6 +3,7 @@ using System.Numerics;
 using SharpGLTF.Schema2;
 
 using SharpGLTF.Geometry.VertexTypes;
+using SharpGLTF.Memory;
 
 namespace quadtreewriter;
 
@@ -18,7 +19,6 @@ public struct VertexWithBatchId : IVertexMaterial
 
     public const string CUSTOMATTRIBUTENAME = "_BATCHID";
 
-    [VertexAttribute(CUSTOMATTRIBUTENAME, EncodingType.FLOAT, false)]
     public float BatchId;
 
     public int MaxColors => 0;
@@ -39,4 +39,20 @@ public struct VertexWithBatchId : IVertexMaterial
     {
         return attributeName == CUSTOMATTRIBUTENAME ? (Object)BatchId : null;
     }
+
+    public VertexMaterialDelta Subtract(IVertexMaterial baseValue)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Add(in VertexMaterialDelta delta)
+    {
+        throw new NotImplementedException();
+    }
+
+    IEnumerable<KeyValuePair<string, AttributeFormat>> IVertexReflection.GetEncodingAttributes()
+    {
+        yield return new KeyValuePair<string, AttributeFormat>(CUSTOMATTRIBUTENAME, new AttributeFormat(DimensionType.SCALAR));
+    }
+
 }
