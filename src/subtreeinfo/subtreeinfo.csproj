@@ -9,9 +9,9 @@
 	<PackAsTool>true</PackAsTool>
 	<ToolCommandName>subtreeinfo</ToolCommandName>
 	<PackageOutputPath>./nupkg</PackageOutputPath>
-	<AssemblyVersion>1.2</AssemblyVersion>
-	<FileVersion>1.2</FileVersion>
-	<Version>1.2</Version>
+	<AssemblyVersion>1.2.0</AssemblyVersion>
+	<FileVersion>1.2.0</FileVersion>
+	<Version>1.2.0</Version>
 
   </PropertyGroup>
 

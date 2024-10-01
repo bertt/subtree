@@ -61,6 +61,8 @@ Availability: 0000000000000000011000000000011001100000000001100000000000000000
 
 ## History
 
+2024-10-01: version 1.2.0: From .NET 6 to .NET 8
+
 2022-09-02: Version 1.1 - add octree subdivision scheme support (parameter s, default Quadtree)
 
 2022-07-11: Version 1.0
