@@ -68,7 +68,7 @@ public static class SubtreeWriter
         }
         else
         {
-            subtreeJson.tileAvailability = new Tileavailability() { constant = subtree.TileAvailabiltyConstant};
+            subtreeJson.tileAvailability = new Tileavailability() { constant = subtree.TileAvailabilityConstant};
         }
 
         if (subtree.ContentAvailability != null)
@@ -82,7 +82,7 @@ public static class SubtreeWriter
         }
         else
         {
-            subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { constant = subtree.ContentAvailabiltyConstant } }.ToArray();
+            subtreeJson.contentAvailability = new List<Contentavailability>() { new Contentavailability() { constant = subtree.ContentAvailabilityConstant } }.ToArray();
         }
 
         if (subtree.ChildSubtreeAvailability != null)

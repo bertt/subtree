@@ -7,8 +7,8 @@ public record Subtree
     public Subtree()
     {
         SubtreeHeader = new SubtreeHeader();
-        TileAvailabiltyConstant = 0;
-        ContentAvailabiltyConstant = 0;
+        TileAvailabilityConstant = 0;
+        ContentAvailabilityConstant = 0;
     }
 
     public SubtreeHeader SubtreeHeader { get; set; } = null!;
@@ -18,9 +18,9 @@ public record Subtree
     public BitArray? ChildSubtreeAvailability { get; set; }
     public BitArray TileAvailability { get; set; } = null!;
 
-    public int TileAvailabiltyConstant { get; set; }
+    public int TileAvailabilityConstant { get; set; }
 
     public BitArray? ContentAvailability { get; set; } = null!;
 
-    public int ContentAvailabiltyConstant { get; set; }
+    public int ContentAvailabilityConstant { get; set; }
 }

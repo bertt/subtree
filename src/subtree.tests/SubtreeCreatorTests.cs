@@ -53,7 +53,7 @@ public class SubtreeCreatorTests
         Assert.That(!subtree.TileAvailability[3]);
         Assert.That(!subtree.TileAvailability[4]);
 
-        Assert.That(subtree.ContentAvailabiltyConstant == 0);
+        Assert.That(subtree.ContentAvailabilityConstant == 0);
         Assert.That(subtree.ChildSubtreeAvailability != null);
         Assert.That(subtree.ChildSubtreeAvailability[0]);
         Assert.That(!subtree.ChildSubtreeAvailability[1]);

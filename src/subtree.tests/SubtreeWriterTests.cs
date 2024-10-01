@@ -11,7 +11,7 @@ public class SubtreeWriterTests
         // create root subtree
         var subtree = new Subtree();
 
-        subtree.TileAvailabiltyConstant= 1;
+        subtree.TileAvailabilityConstant= 1;
 
         // act
         var bytes = SubtreeWriter.ToBytes(subtree);
@@ -20,7 +20,7 @@ public class SubtreeWriterTests
 
         // assert
         Assert.That(newSubtree.TileAvailability == null);
-        Assert.That(newSubtree.TileAvailabiltyConstant == 1);
+        Assert.That(newSubtree.TileAvailabilityConstant == 1);
     }
 
     [Test]

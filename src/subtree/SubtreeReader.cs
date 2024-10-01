@@ -27,7 +27,7 @@ public static class SubtreeReader
             }
             else
             {
-                subtree.TileAvailabiltyConstant = (int)subtreeJsonObject.tileAvailability.constant;
+                subtree.TileAvailabilityConstant = (int)subtreeJsonObject.tileAvailability.constant;
             }
 
             // todo: implement multiple content (do not use first() here)...
@@ -40,7 +40,7 @@ public static class SubtreeReader
             else
             {
                 // todo: implement multiple content (do not use first() here)...
-                subtree.ContentAvailabiltyConstant= (int)subtreeJsonObject.contentAvailability.First().constant;
+                subtree.ContentAvailabilityConstant= (int)subtreeJsonObject.contentAvailability.First().constant;
             }
 
             if (subtreeJsonObject.childSubtreeAvailability != null && subtreeJsonObject.childSubtreeAvailability.bitstream != null)
