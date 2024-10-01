@@ -9,7 +9,7 @@ public class SubtreeReaderTests
     public void ReadSubtreeTestLevel3_5_0()
     {
         // see https://github.com/CesiumGS/3d-tiles-samples/blob/main/1.1/SparseImplicitQuadtree/screenshot/subtreeInfo.md
-        var subtreefile = File.OpenRead(@"testfixtures/3.5.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/3.5.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         // tile availability
@@ -30,7 +30,7 @@ public class SubtreeReaderTests
     public void ReadSubtreeTestLevel0_0_0()
     {
         // see https://github.com/CesiumGS/3d-tiles-samples/blob/main/1.1/SparseImplicitQuadtree/screenshot/subtreeInfo.md
-        var subtreefile = File.OpenRead(@"testfixtures/0.0.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/0.0.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         Assert.That(subtree.SubtreeHeader.Magic == "subt");
         Assert.That(subtree.SubtreeHeader.Version == 1);

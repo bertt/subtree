@@ -19,19 +19,70 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="testfixtures\0.0.0.subtree">
+    <None Update="testfixtures\SparseImplicitOctree\0.0.0.0.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.4.1.subtree">
+    <None Update="testfixtures\SparseImplicitOctree\3.0.4.0.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.5.0.subtree">
+    <None Update="testfixtures\SparseImplicitOctree\3.1.5.1.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.6.3.subtree">
+    <None Update="testfixtures\SparseImplicitOctree\3.2.6.2.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\3.7.2.subtree">
+    <None Update="testfixtures\SparseImplicitOctree\3.3.7.3.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.4.4.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.4.4.4.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.5.5.1.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.5.5.5.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.6.6.2.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.6.6.6.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.7.7.3.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\3.7.7.7.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\0.0.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.0.5.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.1.4.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.2.7.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.3.6.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.4.1.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.5.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.6.3.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\3.7.2.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
