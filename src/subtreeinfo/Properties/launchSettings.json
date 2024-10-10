@@ -4,9 +4,13 @@
       "commandName": "Project",
       "commandLineArgs": "-i ./testfixtures/0.0.0.subtree"
     },
-    "subtreeinfoCesiumsample": {
+    "subtreeinfoQuadtreeCesiumsample": {
       "commandName": "Project",
-      "commandLineArgs": "-i D:\\dev\\github.com\\bertt\\cesium_3dtiles_samples\\samples\\1.1\\SparseImplicitQuadtree\\subtrees\\0.0.0.subtree"
+      "commandLineArgs": "-i D:\\dev\\github.com\\CesiumGS\\3d-tiles-samples\\1.1\\SparseImplicitQuadtree\\subtrees\\0.0.0.subtree"
+    },
+    "subtreeinfoOctreeCesiumsample": {
+      "commandName": "Project",
+      "commandLineArgs": "-i D:\\dev\\github.com\\CesiumGS\\3d-tiles-samples\\1.1\\SparseImplicitOctree\\subtrees\\0.0.0.0.subtree -s Octree"
     },
     "subtreePg2b3dmsample": {
       "commandName": "Project",

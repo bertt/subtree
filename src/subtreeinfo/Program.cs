@@ -61,7 +61,7 @@ void Info(Options options)
             var level = LevelOffset.GetNumberOfLevels(content, scheme);
             for(var l = 0; l < level; l++)
             {
-                var ba = Availability.GetLevel(content, l);
+                var ba = Availability.GetLevel(content, l, scheme);
                 // to get absolute tiles when using multiple subtree change following call:
                 files.AddRange(ba.GetAvailableFiles(0, 0, 0));
             }
@@ -104,7 +104,7 @@ static void PrintAvailability(string availability, ImplicitSubdivisionScheme sch
 
     for (int i = 0; i < l; i++)
     {
-        var ba = Availability.GetLevel(availability, i);
+        var ba = Availability.GetLevel(availability, i, scheme);
         var levelAvailable = ba.Count(true);
         var levelTotal = ba.GetWidth() * ba.GetHeight();
         total += levelTotal;

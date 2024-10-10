@@ -4,6 +4,24 @@ namespace subtree.tests;
 
 public class SubtreeReaderTests
 {
+    [Test]
+    public void ReadSubtree0_0_0_0()
+    {
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitOctree/0.0.0.0.subtree");
+        var subtree = SubtreeReader.ReadSubtree(subtreefile);
+
+        var tileAvailability = subtree.TileAvailability.AsString();
+        Assert.That(tileAvailability == "11111000100000000100000011000000110000001000000000000000000000000100000010000000");
+
+        var l = LevelOffset.GetNumberOfLevels(tileAvailability,ImplicitSubdivisionScheme.Octree);
+        Assert.That(l == 3);
+
+        var contentAvailability = subtree.ContentAvailability.AsString();
+        Assert.That(contentAvailability == "01000000000000000100000010000000000000000000000000000000000000000000000000000000");
+
+        var childSubtreeAvailability = subtree.ChildSubtreeAvailability.AsString();
+        Assert.That(childSubtreeAvailability == "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000010000000000000000000000000000000000000000000000001000000110000001000000000000000000000000000000000000000000000000100000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000100000000000000000000000000000000000000000000000010000001");
+    }
 
     [Test]
     public void ReadSubtreeTestLevel3_5_0()

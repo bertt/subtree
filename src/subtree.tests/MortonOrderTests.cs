@@ -1,11 +1,21 @@
 ﻿using NUnit.Framework;
-using System.Collections;
 
 namespace subtree.tests;
 
 
 public class MortonOrderTests
 {
+    [Test]
+    public void MortonOctreeRoundTripTest()
+    {
+        var mortonIndex = (uint)0b010011010;
+        var res = MortonOrder.Decode3D(mortonIndex);
+        Assert.That(res.x == 2 && res.y == 7 && res.z == 0);
+        Assert.That(MortonOrder.Encode3D(res.x, res.y,res.z) == mortonIndex);
+
+    }
+
+    // sample from:
     [Test]
     public void MortonRoundTripTest()
     {
@@ -19,8 +29,6 @@ public class MortonOrderTests
     [Test]
     public void MortonEncode2DTests()
     {
-        // uint p = 0;
-        // var p1 = new BitArray(new uint[] {0});
         Assert.That(MortonOrder.Encode2D(0, 0) == 0); // binary: 000
         Assert.That(MortonOrder.Encode2D(1, 0) == 1); // binary: 001
         Assert.That(MortonOrder.Encode2D(0, 1) == 2); // binary: 010
@@ -36,6 +44,12 @@ public class MortonOrderTests
 
         Assert.That(MortonOrder.Encode2D(0, 65535) == 2863311530);  //// binary:  10101010101010101010101010101010
 
+    }
+
+    [Test]
+    public void MortonEncode3DTests()
+    {
+        Assert.That(MortonOrder.Encode3D(0, 0, 0) == 0); // binary: 000
     }
 
     [Test]
