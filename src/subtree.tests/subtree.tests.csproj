@@ -58,6 +58,45 @@
     <None Update="testfixtures\SparseImplicitOctree\3.7.7.7.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\0.0.0.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.0.4.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.1.5.1.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.2.6.2.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.3.7.3.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.4.4.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.4.4.4.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.5.5.1.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.5.5.5.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.6.6.2.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.6.6.6.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.7.7.3.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitOctree\subtrees\3.7.7.7.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="testfixtures\SparseImplicitQuadtree\0.0.0.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -83,6 +122,33 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="testfixtures\SparseImplicitQuadtree\3.7.2.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\0.0.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.0.5.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.1.4.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.2.7.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.3.6.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.4.1.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.5.0.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.6.3.subtree">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="testfixtures\SparseImplicitQuadtree\subtrees\3.7.2.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

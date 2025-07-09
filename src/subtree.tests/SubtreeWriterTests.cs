@@ -27,7 +27,7 @@ public class SubtreeWriterTests
     public void TestWriteSubtreeRootFile()
     {
         // arrange
-        var file = @"testfixtures/SparseImplicitQuadtree/0.0.0.subtree";
+        var file = @"testfixtures/SparseImplicitQuadtree/subtrees/0.0.0.subtree";
         var subtreeBytes = File.ReadAllBytes(file);
         var subtreefile = File.OpenRead(file);
         var subtreeOriginal = SubtreeReader.ReadSubtree(subtreefile);
@@ -59,7 +59,7 @@ public class SubtreeWriterTests
     public void TestWriteSubtreeLevel3File()
     {
         // arrange
-        var file = @"testfixtures/SparseImplicitQuadtree/3.5.0.subtree";
+        var file = @"testfixtures/SparseImplicitQuadtree/subtrees/3.5.0.subtree";
         var subtreeBytes = File.ReadAllBytes(file);
         var subtreefile = File.OpenRead(file);
         var subtreeOriginal = SubtreeReader.ReadSubtree(subtreefile);
@@ -90,7 +90,7 @@ public class SubtreeWriterTests
     [Test]
     public void TestWriteHeader()
     {
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/0.0.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/0.0.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         var header = subtree.SubtreeHeader;
 
@@ -111,7 +111,7 @@ public class SubtreeWriterTests
     public void TestWriteJson()
     {
         // arrange
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/0.0.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/0.0.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         var subtreeJson = GetSubtreeJson();
 
@@ -147,7 +147,7 @@ public class SubtreeWriterTests
     public void TestWriteBinary()
     {
         // arrange
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/0.0.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/0.0.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         // act
@@ -177,7 +177,7 @@ public class SubtreeWriterTests
     public void TestWriteBinary1()
     {
         // arrange
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/3.4.1.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/3.4.1.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         // act
@@ -192,7 +192,7 @@ public class SubtreeWriterTests
     public void TestWriteBinary2()
     {
         // arrange
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/3.5.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/3.5.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         // act
@@ -208,7 +208,7 @@ public class SubtreeWriterTests
     public void TestWriteBinary3()
     {
         // arrange
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/3.6.3.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/3.6.3.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         // act
@@ -223,7 +223,7 @@ public class SubtreeWriterTests
     public void TestWriteBinary4()
     {
         // arrange
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/3.7.2.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/3.7.2.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         // act

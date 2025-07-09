@@ -5,16 +5,18 @@ namespace subtree.tests;
 
 public class SubtreeReaderTests
 {
+    // Sample dataset from https://github.com/CesiumGS/3d-tiles-samples/tree/main/1.1/SparseImplicitOctree
     [Test]
     public void ReadOctreeSubtree0_0_0_0()
     {
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitOctree/0.0.0.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitOctree/subtrees/0.0.0.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         var json = subtree.SubtreeJson;
         var subtreeJsonObject = JsonConvert.DeserializeObject<SubtreeJson>(subtree.SubtreeJson);
 
         // get the count of true in bitarray subtree.TileAvailability
-        Assert.That(subtreeJsonObject.tileAvailability.availableCount == subtree.TileAvailability.Cast<bool>().Count(x => x == true));         var actual = subtree.TileAvailability.Count();
+        Assert.That(subtreeJsonObject.tileAvailability.availableCount == subtree.TileAvailability.Cast<bool>().Count(x => x == true));         
+        var actual = subtree.TileAvailability.Count();
 
         // 80 bits
         var tileAvailability = subtree.TileAvailability.AsString();
@@ -42,7 +44,7 @@ public class SubtreeReaderTests
     public void ReadSubtreeTestLevel3_5_0()
     {
         // see https://github.com/CesiumGS/3d-tiles-samples/blob/main/1.1/SparseImplicitQuadtree/screenshot/subtreeInfo.md
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/3.5.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/3.5.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
 
         var l = LevelOffset.GetNumberOfLevels(subtree.TileAvailability.ToString(), ImplicitSubdivisionScheme.Quadtree);
@@ -66,7 +68,7 @@ public class SubtreeReaderTests
     public void ReadSubtreeTestLevel0_0_0()
     {
         // see https://github.com/CesiumGS/3d-tiles-samples/blob/main/1.1/SparseImplicitQuadtree/screenshot/subtreeInfo.md
-        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/0.0.0.subtree");
+        var subtreefile = File.OpenRead(@"testfixtures/SparseImplicitQuadtree/subtrees/0.0.0.subtree");
         var subtree = SubtreeReader.ReadSubtree(subtreefile);
         Assert.That(subtree.SubtreeHeader.Magic == "subt");
         Assert.That(subtree.SubtreeHeader.Version == 1);
