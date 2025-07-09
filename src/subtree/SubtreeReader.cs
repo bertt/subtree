@@ -58,6 +58,7 @@ public static class SubtreeReader
         using (var reader = new BinaryReader(stream))
         {
             var subtree = ReadSubtree(reader);
+
             return subtree;
         }
     }

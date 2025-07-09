@@ -113,9 +113,11 @@ static void PrintAvailability(string availability, ImplicitSubdivisionScheme sch
     }
     Console.WriteLine($"Total: {total}");
 
+    Console.WriteLine("Subdivision scheme: " + scheme);
 
-    if(scheme == ImplicitSubdivisionScheme.Quadtree)
+    if (scheme == ImplicitSubdivisionScheme.Quadtree)
     {
+
         var maxLevel = l;
         if (l > 4)
         {
@@ -135,6 +137,11 @@ static void PrintAvailability(string availability, ImplicitSubdivisionScheme sch
             var availabilityArray = BitArray2DCreator.GetBitArray2D(levelAvailability);
             PrintBitArray2D(availabilityArray);
         }
+    }
+    else
+    {
+        // assume octree
+        Console.WriteLine("Subdivision scheme: Octree");    
     }
 }
 

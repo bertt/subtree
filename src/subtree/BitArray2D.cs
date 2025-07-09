@@ -2,6 +2,11 @@
 
 namespace subtree;
 
+public sealed class BitArray3D
+{
+
+}
+
 public sealed class BitArray2D
 {
     private BitArray _array;
