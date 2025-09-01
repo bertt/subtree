@@ -95,7 +95,11 @@ void Info(Options options)
             {
                 var length = subtree.ChildSubtreeAvailability.Length;
                 int side = (int)Math.Cbrt(length);
-                Console.WriteLine($"Side of cube for subtrees: {side}*{side}*{side}"); 
+                Console.WriteLine($"Side of cube for subtrees: {side}*{side}*{side}");
+
+                // count available subtrees
+                var availableSubtrees = subtree.ChildSubtreeAvailability.Count(true);
+                Console.WriteLine($"Available subtrees: {availableSubtrees}");
             }
         }
     }
