@@ -6,6 +6,19 @@ namespace subtree.tests;
 public class SubtreeWriterTests
 {
     [Test]
+    public void TestWriteOctreeRoot()
+    {
+
+        // write subtree root file with octree for level 0 and 1 
+        var subtree = new Subtree();
+        subtree.TileAvailability = BitArrayCreator.FromString("110000000");
+        subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
+
+        var bytes = SubtreeWriter.ToBytes(subtree);
+        File.WriteAllBytes(@"0_0_0.subtree", bytes);
+    }
+
+    [Test]
     public void TestWriteSubtreeRootwithConstants()
     {
         // create root subtree
