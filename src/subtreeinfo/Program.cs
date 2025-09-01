@@ -82,10 +82,21 @@ void Info(Options options)
             Console.WriteLine("Availability: " + subtree.ChildSubtreeAvailability.AsString());
             var level = Level.GetLevel(subtree.ChildSubtreeAvailability.Length);
             Console.WriteLine($"Level for subtree files: {level}");
-            var childSubtreeAvailability = BitArray2DCreator.GetBitArray2D(subtree.ChildSubtreeAvailability.AsString());
-            PrintBitArray2D(childSubtreeAvailability);
-            var files = childSubtreeAvailability.GetAvailableFiles();
-            Console.WriteLine($"Subtree files expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
+
+            if(scheme == ImplicitSubdivisionScheme.Quadtree)
+            {
+                var childSubtreeAvailability = BitArray2DCreator.GetBitArray2D(subtree.ChildSubtreeAvailability.AsString());
+                PrintBitArray2D(childSubtreeAvailability);
+                var files = childSubtreeAvailability.GetAvailableFiles();
+                Console.WriteLine($"Subtree files expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
+            }
+            // for octree
+            else
+            {
+                var length = subtree.ChildSubtreeAvailability.Length;
+                int side = (int)Math.Cbrt(length);
+                Console.WriteLine($"Side of cube for subtrees: {side}*{side}*{side}"); 
+            }
         }
     }
     else
