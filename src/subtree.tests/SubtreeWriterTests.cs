@@ -11,12 +11,32 @@ public class SubtreeWriterTests
 
         // write subtree root file with octree for level 0 and 1 
         var subtree = new Subtree();
-        subtree.TileAvailability = BitArrayCreator.FromString("110000000");
+        //subtree.TileAvailability = BitArrayCreator.FromString("110000000");
+        //subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
+        subtree.TileAvailability =    BitArrayCreator.FromString("110000000");
         subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
 
+
         var bytes = SubtreeWriter.ToBytes(subtree);
-        File.WriteAllBytes(@"0_0_0.subtree", bytes);
+        File.WriteAllBytes(@"d:\aaa\octree\subtrees\0_0_0_0.subtree", bytes);
     }
+
+    [Test]
+    public void TestWriteQuadtreeRoot()
+    {
+
+        // write subtree root file with octree for level 0 and 1 
+        var subtree = new Subtree();
+        //subtree.TileAvailability = BitArrayCreator.FromString("110000000");
+        //subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
+        subtree.TileAvailability = BitArrayCreator.FromString("11000");
+        subtree.ContentAvailability = BitArrayCreator.FromString("11000");
+
+
+        var bytes = SubtreeWriter.ToBytes(subtree);
+        File.WriteAllBytes(@"d:\aaa\octree\subtrees\0_0_0.subtree", bytes);
+    }
+
 
     [Test]
     public void TestWriteSubtreeRootwithConstants()

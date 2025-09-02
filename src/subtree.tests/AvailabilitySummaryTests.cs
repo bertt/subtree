@@ -10,7 +10,6 @@ public class AvailabilitySummaryTests
         var tileAvailability2d = BitArray2DCreator.GetBitArray2D(availability);
 
         var files = tileAvailability2d.GetAvailableFiles(3, 0, 5);
-
     }
 
     [Test]

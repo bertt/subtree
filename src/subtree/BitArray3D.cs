@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 namespace subtree
 {
@@ -18,8 +17,19 @@ namespace subtree
             bits = new BitArray(dimension1 * dimension2 *  dimension3);
         }
 
+        private int GetIndex(int x, int y, int z)
+        {
+            return x * (_dimension2 * _dimension3) + y * _dimension3 + z;
+        }
 
+        public void Set(int x, int y, int z, bool value)
+        {
+            bits[GetIndex(x, y, z)] = value;
+        }
 
-
+        public bool Get(int x, int y, int z)
+        {
+            return bits[GetIndex(x, y, z)];
+        }
     }
 }
