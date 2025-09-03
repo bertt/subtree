@@ -31,5 +31,13 @@ namespace subtree
         {
             return bits[GetIndex(x, y, z)];
         }
+
+        public int GetDimension() { return _dimension1; }
+
+        public int Count(bool whereClause = false)
+        {
+            return bits.Count(whereClause);
+        }
+
     }
 }

@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "quadtreewriter", "samples\q
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "subtreewriter", "samples\subtreewriter\subtreewriter.csproj", "{039F9FFA-21E7-4902-81E4-0F058D5D0F6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "octreewriter", "samples\octreewriter\octreewriter.csproj", "{144EB763-B0A8-4874-B63D-5617B74A6893}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{039F9FFA-21E7-4902-81E4-0F058D5D0F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{039F9FFA-21E7-4902-81E4-0F058D5D0F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{039F9FFA-21E7-4902-81E4-0F058D5D0F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144EB763-B0A8-4874-B63D-5617B74A6893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144EB763-B0A8-4874-B63D-5617B74A6893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144EB763-B0A8-4874-B63D-5617B74A6893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144EB763-B0A8-4874-B63D-5617B74A6893}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5534ACE3-D257-4DC8-8A55-954FB51DC2F4} = {98B873ED-34B9-4B49-AB2E-9F3DB9A95423}
 		{039F9FFA-21E7-4902-81E4-0F058D5D0F6A} = {98B873ED-34B9-4B49-AB2E-9F3DB9A95423}
+		{144EB763-B0A8-4874-B63D-5617B74A6893} = {98B873ED-34B9-4B49-AB2E-9F3DB9A95423}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {503BAF91-F0DE-4E53-B337-A6B48DB049FD}

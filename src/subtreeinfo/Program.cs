@@ -61,9 +61,17 @@ void Info(Options options)
             var level = LevelOffset.GetNumberOfLevels(content, scheme);
             for(var l = 0; l < level; l++)
             {
-                var ba = Availability.GetLevel(content, l, scheme);
-                // to get absolute tiles when using multiple subtree change following call:
-                files.AddRange(ba.GetAvailableFiles(0, 0, 0));
+                if(scheme == ImplicitSubdivisionScheme.Quadtree)
+                {
+                    var ba = Availability.GetLevel(content, l);
+                    // to get absolute tiles when using multiple subtree change following call:
+                    files.AddRange(ba.GetAvailableFiles(0, 0, 0));
+                }
+                else
+                {
+                    var ba = Availability.GetLevel3D(content, l);
+                    // files.AddRange(ba.GetAvailableFilesOctree(0, 0, 0, 0));
+                }
             }
             Console.WriteLine($"Tiles expected (first 3 of {files.Count}): " + String.Join(',', files.Take(3)));
         }
@@ -119,12 +127,23 @@ static void PrintAvailability(string availability, ImplicitSubdivisionScheme sch
 
     for (int i = 0; i < l; i++)
     {
-        var ba = Availability.GetLevel(availability, i, scheme);
-        var levelAvailable = ba.Count(true);
-        var levelTotal = ba.GetWidth() * ba.GetHeight();
-        total += levelTotal;
-        
-        Console.WriteLine($"Level: {i}, available {levelAvailable}/{levelTotal}");
+        if(scheme == ImplicitSubdivisionScheme.Quadtree)
+        {
+            var ba = Availability.GetLevel(availability, i);
+            var levelAvailable = ba.Count(true);
+            var levelTotal = ba.GetWidth() * ba.GetHeight();
+            total += levelTotal;
+            Console.WriteLine($"Level: {i}, available {levelAvailable}/{levelTotal}");
+
+        }
+        else
+        {
+            var ba = Availability.GetLevel3D(availability, i);
+            var levelAvailable = ba.Count(true);
+            var levelTotal = ba.GetDimension() * ba.GetDimension()*ba.GetDimension();
+            total += levelTotal;
+            Console.WriteLine($"Level: {i}, available {levelAvailable}/{levelTotal}");
+        }
     }
     Console.WriteLine($"Total: {total}");
 

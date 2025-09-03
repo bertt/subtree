@@ -34,6 +34,7 @@ public sealed class BitArray2D
     public int GetWidth() { return _dimension1; }
     public int GetHeight() { return _dimension2; }
 
+    public int GetDimension() { return _dimension1; }
     public bool IsAvailable()
     {
         return _array.OfType<bool>().Count(p => p) > 0;
