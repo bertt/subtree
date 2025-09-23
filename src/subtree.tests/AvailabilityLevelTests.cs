@@ -28,6 +28,24 @@ public class AvailabilityLevelTests
     }
 
 
+    [Test]
+    public void TileAvailabilityToContentAvailabilityTest3D()
+    {
+        // arrange
+        var level0 = new AvailabilityLevel3D(0);
+        var level1 = new AvailabilityLevel3D(1);
+        level1.BitArray3D.Set(0, 0, 0, true);
+        var contentAvailabilitylevels = new AvailabilityLevels3D() { level0, level1};
+        var mortonContent = contentAvailabilitylevels.ToMortonIndex();
+        Assert.That(mortonContent == "010000000");
+        // act
+        var tileAvailabilitylevels = ContentToTileAvailability.GetTileAvailabilityLevels3D(contentAvailabilitylevels);
+
+        // assert
+        Assert.That(tileAvailabilitylevels != null);
+        var mortenTileAvailability = tileAvailabilitylevels.ToMortonIndex();
+        Assert.That(mortenTileAvailability == "110000000");
+    }
 
 
     [Test]

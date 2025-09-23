@@ -6,10 +6,6 @@ public class AvailabilityLevel3D
     public AvailabilityLevel3D(int level)
     {
         Level = level;
-
-        // level -0 -> diomension 1
-        // level -1 -> diomension 2
-        // level -2 -> diomension 4
         dimension = 1 << level;
         BitArray3D = new BitArray3D(dimension,dimension,dimension);
     }
