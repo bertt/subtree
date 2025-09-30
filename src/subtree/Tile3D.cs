@@ -10,6 +10,9 @@ public class Tile3D
     }
 
     public int Level { get; set; }
+
+    public bool Available { get; set; }
+
     public int X { get; set; }
     public int Y { get; set; }
     public int Z { get; set; }

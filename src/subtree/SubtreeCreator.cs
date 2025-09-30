@@ -2,6 +2,13 @@
 
 public static class SubtreeCreator
 {
+    public static byte[] GenerateSubtreefile3D(List<Tile3D> tiles)
+    {
+        var mortonIndices = MortonIndex.GetMortonIndices3D(tiles);
+        var subtreebytes = SubtreeWriter.ToBytes(mortonIndices.tileAvailability, mortonIndices.contentAvailability);
+        return subtreebytes;
+    }
+
     public static byte[] GenerateSubtreefile(List<Tile> tiles)
     {
         var mortonIndices = MortonIndex.GetMortonIndices(tiles);

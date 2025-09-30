@@ -3,6 +3,32 @@
 namespace subtree.tests;
 public class SubtreeCreatorTests
 {
+
+    [Test]
+    public void CreateSubtreeTest2()
+    {
+        var tile = new Tile(0, 0, 0);
+        tile.Available = false;
+        var tiles = new List<Tile> { tile };
+
+        for(var x= 0; x < 2; x++)
+            for(var y= 0; y < 2; y++)
+            {
+                var t2 = new Tile(1, x, y);
+                t2.Available = true;
+                tiles.Add(t2);
+            }
+
+        var subtreeFiles = SubtreeCreator.GenerateSubtreefiles(tiles);
+        Assert.That(subtreeFiles, Is.Not.EqualTo(null));
+        var stream = new MemoryStream(subtreeFiles.FirstOrDefault().Value);
+        var subtree = SubtreeReader.ReadSubtree(stream);
+        Assert.That(subtree.TileAvailability[0]);
+        Assert.That(!subtree.ContentAvailability[0]);
+        Assert.That(subtree.ChildSubtreeAvailability == null);
+    }
+
+
     [Test]
     public void CreateSubtreeTest()
     {
