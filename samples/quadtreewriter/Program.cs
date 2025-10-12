@@ -5,15 +5,21 @@ using subtree;
 using System.Diagnostics;
 using Wkx;
 
-var table = "delaware_buildings";
+var table = "ifc.kievitsweg";
+var geometry_column = "geom2";
 var stopwatch = new Stopwatch();
 stopwatch.Start();
 
-var connectionString = "Host=::1;Username=postgres;Database=postgres;Port=5432;password=postgres";
+var connectionString = "Host=::1;Username=postgres;Database=postgres;Port=5439;password=postgres";
 var conn = new NpgsqlConnection(connectionString);
-var bbox3d = GetBBox3D(conn);
-var epsg = 4326;
-var geometry_column = "geom_triangle";
+var bbox3d = GetBBox3D(conn, table, geometry_column);
+var epsg = 7415;
+
+if (!Directory.Exists("content"))
+{
+    Directory.CreateDirectory("content");
+}
+
 
 Console.WriteLine("bbox 3d: " + bbox3d);
 var bbox = new BoundingBox(bbox3d.XMin, bbox3d.YMin, bbox3d.XMax, bbox3d.YMax);
@@ -38,9 +44,9 @@ File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
 
 Console.WriteLine("Subtree file is written, en d of program");
 
-static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometry_column, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
+static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometryColumn, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
 {
-    var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometry_column, new Point(bbox.XMin, bbox.YMin), new Point(bbox.XMax, bbox.YMax), epsg, "");
+    var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometryColumn, new Point(bbox.XMin, bbox.YMin), new Point(bbox.XMax, bbox.YMax), epsg);
 
     Console.WriteLine($"Features of tile {tile.Z},{tile.X},{tile.Y}: " + numberOfFeatures);
     if (numberOfFeatures == 0)
@@ -68,14 +74,14 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
                 var bboxQuad = new BoundingBox(xstart, ystart, xend, yend);
 
                 var new_tile = new Tile(tile.Z + 1, tile.X * 2 + x, tile.Y * 2 + y);
-                generateTiles(table, conn, epsg, geometry_column, bboxQuad, maxFeaturesPerTile, new_tile, tiles);
+                generateTiles(table, conn, epsg, geometryColumn, bboxQuad, maxFeaturesPerTile, new_tile, tiles);
             }
         }
     }
     else
     {
         Console.WriteLine($"Generate tile: {tile.Z}, {tile.X}, {tile.Y}");
-        var bytes = GenerateGlbFromDatabase(conn, table, bbox, epsg);
+        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, bbox, epsg);
         File.WriteAllBytes($"content/test_{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
         var t1 = new Tile(tile.Z, tile.X, tile.Y);
         t1.Available = true;
@@ -85,9 +91,9 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
     return tiles;
 }
 
-static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, BoundingBox bbox, int epsg)
+static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg)
 {
-    var geoms = GetGeometries(conn, table, bbox, epsg);
+    var geoms = GetGeometries(conn, table, geometryColumn, bbox, epsg);
     var triangles = GetTriangles(geoms);
     var bytes = GlbCreator.GetGlb(triangles);
     return bytes;
@@ -98,7 +104,7 @@ static List<quadtreewriter.Triangle> GetTriangles(List<Geometry> geoms)
     var triangleCollection = new List<quadtreewriter.Triangle>();
     foreach (var g in geoms)
     {
-        var surface = (PolyhedralSurface)g;
+        var surface = (Tin)g;
         var triangles = Triangulator.GetTriangles(surface);
 
         triangleCollection.AddRange(triangles);
@@ -107,11 +113,10 @@ static List<quadtreewriter.Triangle> GetTriangles(List<Geometry> geoms)
     return triangleCollection;
 }
 
-static BoundingBox3D GetBBox3D(NpgsqlConnection conn)
+static BoundingBox3D GetBBox3D(NpgsqlConnection conn, string tableName, string geometry)
 {
     conn.Open();
-    var table = "delaware_buildings";
-    var sql = $"SELECT st_xmin(geom1), st_ymin(geom1), st_zmin(geom1), st_xmax(geom1), st_ymax(geom1), st_zmax(geom1) FROM (select ST_3DExtent(geom_triangle) as geom1 from {table} where ST_GeometryType(geom_triangle) =  'ST_PolyhedralSurface' )  as t";
+    var sql = $"SELECT st_xmin(geom1), st_ymin(geom1), st_zmin(geom1), st_xmax(geom1), st_ymax(geom1), st_zmax(geom1) FROM (select ST_3DExtent({geometry}) as geom1 from {tableName})  as t";
     var cmd = new NpgsqlCommand(sql, conn);
     var reader = cmd.ExecuteReader();
     reader.Read();
@@ -126,10 +131,10 @@ static BoundingBox3D GetBBox3D(NpgsqlConnection conn)
     return new BoundingBox3D() { XMin = xmin, YMin = ymin, ZMin = zmin, XMax = xmax, YMax = ymax, ZMax = zmax };
 }
 
-static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, BoundingBox bbox, int epsg)
+static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg)
 {
-    var sql = $"SELECT ST_AsBinary(ST_RotateX(ST_Translate(geom_triangle, 1238070.0029833354 * -1, -4795867.907504121 * -1, 4006102.3617460253 * -1), -pi() / 2))FROM {table}";
-    var sqlWhere = $" WHERE ST_Intersects(ST_Centroid(ST_Envelope(geom_triangle)), ST_MakeEnvelope({bbox.XMin}, {bbox.YMin}, {bbox.XMax}, {bbox.YMax}, {epsg})) and ST_GeometryType(geom_triangle) = 'ST_PolyhedralSurface'";
+    var sql = $"SELECT ST_AsBinary(ST_RotateX(ST_Translate({geometryColumn}, 1238070.0029833354 * -1, -4795867.907504121 * -1, 4006102.3617460253 * -1), -pi() / 2)) FROM {table}";
+    var sqlWhere = $" WHERE ST_Intersects(ST_Centroid(ST_Envelope({geometryColumn})), ST_MakeEnvelope({bbox.XMin}, {bbox.YMin}, {bbox.XMax}, {bbox.YMax}, {epsg}))";
 
     conn.Open();
     var cmd = new NpgsqlCommand(sql + sqlWhere, conn);

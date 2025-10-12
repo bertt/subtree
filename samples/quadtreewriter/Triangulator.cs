@@ -5,22 +5,17 @@ namespace quadtreewriter;
 
 public static class Triangulator
 {
-    public static List<Triangle> GetTriangles(PolyhedralSurface polyhedralsurface)
+    public static List<Triangle> GetTriangles(Tin tin)
     {
-        var degenerated_triangles = 0;
         var allTriangles = new List<Triangle>();
-        for (var i = 0; i < polyhedralsurface.Geometries.Count; i++)
+        for (var i = 0; i < tin.Geometries.Count; i++)
         {
-            var geometry = polyhedralsurface.Geometries[i];
+            var geometry = tin.Geometries[i];
             var triangle = GetTriangle(geometry);
 
             if (triangle != null)
             {
                 allTriangles.Add(triangle);
-            }
-            else
-            {
-                degenerated_triangles++;
             }
         }
 
