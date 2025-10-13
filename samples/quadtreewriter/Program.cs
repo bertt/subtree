@@ -3,10 +3,11 @@ using Npgsql;
 using quadtreewriter;
 using subtree;
 using System.Diagnostics;
+using System.Numerics;
 using Wkx;
 
 var table = "ifc.kievitsweg";
-var geometry_column = "geom2";
+var geometry_column = "geometry";
 var stopwatch = new Stopwatch();
 stopwatch.Start();
 
@@ -39,10 +40,16 @@ Console.WriteLine("Max available level: " + maxAvailableLevel);
 var mortonIndices = MortonIndex.GetMortonIndices(tiles);
 Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 
-var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability);
-File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
+// var subtreeFiles = SubtreeCreator.GenerateSubtreefiles(tiles);
 
+var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability, mortonIndices.tileAvailability);
+//File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreeFiles.First().Value);
+
+File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
 Console.WriteLine("Subtree file is written, en d of program");
+
+// figure max of tile.z
+ Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
 
 static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometryColumn, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
 {
@@ -82,7 +89,7 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
     {
         Console.WriteLine($"Generate tile: {tile.Z}, {tile.X}, {tile.Y}");
         var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, bbox, epsg);
-        File.WriteAllBytes($"content/test_{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
+        File.WriteAllBytes($"content/{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
         var t1 = new Tile(tile.Z, tile.X, tile.Y);
         t1.Available = true;
         tiles.Add(t1);
@@ -133,7 +140,10 @@ static BoundingBox3D GetBBox3D(NpgsqlConnection conn, string tableName, string g
 
 static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg)
 {
-    var sql = $"SELECT ST_AsBinary(ST_RotateX(ST_Translate({geometryColumn}, 1238070.0029833354 * -1, -4795867.907504121 * -1, 4006102.3617460253 * -1), -pi() / 2)) FROM {table}";
+    var v3 = new Vector3(3932794.25f, 316347.9375f, 4994553.5f);
+    // var v3 = new Vector3(3932794, (float)316347.90625, (float)4994553.5);
+    // var sql = $"SELECT ST_AsBinary(ST_RotateX(ST_Translate({geometryColumn}, 1238070.0029833354 * -1, -4795867.907504121 * -1, 4006102.3617460253 * -1), -pi() / 2)) FROM {table}";
+    var sql = $"SELECT ST_AsBinary(ST_Translate(st_transform({geometryColumn},4978), {v3.X} * -1, {v3.Y} * -1, {v3.Z} * -1)) FROM {table}";
     var sqlWhere = $" WHERE ST_Intersects(ST_Centroid(ST_Envelope({geometryColumn})), ST_MakeEnvelope({bbox.XMin}, {bbox.YMin}, {bbox.XMax}, {bbox.YMax}, {epsg}))";
 
     conn.Open();
@@ -152,10 +162,13 @@ static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, string 
     return geometries;
 }
 
-static byte[] GetSubtreeBytes(string contentAvailability, string subtreeAvailability = null)
+static byte[] GetSubtreeBytes(string contentAvailability, string tileAvailability, string subtreeAvailability = null)
 {
     var subtree_root = new Subtree();
-    subtree_root.TileAvailabilityConstant = 1;
+    var s01_root = BitArrayCreator.FromString(tileAvailability);
+    subtree_root.TileAvailability = s01_root;
+
+    // subtree_root.TileAvailabilityConstant = 1;
 
     var s0_root = BitArrayCreator.FromString(contentAvailability);
     subtree_root.ContentAvailability = s0_root;

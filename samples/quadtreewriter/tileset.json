@@ -1,37 +1,10 @@
 ﻿{
-  "asset" : {
-    "version" : "1.1"
+  "asset": {
+    "generator": "pg2b3dm 2.21.0.0",
+    "version": "1.1"
   },
-  "geometricError" : 1024.0,
+  "geometricError": 2000.0,
   "root": {
-    "boundingVolume": {
-      "box": [
-        0.0,
-        0.0,
-        0.0,
-        6813.594,
-        0.0,
-        0.0,
-        0.0,
-        4585.989,
-        0.0,
-        0.0,
-        0.0,
-        6077.698
-      ]
-    },
-    "geometricError": 512.0,
-    "refine": "ADD",
-    "content": {
-      "uri": "content/test_{level}_{x}_{y}.glb"
-    },
-    "implicitTiling": {
-      "subdivisionScheme": "QUADTREE",
-      "subtreeLevels": 5,
-      "subtrees": {
-        "uri": "subtrees/{level}_{x}_{y}.subtree"
-      }
-    },
     "transform": [
       1.0,
       0.0,
@@ -45,10 +18,33 @@
       0.0,
       1.0,
       0.0,
-      1238070.0029833354,
-      -4795867.907504121,
-      4006102.3617460253,
+      3932794.25,
+      316347.9375,
+      4994553.5,
       1.0
-    ]
+    ],
+    "geometricError": 2000.0,
+    "refine": "ADD",
+    "boundingVolume": {
+      "region": [
+        0.08025675163289678,
+        0.9054667477295618,
+        0.08027507734616517,
+        0.9054786833273178,
+        38.478996581218055,
+        52.67196353858528
+      ]
+    },
+    "content": {
+      "uri": "content/{level}_{x}_{y}.glb"
+    },
+    "implicitTiling": {
+      "availableLevels": 1,
+      "subdivisionScheme": "QUADTREE",
+      "subtreeLevels": 4,
+      "subtrees": {
+        "uri": "subtrees/{level}_{x}_{y}.subtree"
+      }
+    }
   }
 }

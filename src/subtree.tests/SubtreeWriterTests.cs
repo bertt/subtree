@@ -18,7 +18,7 @@ public class SubtreeWriterTests
 
 
         var bytes = SubtreeWriter.ToBytes(subtree);
-        File.WriteAllBytes(@"d:\aaa\octree\subtrees\0_0_0_0.subtree", bytes);
+        File.WriteAllBytes(@"0_0_0_0.subtree", bytes);
     }
 
     [Test]
@@ -34,7 +34,7 @@ public class SubtreeWriterTests
 
 
         var bytes = SubtreeWriter.ToBytes(subtree);
-        File.WriteAllBytes(@"d:\aaa\octree\subtrees\0_0_0.subtree", bytes);
+        File.WriteAllBytes(@"0_0_0.subtree", bytes);
     }
 
 
