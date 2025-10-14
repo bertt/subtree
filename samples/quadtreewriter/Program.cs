@@ -26,7 +26,7 @@ if (!Directory.Exists("content"))
 
 
 var subdivisionScheme = SubdivisionScheme.OCTREE;
-var maxFeaturesPerTile = 9999999;
+var maxFeaturesPerTile = 1000;
 
 Console.WriteLine("bbox 3d: " + bbox3d);
 
