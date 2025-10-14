@@ -21,35 +21,64 @@ if (!Directory.Exists("content"))
     Directory.CreateDirectory("content");
 }
 
+// subdivision scheme quadtree or octree enum
+// quadtree is 2d subdivision, octree is 3d subdivision
+
+
+var subdivisionScheme = SubdivisionScheme.OCTREE;
+var maxFeaturesPerTile = 9999999;
 
 Console.WriteLine("bbox 3d: " + bbox3d);
+
 var bbox = new BoundingBox(bbox3d.XMin, bbox3d.YMin, bbox3d.XMax, bbox3d.YMax);
 
-var maxFeaturesPerTile = 1000;
+if (subdivisionScheme == SubdivisionScheme.OCTREE)
+{
+    var rootTile3D = new Tile3D(0, 0, 0, 0);
+    var tiles3D = generateTiles3D(table, conn, epsg, geometry_column, bbox3d, maxFeaturesPerTile, 0, rootTile3D, new List<Tile3D>());
+    var mortonIndices = MortonIndex.GetMortonIndices3D(tiles3D);
+    Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 
-var tile = new Tile(0, 0, 0);
-var tiles = generateTiles(table, conn, epsg, geometry_column, bbox, maxFeaturesPerTile, tile, new List<Tile>());
-Console.WriteLine("tiles:" + tiles.Count);
+    var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability, mortonIndices.tileAvailability);
+    //File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreeFiles.First().Value);
 
-stopwatch.Stop();
-Console.WriteLine(stopwatch.ElapsedMilliseconds / 1000 + "s");
-var maxAvailableLevel = tiles.Max(x => x.Z);
-Console.WriteLine("Max available level: " + maxAvailableLevel);
+    File.WriteAllBytes($"subtrees/0_0_0_0.subtree", subtreebytes);
+    Console.WriteLine("Subtree file is written, en d of program");
 
-// sample: 00000001000010001011000001110000011101001000001010000111100101111000011010000000000000000000000000000000000000000111100000000000000000000000000001111000000001111000000000000000000001111000011110000000000000000000000000000000000001111111100001111000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000
-var mortonIndices = MortonIndex.GetMortonIndices(tiles);
-Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
+    var maxAvailableLevel = tiles3D.Max(p => p.Level);
+    Console.WriteLine("Max available level: " + maxAvailableLevel);
 
-// var subtreeFiles = SubtreeCreator.GenerateSubtreefiles(tiles);
+    // figure max of tile.z
+    Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
+    Console.WriteLine("Program end");
 
-var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability, mortonIndices.tileAvailability);
-//File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreeFiles.First().Value);
+}
+else
+{
+    var tile = new Tile(0, 0, 0);
+    var tiles = generateTiles(table, conn, epsg, geometry_column, bbox, maxFeaturesPerTile, tile, new List<Tile>());
+    Console.WriteLine("tiles:" + tiles.Count);
 
-File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
-Console.WriteLine("Subtree file is written, en d of program");
+    stopwatch.Stop();
+    Console.WriteLine(stopwatch.ElapsedMilliseconds / 1000 + "s");
+    var maxAvailableLevel = tiles.Max(x => x.Z);
+    Console.WriteLine("Max available level: " + maxAvailableLevel);
 
-// figure max of tile.z
- Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
+    // sample: 00000001000010001011000001110000011101001000001010000111100101111000011010000000000000000000000000000000000000000111100000000000000000000000000001111000000001111000000000000000000001111000011110000000000000000000000000000000000001111111100001111000000000000000000000000000000000000000011110000000000000000000000000000000000000000000000000000
+    var mortonIndices = MortonIndex.GetMortonIndices(tiles);
+    Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
+
+    // var subtreeFiles = SubtreeCreator.GenerateSubtreefiles(tiles);
+
+    var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability, mortonIndices.tileAvailability);
+    //File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreeFiles.First().Value);
+
+    File.WriteAllBytes($"subtrees/0_0_0.subtree", subtreebytes);
+    Console.WriteLine("Subtree file is written, en d of program");
+
+    // figure max of tile.z
+    Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
+}
 
 static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometryColumn, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
 {
@@ -98,9 +127,67 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
     return tiles;
 }
 
-static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg)
+
+
+static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int epsg, string geometryColumn, BoundingBox3D bbox, int maxFeaturesPerTile, int level, Tile3D tile, List<Tile3D> tiles)
 {
-    var geoms = GetGeometries(conn, table, geometryColumn, bbox, epsg);
+    var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometryColumn, new Point(bbox.XMin, bbox.YMin, bbox.ZMin), new Point(bbox.XMax, bbox.YMax, bbox.ZMax), epsg);
+
+    Console.WriteLine($"Features of tile {level}, {tile.Z},{tile.X},{tile.Y}: " + numberOfFeatures);
+    if (numberOfFeatures == 0)
+    {
+        var t2 = new Tile3D(level, tile.Z, tile.X, tile.Y);
+        t2.Available = false;
+        tiles.Add(t2);
+    }
+    else if (numberOfFeatures > maxFeaturesPerTile)
+    {
+        level++;
+        Console.WriteLine($"Split tile in octree: {level},{tile.Z}_{tile.X}_{tile.Y} ");
+        for (var x = 0; x < 2; x++)
+        {
+            for (var y = 0; y < 2; y++)
+            {
+                var dx = (bbox.XMax - bbox.XMin) / 2;
+                var dy = (bbox.YMax - bbox.YMin) / 2;
+
+                var xstart = bbox.XMin + dx * x;
+                var ystart = bbox.YMin + dy * y;
+                var xend = xstart + dx;
+                var yend = ystart + dy;
+
+
+                for (var z = 0; z < 2; z++)
+                {
+                    var dz = (bbox.ZMax - bbox.ZMin) / 2;
+                    var z_start = bbox.ZMin + dz * z;
+                    var zend = z_start + dz;
+                    var bbox3d = new BoundingBox3D(xstart, ystart, z_start, xend, yend, zend);
+
+                    var new_tile = new Tile3D(level, tile.Z + 1, tile.X * 2 + x, tile.Y * 2 + y);
+                    generateTiles3D(table, conn, epsg, geometryColumn, bbox3d, maxFeaturesPerTile, level, new_tile, tiles);
+                }
+            }
+        }
+    }
+    else
+    {
+        Console.WriteLine($"Generate 3D tile: {tile.Level}, {tile.Z}, {tile.X}, {tile.Y}");
+        var boundingBox = new BoundingBox(bbox.XMin, bbox.YMin, bbox.XMax, bbox.YMax);
+        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, boundingBox, epsg, bbox.ZMin, bbox.ZMax);
+        File.WriteAllBytes($"content/{tile.Level}_{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
+        var t1 = new Tile3D(level, tile.Z, tile.X, tile.Y);
+        t1.Available = true;
+        tiles.Add(t1);
+    }
+
+    return tiles;
+}
+
+static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg, double? zMin=null, double? zMax= null)
+{
+    var v3 = new Vector3(3932794.25f, 316347.9375f, 4994553.5f);
+    var geoms = GetGeometries(conn, v3, table, geometryColumn, bbox, epsg, zMin, zMax);
     var triangles = GetTriangles(geoms);
     var bytes = GlbCreator.GetGlb(triangles);
     return bytes;
@@ -138,13 +225,14 @@ static BoundingBox3D GetBBox3D(NpgsqlConnection conn, string tableName, string g
     return new BoundingBox3D() { XMin = xmin, YMin = ymin, ZMin = zmin, XMax = xmax, YMax = ymax, ZMax = zmax };
 }
 
-static List<Geometry> GetGeometries(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg)
+static List<Geometry> GetGeometries(NpgsqlConnection conn, Vector3 translation, string table, string geometryColumn, BoundingBox bbox, int epsg, double? zMin=null, double? zMax = null)
 {
-    var v3 = new Vector3(3932794.25f, 316347.9375f, 4994553.5f);
-    // var v3 = new Vector3(3932794, (float)316347.90625, (float)4994553.5);
-    // var sql = $"SELECT ST_AsBinary(ST_RotateX(ST_Translate({geometryColumn}, 1238070.0029833354 * -1, -4795867.907504121 * -1, 4006102.3617460253 * -1), -pi() / 2)) FROM {table}";
-    var sql = $"SELECT ST_AsBinary(ST_Translate(st_transform({geometryColumn},4978), {v3.X} * -1, {v3.Y} * -1, {v3.Z} * -1)) FROM {table}";
-    var sqlWhere = $" WHERE ST_Intersects(ST_Centroid(ST_Envelope({geometryColumn})), ST_MakeEnvelope({bbox.XMin}, {bbox.YMin}, {bbox.XMax}, {bbox.YMax}, {epsg}))";
+    var hasZ = zMin.HasValue && zMax.HasValue;  
+    var sql = $"SELECT ST_AsBinary(ST_Translate(st_transform({geometryColumn},4978), {translation.X} * -1, {translation.Y} * -1, {translation.Z} * -1)) FROM {table}";
+
+    var sqlWhere = hasZ?
+        $" WHERE ST_3DIntersects(ST_Centroid(ST_Envelope({geometryColumn})), ST_3DMakeBox(st_setsrid(ST_MakePoint({bbox.XMin}, {bbox.YMin}, {zMin.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)}), {epsg}), st_setsrid(ST_MakePoint({bbox.XMax}, {bbox.YMax}, {zMax.Value.ToString(System.Globalization.CultureInfo.InvariantCulture)}), {epsg}))) " :
+        $" WHERE ST_Intersects(ST_Centroid(ST_Envelope({geometryColumn})), ST_MakeEnvelope({bbox.XMin}, {bbox.YMin}, {bbox.XMax}, {bbox.YMax}, {epsg}))";
 
     conn.Open();
     var cmd = new NpgsqlCommand(sql + sqlWhere, conn);
@@ -168,8 +256,6 @@ static byte[] GetSubtreeBytes(string contentAvailability, string tileAvailabilit
     var s01_root = BitArrayCreator.FromString(tileAvailability);
     subtree_root.TileAvailability = s01_root;
 
-    // subtree_root.TileAvailabilityConstant = 1;
-
     var s0_root = BitArrayCreator.FromString(contentAvailability);
     subtree_root.ContentAvailability = s0_root;
 
@@ -181,4 +267,11 @@ static byte[] GetSubtreeBytes(string contentAvailability, string tileAvailabilit
 
     var subtreebytes = SubtreeWriter.ToBytes(subtree_root);
     return subtreebytes;
+}
+
+
+enum SubdivisionScheme
+{
+    QUADTREE,
+    OCTREE
 }
