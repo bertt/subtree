@@ -59,4 +59,25 @@ public class MortonIndexTests
         Assert.That(mortonIndicesBytes.tileAvailability.Length == 2);
     }
 
+    [Test]
+    public void MortonIndex3DTest1()
+    {
+        var tile3d = new Tile3D(0, 0, 0, 0);
+        tile3d.Available = false;
+
+        var tiles = new List<Tile3D>() { tile3d };
+        var t = new Tile3D(1, 0, 1, 0);
+        t.Available = true;
+        tiles.Add(t);
+
+        var mortonIndices = MortonIndex.GetMortonIndices3D(tiles);
+
+        // act
+        var mortonIndicesBytes = MortonIndex.GetMortonIndexAsBytes3D(tiles);
+        Assert.That(mortonIndices.tileAvailability == "100100000");
+        Assert.That(mortonIndices.contentAvailability == "000100000");
+        Assert.That(mortonIndicesBytes.tileAvailability.Length == 2);
+    }
+
+
 }

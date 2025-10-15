@@ -13,12 +13,12 @@ public class SubtreeWriterTests
         var subtree = new Subtree();
         //subtree.TileAvailability = BitArrayCreator.FromString("110000000");
         //subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
-        subtree.TileAvailability =    BitArrayCreator.FromString("110000000");
-        subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
+        subtree.TileAvailability =    BitArrayCreator.FromString("101011111");
+        subtree.ContentAvailability = BitArrayCreator.FromString("001011111");
 
 
         var bytes = SubtreeWriter.ToBytes(subtree);
-        File.WriteAllBytes(@"0_0_0_0.subtree", bytes);
+       // File.WriteAllBytes(@"D:\dev\github.com\bertt\subtree\samples\quadtreewriter\bin\Debug\net8.0\subtrees\0_0_0_0.subtree", bytes);
     }
 
     [Test]

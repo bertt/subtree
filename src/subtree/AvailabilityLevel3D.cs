@@ -22,7 +22,7 @@ public class AvailabilityLevel3D
             {
                 for(var z=0; z< dimension; z++)
                 {
-                    var index = MortonOrder.Encode3D((uint)x, (uint)y, (uint)z);
+                    var index = MortonOrder.Encode3D((ulong)x, (ulong)y, (ulong)z);
                     s[index] = BitArray3D.Get(x, y, z) ? '1' : '0';
                 }
             }

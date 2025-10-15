@@ -5,6 +5,20 @@ namespace subtree.tests;
 
 public class MortonOrderTests
 {
+    [TestCase(0, 0, 0, 0)]
+    [TestCase(1, 0, 0, 1)]
+    [TestCase(0, 1, 0, 2)]
+    [TestCase(1, 1, 0, 3)]
+    [TestCase(0, 0, 1, 4)]
+    [TestCase(1, 0, 1, 5)]
+    [TestCase(0, 1, 1, 6)]
+    [TestCase(1, 1, 1, 7)]
+    public void MortonOctreeTest(int x,  int y, int z, int expected)
+    {
+        var mortonOrderEncode = MortonOrder.Encode3D((ulong)x, (ulong)y, (ulong)z);
+        Assert.That(mortonOrderEncode == expected);
+    }
+
     [Test]
     public void MortonOctreeRoundTripTest()
     {
@@ -12,7 +26,6 @@ public class MortonOrderTests
         var res = MortonOrder.Decode3D(mortonIndex);
         Assert.That(res.x == 2 && res.y == 7 && res.z == 0);
         Assert.That(MortonOrder.Encode3D(res.x, res.y,res.z) == mortonIndex);
-
     }
 
     // sample from:
@@ -50,6 +63,14 @@ public class MortonOrderTests
     public void MortonEncode3DTests()
     {
         Assert.That(MortonOrder.Encode3D(0, 0, 0) == 0); // binary: 000
+        Assert.That(MortonOrder.Encode3D(1, 0, 0) == 1); // binary: 010
+        Assert.That(MortonOrder.Encode3D(0, 1, 0) == 2); // binary: 010
+        Assert.That(MortonOrder.Encode3D(1, 1, 0) == 3); // binary: 010
+        Assert.That(MortonOrder.Encode3D(0, 0, 1) == 4); // binary: 010
+        Assert.That(MortonOrder.Encode3D(1, 0, 1) == 5); // binary: 010
+        Assert.That(MortonOrder.Encode3D(0, 1, 1) == 6); // binary: 010
+        Assert.That(MortonOrder.Encode3D(1, 1, 1) == 7); // binary: 010
+
     }
 
     [Test]

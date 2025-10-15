@@ -36,14 +36,13 @@
       ]
     },
     "content": {
-      "uri": "content/{level}_{x}_{y}.glb"
+      "uri": "content/{level}_{z}_{x}_{y}.glb"
     },
     "implicitTiling": {
-      "availableLevels": 1,
-      "subdivisionScheme": "QUADTREE",
-      "subtreeLevels": 4,
+      "subdivisionScheme": "OCTREE",
+      "subtreeLevels": 3,
       "subtrees": {
-        "uri": "subtrees/{level}_{x}_{y}.subtree"
+        "uri": "subtrees/{level}_{z}_{x}_{y}.subtree"
       }
     }
   }

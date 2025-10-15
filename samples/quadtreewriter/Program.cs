@@ -26,7 +26,7 @@ if (!Directory.Exists("content"))
 
 
 var subdivisionScheme = SubdivisionScheme.OCTREE;
-var maxFeaturesPerTile = 1000;
+var maxFeaturesPerTile = 800;
 
 Console.WriteLine("bbox 3d: " + bbox3d);
 
@@ -134,6 +134,11 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
     var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometryColumn, new Point(bbox.XMin, bbox.YMin, bbox.ZMin), new Point(bbox.XMax, bbox.YMax, bbox.ZMax), epsg);
 
     Console.WriteLine($"Features of tile {level}, {tile.Z},{tile.X},{tile.Y}: " + numberOfFeatures);
+
+    if(level == 1 && tile.X == 1 && tile.Y == 0 && tile.Z ==0)
+    {
+        Console.WriteLine("debug");
+    }
     if (numberOfFeatures == 0)
     {
         var t2 = new Tile3D(level, tile.Z, tile.X, tile.Y);
@@ -142,8 +147,10 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
     }
     else if (numberOfFeatures > maxFeaturesPerTile)
     {
-        level++;
+        //tile.Available = false;
+        // tiles.Add(tile);
         Console.WriteLine($"Split tile in octree: {level},{tile.Z}_{tile.X}_{tile.Y} ");
+        level++;
         for (var x = 0; x < 2; x++)
         {
             for (var y = 0; y < 2; y++)
@@ -164,7 +171,7 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
                     var zend = z_start + dz;
                     var bbox3d = new BoundingBox3D(xstart, ystart, z_start, xend, yend, zend);
 
-                    var new_tile = new Tile3D(level, tile.Z + 1, tile.X * 2 + x, tile.Y * 2 + y);
+                    var new_tile = new Tile3D(level, tile.X * 2 + x, tile.Y * 2 + y, tile.Z + z);
                     generateTiles3D(table, conn, epsg, geometryColumn, bbox3d, maxFeaturesPerTile, level, new_tile, tiles);
                 }
             }
@@ -172,11 +179,16 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
     }
     else
     {
-        Console.WriteLine($"Generate 3D tile: {tile.Level}, {tile.Z}, {tile.X}, {tile.Y}");
+        if (level == 1 && tile.X == 1 && tile.Y == 0 && tile.Z == 0)
+        {
+            Console.WriteLine("debug111");
+        }
+
+        Console.WriteLine($"Generate 3D tile: {tile.Level}, {tile.X}, {tile.Y}, {tile.Z}, ");
         var boundingBox = new BoundingBox(bbox.XMin, bbox.YMin, bbox.XMax, bbox.YMax);
         var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, boundingBox, epsg, bbox.ZMin, bbox.ZMax);
         File.WriteAllBytes($"content/{tile.Level}_{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
-        var t1 = new Tile3D(level, tile.Z, tile.X, tile.Y);
+        var t1 = new Tile3D(level, tile.X, tile.Y, tile.Z);
         t1.Available = true;
         tiles.Add(t1);
     }

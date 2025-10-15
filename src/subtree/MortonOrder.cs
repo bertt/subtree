@@ -8,9 +8,10 @@ public static class MortonOrder
 
         for (int i = 0; i < (sizeof(ulong) * 8 / 3); i++) 
         {
-            mortonIndex = SetBit(mortonIndex, 3 * i, GetBit(x, i));     
-            mortonIndex = SetBit(mortonIndex, 3 * i + 1, GetBit(y, i)); 
-            mortonIndex = SetBit(mortonIndex, 3 * i + 2, GetBit(z, i)); 
+
+            mortonIndex = SetBit(mortonIndex, 3 * i, GetBit(x, i));
+            mortonIndex = SetBit(mortonIndex, 3 * i + 1, GetBit(y, i));
+            mortonIndex = SetBit(mortonIndex, 3 * i + 2, GetBit(z, i));
         }
 
         return (uint)mortonIndex;
