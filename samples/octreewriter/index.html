@@ -26,6 +26,8 @@
 <body>
   <div id="cesiumContainer"></div>
   <script type="module">
+
+
     var viewer = new Cesium.Viewer('cesiumContainer', {
         requestRenderMode: true,
            baseLayer: new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
@@ -44,7 +46,6 @@
       var terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl('https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/digitaalterreinmodel/quantized-mesh');
       viewer.scene.terrainProvider = terrainProvider;
     viewer.scene.globe.baseColor = Cesium.Color.WHITE; 
-    // viewer.debugShowBoundingVolume = true;
     viewer.scene.globe.depthTestAgainstTerrain=true;
 
     const tileset = await Cesium.Cesium3DTileset.fromUrl(
