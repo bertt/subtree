@@ -14,9 +14,11 @@ public static class BoundingBoxRepository
         var toX = to.X.Value.ToString(CultureInfo.InvariantCulture);
         var toY = to.Y.Value.ToString(CultureInfo.InvariantCulture);
 
+        var select = $"select count({geometry_column}) from {geometry_table}";
+
         var sql = hasZ?
-            $"select count({geometry_column}) from {geometry_table} where ST_3DIntersects(ST_Centroid(ST_Envelope({geometry_column})), ST_3DMakeBox(st_setsrid(ST_MakePoint({fromX}, {fromY}, {from.Z.Value.ToString(CultureInfo.InvariantCulture)}), {epsg}), st_setsrid(ST_MakePoint({toX}, {toY}, {to.Z.Value.ToString(CultureInfo.InvariantCulture)}), {epsg}))) ":
-            $"select count({geometry_column}) from {geometry_table} where ST_Intersects(ST_Centroid(ST_Envelope({geometry_column})), ST_MakeEnvelope({fromX}, {fromY}, {toX}, {toY}, {epsg})) ";
+            $"{select} where ST_3DIntersects(ST_Centroid(ST_Envelope({geometry_column})), ST_3DMakeBox(st_setsrid(ST_MakePoint({fromX}, {fromY}, {from.Z.Value.ToString(CultureInfo.InvariantCulture)}), {epsg}), st_setsrid(ST_MakePoint({toX}, {toY}, {to.Z.Value.ToString(CultureInfo.InvariantCulture)}), {epsg}))) ":
+            $"{select} from {geometry_table} where ST_Intersects(ST_Centroid(ST_Envelope({geometry_column})), ST_MakeEnvelope({fromX}, {fromY}, {toX}, {toY}, {epsg})) ";
         
         conn.Open();
         var cmd = new NpgsqlCommand(sql, conn);

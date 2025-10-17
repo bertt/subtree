@@ -26,32 +26,23 @@
 <body>
   <div id="cesiumContainer"></div>
   <script type="module">
-     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NWQyNjhiOC1jYmQ5LTQyZWQtODJlMi01MTg5ZDNkMzRhOGQiLCJpZCI6NDc4OSwiaWF0IjoxNzUzNzk1NzA1fQ.m2LCYXXGRYZPfwE3HG272TFz7xBIIwXj1wWNDXJ0V_w';
     var viewer = new Cesium.Viewer('cesiumContainer', {
-        terrain: Cesium.Terrain.fromWorldTerrain(),
-        requestRenderMode: true
+        requestRenderMode: true,
+           baseLayer: new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
+               url: "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png",
+               maximumLevel: 19,
+           })),
 
-    //   animation: false,
-    //   baseLayerPicker: false,
-    //   fullscreenButton: true,
-    //   vrButton: false,
-    //   geocoder: true,
-    //   homeButton: false,
-    //   infoBox: true,
-    //   selectionIndicator: true,
-    //   timeline: false,
-    //   shadows: false,
-    //   navigationHelpButton: false,
-    //   navigationInstructionsInitiallyVisible: true,
-    //   scene3DOnly: true,
-    //   geocoder: false,
-    //   shouldAnimate: true,
-    //   baseLayer: new Cesium.ImageryLayer(new Cesium.UrlTemplateImageryProvider({
-    //       url: "https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png",
-    //       maximumLevel: 19,
-    //   }))
+           baseLayerPicker: false,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        timeline: false,
+        animation: false,
     });
 
+      var terrainProvider = await Cesium.CesiumTerrainProvider.fromUrl('https://api.pdok.nl/kadaster/3d-basisvoorziening/ogc/v1_0/collections/digitaalterreinmodel/quantized-mesh');
+      viewer.scene.terrainProvider = terrainProvider;
     viewer.scene.globe.baseColor = Cesium.Color.WHITE; 
     // viewer.debugShowBoundingVolume = true;
     viewer.scene.globe.depthTestAgainstTerrain=true;
@@ -59,20 +50,8 @@
     const tileset = await Cesium.Cesium3DTileset.fromUrl(
       "tileset.json"
     );  
-    //var translation = new Cesium.Cartesian3(0, 0, 10); 
-    //var modelMatrix = Cesium.Matrix4.fromTranslation(translation);
-    //tileset.modelMatrix = modelMatrix;
 
     viewer.scene.primitives.add(tileset);
-
-//     tileset.style = new Cesium.Cesium3DTileStyle({
-//   color: {
-//     conditions: [
-//       ["true", "color('rgba(0, 0, 255, 0.2)')"] // blauw met 50% transparantie
-//     ]
-//   }
-// });
-
 
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.globe.enableLighting = false;

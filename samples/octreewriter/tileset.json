@@ -40,7 +40,7 @@
     },
     "implicitTiling": {
       "subdivisionScheme": "OCTREE",
-      "subtreeLevels": 3,
+      "subtreeLevels": 4,
       "subtrees": {
         "uri": "subtrees/{level}_{z}_{x}_{y}.subtree"
       }
