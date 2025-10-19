@@ -8,33 +8,28 @@ public class SubtreeWriterTests
     [Test]
     public void TestWriteOctreeRoot()
     {
-
         // write subtree root file with octree for level 0 and 1 
         var subtree = new Subtree();
-        //subtree.TileAvailability = BitArrayCreator.FromString("110000000");
-        //subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
         subtree.TileAvailability =    BitArrayCreator.FromString("101011111");
         subtree.ContentAvailability = BitArrayCreator.FromString("001011111");
-
-
         var bytes = SubtreeWriter.ToBytes(subtree);
-       // File.WriteAllBytes(@"D:\dev\github.com\bertt\subtree\samples\quadtreewriter\bin\Debug\net8.0\subtrees\0_0_0_0.subtree", bytes);
+        File.WriteAllBytes(@"0_0_0_0.subtree", bytes);
+        var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
     }
 
     [Test]
     public void TestWriteQuadtreeRoot()
     {
 
-        // write subtree root file with octree for level 0 and 1 
+        // write subtree root file with quadtreefor level 0 and 1 
         var subtree = new Subtree();
-        //subtree.TileAvailability = BitArrayCreator.FromString("110000000");
-        //subtree.ContentAvailability = BitArrayCreator.FromString("010000000");
         subtree.TileAvailability = BitArrayCreator.FromString("11000");
         subtree.ContentAvailability = BitArrayCreator.FromString("11000");
 
-
         var bytes = SubtreeWriter.ToBytes(subtree);
         File.WriteAllBytes(@"0_0_0.subtree", bytes);
+
+        var newSubtree = SubtreeReader.ReadSubtree(new MemoryStream(bytes));
     }
 
 

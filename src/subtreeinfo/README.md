@@ -1,6 +1,16 @@
 ﻿
 ## Tool subtree info:
 
+Parameters:
+
+```
+Usage: subtreeinfo [options]
+Options:
+  -i, --input <file>         Input subtree file path
+  -s, --subdivision <scheme> Subdivision scheme: Quadtree (default) or Octree
+  -h, --help                 Show help information
+```
+
 Install:
 
 ```

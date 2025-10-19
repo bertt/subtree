@@ -25,9 +25,11 @@ var maxFeaturesPerTile = 800;
 Console.WriteLine("bbox 3d: " + bbox3d);
 
 var bbox = new BoundingBox(bbox3d.XMin, bbox3d.YMin, bbox3d.XMax, bbox3d.YMax);
+var center = new Point((bbox.XMin + bbox.XMax) / 2, (bbox.YMin + bbox.YMax) / 2, 0 );
+var ecefCenter = GetEcef(conn, (double)center.X, (double)center.Y, (double)center.Z, epsg);
 
 var rootTile3D = new Tile3D(0, 0, 0, 0);
-var tiles3D = generateTiles3D(table, conn, epsg, geometry_column, bbox3d, maxFeaturesPerTile, 0, rootTile3D, new List<Tile3D>());
+var tiles3D = generateTiles3D(table, conn, epsg, geometry_column, ecefCenter, bbox3d, maxFeaturesPerTile, 0, rootTile3D, new List<Tile3D>());
 var mortonIndices = MortonIndex.GetMortonIndices3D(tiles3D);
 Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 
@@ -41,7 +43,7 @@ Console.WriteLine("Max available level: " + maxAvailableLevel);
 Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
 Console.WriteLine("Program end");
 
-static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometryColumn, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
+static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometryColumn, Vector3 translation, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
 {
     var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometryColumn, new Point(bbox.XMin, bbox.YMin), new Point(bbox.XMax, bbox.YMax), epsg);
 
@@ -71,14 +73,14 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
                 var bboxQuad = new BoundingBox(xstart, ystart, xend, yend);
 
                 var new_tile = new Tile(tile.Z + 1, tile.X * 2 + x, tile.Y * 2 + y);
-                generateTiles(table, conn, epsg, geometryColumn, bboxQuad, maxFeaturesPerTile, new_tile, tiles);
+                generateTiles(table, conn, epsg, geometryColumn, translation, bboxQuad, maxFeaturesPerTile, new_tile, tiles);
             }
         }
     }
     else
     {
         Console.WriteLine($"Generate tile: {tile.Z}, {tile.X}, {tile.Y}");
-        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, bbox, epsg);
+        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, translation, bbox, epsg);
         File.WriteAllBytes($"content/{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
         var t1 = new Tile(tile.Z, tile.X, tile.Y);
         t1.Available = true;
@@ -90,7 +92,7 @@ static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, s
 
 
 
-static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int epsg, string geometryColumn, BoundingBox3D bbox, int maxFeaturesPerTile, int level, Tile3D tile, List<Tile3D> tiles)
+static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int epsg, string geometryColumn, Vector3 translation, BoundingBox3D bbox, int maxFeaturesPerTile, int level, Tile3D tile, List<Tile3D> tiles)
 {
     var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometryColumn, new Point(bbox.XMin, bbox.YMin, bbox.ZMin), new Point(bbox.XMax, bbox.YMax, bbox.ZMax), epsg);
 
@@ -131,7 +133,7 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
                     var bbox3d = new BoundingBox3D(xstart, ystart, z_start, xend, yend, zend);
 
                     var new_tile = new Tile3D(level, tile.X * 2 + x, tile.Y * 2 + y, tile.Z + z);
-                    generateTiles3D(table, conn, epsg, geometryColumn, bbox3d, maxFeaturesPerTile, level, new_tile, tiles);
+                    generateTiles3D(table, conn, epsg, geometryColumn, translation, bbox3d, maxFeaturesPerTile, level, new_tile, tiles);
                 }
             }
         }
@@ -140,7 +142,7 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
     {
         Console.WriteLine($"Generate 3D tile: {tile.Level}, {tile.X}, {tile.Y}, {tile.Z}, ");
         var boundingBox = new BoundingBox(bbox.XMin, bbox.YMin, bbox.XMax, bbox.YMax);
-        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, boundingBox, epsg, bbox.ZMin, bbox.ZMax);
+        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, translation, boundingBox, epsg, bbox.ZMin, bbox.ZMax);
         File.WriteAllBytes($"content/{tile.Level}_{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
         var t1 = new Tile3D(level, tile.X, tile.Y, tile.Z);
         t1.Available = true;
@@ -150,10 +152,9 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
     return tiles;
 }
 
-static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, string geometryColumn, BoundingBox bbox, int epsg, double? zMin=null, double? zMax= null)
+static byte[] GenerateGlbFromDatabase(NpgsqlConnection conn, string table, string geometryColumn, Vector3 translation, BoundingBox bbox, int epsg, double? zMin=null, double? zMax= null)
 {
-    var v3 = new Vector3(3932794.25f, 316347.9375f, 4994553.5f);
-    var geoms = GetGeometries(conn, v3, table, geometryColumn, bbox, epsg, zMin, zMax);
+    var geoms = GetGeometries(conn, translation, table, geometryColumn, bbox, epsg, zMin, zMax);
     var triangles = GetTriangles(geoms);
     var bytes = GlbCreator.GetGlb(triangles);
     return bytes;
@@ -171,6 +172,22 @@ static List<quadtreewriter.Triangle> GetTriangles(List<Geometry> geoms)
     }
 
     return triangleCollection;
+}
+
+
+static Vector3 GetEcef(NpgsqlConnection conn, double x, double y, double z, int sourceEpsg)
+{
+    conn.Open();
+    var sql = $"select st_X(t.geom), st_Y(t.geom), st_Z(t.geom) from (SELECT st_transform(st_setsrid(ST_MakePoint({x.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {y.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {z.ToString(System.Globalization.CultureInfo.InvariantCulture)}), {sourceEpsg}), 4978) as geom) as t";
+    var cmd = new NpgsqlCommand(sql, conn);
+    var reader = cmd.ExecuteReader();
+    reader.Read();
+    var xe = reader.GetDouble(0);
+    var ye = reader.GetDouble(1);
+    var ze = reader.GetDouble(2);
+    reader.Close();
+    conn.Close();
+    return new Vector3((float)xe, (float)ye, (float)ze);
 }
 
 static BoundingBox3D GetBBox3D(NpgsqlConnection conn, string tableName, string geometry)
