@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Numerics;
 using Wkx;
 
+
 var table = "ifc.kievitsweg";
 var geometry_column = "geometry";
 var stopwatch = new Stopwatch();
@@ -18,6 +19,11 @@ var epsg = 7415;
 if (!Directory.Exists("content"))
 {
     Directory.CreateDirectory("content");
+}
+
+if (!Directory.Exists("subtrees"))
+{
+    Directory.CreateDirectory("subtrees");
 }
 
 var maxFeaturesPerTile = 800;
