@@ -23,6 +23,8 @@ File.WriteAllBytes("subtrees/0.0.0.subtree", bytes);
 
 ## History
 
+2025-10-20: version 1.6.0: Adding support for Octree
+
 2024-10-01: version 1.5.0: From .NET 6 to .NET 8
 
 2023-04-09: version 1.4.7: no rounding of bounding volume box
