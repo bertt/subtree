@@ -27,7 +27,7 @@
     <None Update="testfixtures\0.0.0.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testfixtures\0_0_0_0.subtree">
+    <None Update="testfixtures\0_0_0_0_octree.subtree">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="testfixtures\0_0_0_0_china.subtree">

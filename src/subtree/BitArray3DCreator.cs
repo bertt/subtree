@@ -23,10 +23,11 @@ public class BitArray3DCreator
         return result;
     }
 
-    public static int GetWidth(string mortonIndex)
+    private static int GetWidth(string mortonIndex)
     {
         var length = mortonIndex.Length;
-        var size = Math.Sqrt(length);
+        // do for octree
+        double size = Math.Cbrt(length);
         return (int)size;
     }
 
