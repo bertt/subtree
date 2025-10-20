@@ -1,12 +1,12 @@
 ﻿using Npgsql;
+using octreetreewriter;
 using quadtreewriter;
 using subtree;
 using System.Diagnostics;
 using System.Numerics;
 using Wkx;
 
-
-var table = "ifc.kievitsweg";
+var table = "ifc.v_kievitsweg";
 var geometry_column = "geometry";
 var stopwatch = new Stopwatch();
 stopwatch.Start();
@@ -47,56 +47,48 @@ var maxAvailableLevel = tiles3D.Max(p => p.Level);
 Console.WriteLine("Max available level: " + maxAvailableLevel);
 
 Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
+
+var transform = new float[] {
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      0.0f,
+      1.0f,
+      0.0f,
+      ecefCenter.X,
+      ecefCenter.Y,
+      ecefCenter.Z,
+      1.0f
+};
+
+var regionWgs84 = ToWgs84(conn, bbox3d, epsg);
+
+var region = new float[]
+            {
+                (float)ToRadians(regionWgs84.XMin),
+                (float)ToRadians(regionWgs84.YMin),
+                (float)ToRadians(regionWgs84.XMax),
+                (float)ToRadians(regionWgs84.YMax),
+                (float)(regionWgs84.ZMin),
+                (float)(regionWgs84.ZMax)
+            };
+
+var tileset = TilesetBuilder.CreateTilesetJson(transform,region,maxAvailableLevel + 1);
+
+File.WriteAllText("tileset.json", tileset);
+
 Console.WriteLine("Program end");
 
-static List<Tile> generateTiles(string table, NpgsqlConnection conn, int epsg, string geometryColumn, Vector3 translation, BoundingBox bbox, int maxFeaturesPerTile, Tile tile, List<Tile> tiles)
+static double ToRadians(double angle)
 {
-    var numberOfFeatures = BoundingBoxRepository.CountFeaturesInBox(conn, table, geometryColumn, new Point(bbox.XMin, bbox.YMin), new Point(bbox.XMax, bbox.YMax), epsg);
-
-    Console.WriteLine($"Features of tile {tile.Z},{tile.X},{tile.Y}: " + numberOfFeatures);
-    if (numberOfFeatures == 0)
-    {
-        var t2 = new Tile(tile.Z, tile.X, tile.Y);
-        t2.Available = false;
-        tiles.Add(t2);
-    }
-    else if (numberOfFeatures > maxFeaturesPerTile)
-    {
-        Console.WriteLine($"Split tile in quads: {tile.Z}_{tile.X}_{tile.Y} ");
-        // split in quadtree
-        for (var x = 0; x < 2; x++)
-        {
-            for (var y = 0; y < 2; y++)
-            {
-                var dx = (bbox.XMax - bbox.XMin) / 2;
-                var dy = (bbox.YMax - bbox.YMin) / 2;
-
-                var xstart = bbox.XMin + dx * x;
-                var ystart = bbox.YMin + dy * y;
-                var xend = xstart + dx;
-                var yend = ystart + dy;
-
-                var bboxQuad = new BoundingBox(xstart, ystart, xend, yend);
-
-                var new_tile = new Tile(tile.Z + 1, tile.X * 2 + x, tile.Y * 2 + y);
-                generateTiles(table, conn, epsg, geometryColumn, translation, bboxQuad, maxFeaturesPerTile, new_tile, tiles);
-            }
-        }
-    }
-    else
-    {
-        Console.WriteLine($"Generate tile: {tile.Z}, {tile.X}, {tile.Y}");
-        var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, translation, bbox, epsg);
-        File.WriteAllBytes($"content/{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
-        var t1 = new Tile(tile.Z, tile.X, tile.Y);
-        t1.Available = true;
-        tiles.Add(t1);
-    }
-
-    return tiles;
+    return Math.PI * angle / 180.0;
 }
-
-
 
 static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int epsg, string geometryColumn, Vector3 translation, BoundingBox3D bbox, int maxFeaturesPerTile, int level, Tile3D tile, List<Tile3D> tiles)
 {
@@ -104,10 +96,6 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
 
     Console.WriteLine($"Features of tile {level}, {tile.Z},{tile.X},{tile.Y}: " + numberOfFeatures);
 
-    if(level == 1 && tile.X == 1 && tile.Y == 0 && tile.Z ==0)
-    {
-        Console.WriteLine("debug");
-    }
     if (numberOfFeatures == 0)
     {
         var t2 = new Tile3D(level, tile.Z, tile.X, tile.Y);
@@ -186,7 +174,7 @@ static Vector3 GetEcef(NpgsqlConnection conn, double x, double y, double z, int 
     conn.Open();
     var sql = $"select st_X(t.geom), st_Y(t.geom), st_Z(t.geom) from (SELECT st_transform(st_setsrid(ST_MakePoint({x.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {y.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {z.ToString(System.Globalization.CultureInfo.InvariantCulture)}), {sourceEpsg}), 4978) as geom) as t";
     var cmd = new NpgsqlCommand(sql, conn);
-    var reader = cmd.ExecuteReader();
+    var reader = cmd.ExecuteReader(); 
     reader.Read();
     var xe = reader.GetDouble(0);
     var ye = reader.GetDouble(1);
@@ -194,6 +182,25 @@ static Vector3 GetEcef(NpgsqlConnection conn, double x, double y, double z, int 
     reader.Close();
     conn.Close();
     return new Vector3((float)xe, (float)ye, (float)ze);
+}
+
+static BoundingBox3D ToWgs84(NpgsqlConnection conn, BoundingBox3D bbox, int sourceEpsg)
+{
+    conn.Open();
+    var sql = $"SELECT st_xmin(geom1), st_ymin(geom1), st_xmax(geom1), st_ymax(geom1), st_zmin(geom1), st_zmax(geom1) FROM (select ST_3DExtent(st_transform(st_setsrid(ST_3DMakeBox(st_makepoint({bbox.XMin}, {bbox.YMin}, {bbox.ZMin}), st_makepoint({bbox.XMax}, {bbox.YMax}, {bbox.ZMax})), {sourceEpsg}), 4979)) as geom1)  as t";
+    var cmd = new NpgsqlCommand(sql, conn);
+    var reader = cmd.ExecuteReader();
+    reader.Read();
+    var xmin = reader.GetDouble(0);
+    var ymin = reader.GetDouble(1);
+        
+    var xmax = reader.GetDouble(2);
+    var ymax = reader.GetDouble(3);
+    var zmin = reader.GetDouble(4);
+    var zmax = reader.GetDouble(5);
+    reader.Close();
+    conn.Close();
+    return new BoundingBox3D() { XMin = xmin, YMin = ymin, ZMin = zmin, XMax = xmax, YMax = ymax, ZMax = zmax };
 }
 
 static BoundingBox3D GetBBox3D(NpgsqlConnection conn, string tableName, string geometry)
