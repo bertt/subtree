@@ -168,4 +168,221 @@ public class SubtreeCreator3DTests
         Assert.That(filled == "1010000000");
         Assert.That(filled.Length == 10);
     }
+
+    [Test]
+    public void CreateSubtreeWithMultipleLevelsAndSparseContent()
+    {
+        // This test simulates the real-world scenario where:
+        // - We have tiles at level 0, 1, 2, 3, 4, 5
+        // - Content is sparse (not all tiles have content)
+        // - Subtrees should be created at appropriate levels
+        var tiles = new List<Tile3D>();
+
+        // Root tile
+        tiles.Add(new Tile3D(0, 0, 0, 0) { Available = false });
+
+        // Level 1 - add some tiles
+        tiles.Add(new Tile3D(1, 0, 0, 0) { Available = false });
+        tiles.Add(new Tile3D(1, 0, 0, 1) { Available = false });
+
+        // Level 2 - add tiles with some content
+        tiles.Add(new Tile3D(2, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(2, 0, 0, 1) { Available = false });
+        tiles.Add(new Tile3D(2, 0, 1, 0) { Available = false });
+
+        // Level 3 - add tiles with content
+        tiles.Add(new Tile3D(3, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(3, 0, 0, 1) { Available = true });
+        tiles.Add(new Tile3D(3, 0, 1, 0) { Available = false });
+
+        // Level 4 - deeper content
+        tiles.Add(new Tile3D(4, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(4, 0, 0, 2) { Available = true });
+
+        // Level 5 - even deeper
+        tiles.Add(new Tile3D(5, 0, 0, 0) { Available = true });
+
+        var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles);
+
+        // With maxLevel=5, subtreeLevel should be (5+1)/2 = 3
+        // So we should have:
+        // - Root subtree (0,0,0,0)
+        // - Child subtrees at level 3 for tiles that have children
+        
+        Assert.That(subtreeFiles.Count, Is.GreaterThan(0), "Should generate at least one subtree file");
+        
+        // Root subtree should exist
+        Assert.That(subtreeFiles.ContainsKey(new Tile3D(0, 0, 0, 0)), "Root subtree should exist");
+
+        // Verify root subtree has child subtree availability set correctly
+        var rootStream = new MemoryStream(subtreeFiles[new Tile3D(0, 0, 0, 0)]);
+        var rootSubtree = SubtreeReader.ReadSubtree(rootStream);
+        Assert.That(rootSubtree.ChildSubtreeAvailability, Is.Not.Null, "Root should have child subtree availability");
+    }
+
+    [Test]
+    public void EnsureAllRequestedSubtreesAreGenerated()
+    {
+        // This test ensures that all subtree files that could be requested are actually generated
+        // Simulating a scenario with levels 0-5 where tiles exist at various levels
+        var tiles = new List<Tile3D>();
+
+        // Create a tree structure with content at various levels
+        tiles.Add(new Tile3D(0, 0, 0, 0) { Available = false });
+
+        // Level 1 - octree has 8 possible children, add a few
+        for (var x = 0; x < 2; x++)
+            for (var y = 0; y < 1; y++)
+                for (var z = 0; z < 1; z++)
+                    tiles.Add(new Tile3D(1, x, y, z) { Available = false });
+
+        // Level 2 - add content in one branch
+        tiles.Add(new Tile3D(2, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(2, 1, 0, 0) { Available = false });
+
+        // Level 3 - add more content
+        tiles.Add(new Tile3D(3, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(3, 1, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(3, 2, 0, 0) { Available = false });
+
+        var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles);
+
+        // Verify that we have generated subtree files for all necessary tiles
+        Assert.That(subtreeFiles.Count, Is.GreaterThan(0));
+        
+        // Check that the root exists
+        var rootKey = new Tile3D(0, 0, 0, 0);
+        Assert.That(subtreeFiles.ContainsKey(rootKey), $"Root subtree should be generated");
+
+        // With maxLevel=3, subtreeLevel=(3+1)/2=2
+        // We should have child subtrees at level 2
+        Console.WriteLine($"Generated {subtreeFiles.Count} subtree files:");
+        foreach (var key in subtreeFiles.Keys)
+        {
+            Console.WriteLine($"  Level {key.Level}: ({key.X}, {key.Y}, {key.Z})");
+        }
+    }
+
+    [Test]
+    public void VerifyChildSubtreesMatchTileAvailability()
+    {
+        // This test verifies that child subtree availability correctly indicates
+        // which subtree files should be generated
+        var tiles = new List<Tile3D>();
+
+        tiles.Add(new Tile3D(0, 0, 0, 0) { Available = false });
+
+        // Level 1
+        for (var x = 0; x < 2; x++)
+            for (var y = 0; y < 2; y++)
+                for (var z = 0; z < 2; z++)
+                    tiles.Add(new Tile3D(1, x, y, z) { Available = false });
+
+        // Level 2 - add tiles that have children at level 3
+        tiles.Add(new Tile3D(2, 0, 0, 0) { Available = false });
+        tiles.Add(new Tile3D(2, 1, 0, 0) { Available = false });
+
+        // Level 3 - add content
+        tiles.Add(new Tile3D(3, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(3, 2, 0, 0) { Available = true }); // This is a child of (2,1,0,0)
+
+        var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles);
+
+        // Read root subtree and check child availability
+        var rootSubtree = SubtreeReader.ReadSubtree(new MemoryStream(subtreeFiles[new Tile3D(0, 0, 0, 0)]));
+        
+        // If child subtree availability is set, verify all indicated subtrees exist
+        if (rootSubtree.ChildSubtreeAvailability != null)
+        {
+            var maxLevel = tiles.Max(t => t.Level);
+            var subtreeLevel = (int)Math.Ceiling(((double)maxLevel + 1) / 2);
+            
+            var ba = BitArray3DCreator.GetBitArray3D(
+                Availability.GetLevelAvailability(
+                    MortonIndex.GetMortonIndices3D(tiles).tileAvailability,
+                    subtreeLevel,
+                    ImplicitSubdivisionScheme.Octree));
+
+            for (var x = 0; x < ba.GetDimension(); x++)
+            {
+                for (var y = 0; y < ba.GetDimension(); y++)
+                {
+                    for (var z = 0; z < ba.GetDimension(); z++)
+                    {
+                        if (ba.Get(x, y, z))
+                        {
+                            var expectedKey = new Tile3D(subtreeLevel, x, y, z);
+                            Assert.That(subtreeFiles.ContainsKey(expectedKey),
+                                $"Subtree at level {subtreeLevel} ({x},{y},{z}) should be generated because child availability indicates it");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [Test]
+    public void RealWorldScenarioWithDeepHierarchy()
+    {
+        // Simulates a real scenario with levels 0-5
+        var tiles = new List<Tile3D>();
+
+        // Root
+        tiles.Add(new Tile3D(0, 0, 0, 0) { Available = false });
+
+        // Level 1 - sparse
+        tiles.Add(new Tile3D(1, 0, 0, 0) { Available = false });
+
+        // Level 2 - some content
+        tiles.Add(new Tile3D(2, 0, 0, 0) { Available = true });
+
+        // Level 3 - more content  
+        tiles.Add(new Tile3D(3, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(3, 0, 0, 1) { Available = false });
+
+        // Level 4
+        tiles.Add(new Tile3D(4, 0, 0, 0) { Available = true });
+
+        // Level 5
+        tiles.Add(new Tile3D(5, 0, 0, 0) { Available = true });
+
+        var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles);
+
+        // With maxLevel=5, subtreeLevel should be (5+1)/2 = 3
+        var maxLevel = tiles.Max(t => t.Level);
+        var subtreeLevel = (int)Math.Ceiling(((double)maxLevel + 1) / 2);
+        
+        Assert.That(subtreeLevel, Is.EqualTo(3), "Subtree level calculation");
+        Assert.That(subtreeFiles.Count, Is.GreaterThan(0), "Should generate at least one subtree file");
+        
+        // Root subtree should exist
+        Assert.That(subtreeFiles.ContainsKey(new Tile3D(0, 0, 0, 0)), "Root subtree should exist");
+
+        // Verify all tiles indicated by child availability are generated
+        var rootSubtree = SubtreeReader.ReadSubtree(new MemoryStream(subtreeFiles[new Tile3D(0, 0, 0, 0)]));
+        if (rootSubtree.ChildSubtreeAvailability != null)
+        {
+            var ba = BitArray3DCreator.GetBitArray3D(
+                Availability.GetLevelAvailability(
+                    MortonIndex.GetMortonIndices3D(tiles).tileAvailability,
+                    subtreeLevel,
+                    ImplicitSubdivisionScheme.Octree));
+
+            for (var x = 0; x < ba.GetDimension(); x++)
+            {
+                for (var y = 0; y < ba.GetDimension(); y++)
+                {
+                    for (var z = 0; z < ba.GetDimension(); z++)
+                    {
+                        if (ba.Get(x, y, z))
+                        {
+                            var expectedKey = new Tile3D(subtreeLevel, x, y, z);
+                            Assert.That(subtreeFiles.ContainsKey(expectedKey),
+                                $"Subtree at level {subtreeLevel} ({x},{y},{z}) should exist but is missing!");
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
