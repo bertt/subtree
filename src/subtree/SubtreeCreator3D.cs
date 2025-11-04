@@ -101,6 +101,17 @@ public static class SubtreeCreator3D
         return new Tile3D(deltaLevel, to.X - from.X, to.Y - from.Y, to.Z - from.Z);
     }
 
+    /// <summary>
+    /// Converts a Tile3D (octree) to a Tile (quadtree) for use as a dictionary key.
+    /// Since the return type of GenerateSubtreefiles must be Dictionary&lt;Tile, byte[]&gt;,
+    /// we need to encode the 3D coordinates (x, y, z) into a 2D Tile structure.
+    /// 
+    /// This uses a linearized index approach: linearIndex = x + y * width + z * width * width
+    /// where width = 2^level. This creates a unique mapping from 3D coordinates to a linear index,
+    /// which is then stored in the Tile's X coordinate (with Y set to 0).
+    /// </summary>
+    /// <param name="tile3D">The 3D octree tile to convert</param>
+    /// <returns>A 2D Tile with the level preserved and coordinates encoded</returns>
     private static Tile ConvertTile3DToTile(Tile3D tile3D)
     {
         // For octree, we need to encode the 3D coordinates into a 2D Tile

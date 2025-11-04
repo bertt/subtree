@@ -126,7 +126,7 @@ public class SubtreeCreator3DTests
         var child2 = new Tile3D(1, 1, 1, 1);
         Assert.That(parent.HasChild(child2));
 
-        var notChild = new Tile3D(1, 2, 0, 0);
+        var notChild = new Tile3D(0, 1, 0, 0);
         Assert.That(!parent.HasChild(notChild));
     }
 
