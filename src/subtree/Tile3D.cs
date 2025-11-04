@@ -35,4 +35,18 @@ public class Tile3D
 
         return X == parent.X && Y == parent.Y && Z == parent.Z && Level == parent.Level;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Tile3D other)
+        {
+            return Level == other.Level && X == other.X && Y == other.Y && Z == other.Z;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Level, X, Y, Z);
+    }
 }
