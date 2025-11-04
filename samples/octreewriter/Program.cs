@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Numerics;
 using Wkx;
 
-var table = "ifc.v_kievitsweg";
+var table = "ifc.kievitsweg";
 var geometry_column = "geometry";
 var stopwatch = new Stopwatch();
 stopwatch.Start();
@@ -52,10 +52,10 @@ foreach (var kvp in subtreeFiles)
 }
 Console.WriteLine("Subtree files written, end of program");
 
-var maxAvailableLevel = tiles3D.Max(p => p.Level);
+var maxAvailableLevel = subtreeFiles.Max(p => p.Key.Level);
 Console.WriteLine("Max available level: " + maxAvailableLevel);
 
-Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
+Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel}");
 
 var transform = new float[] {
       1.0f,
@@ -88,7 +88,7 @@ var region = new float[]
                 (float)(regionWgs84.ZMax)
             };
 
-var tileset = TilesetBuilder.CreateTilesetJson(transform,region,maxAvailableLevel + 1);
+var tileset = TilesetBuilder.CreateTilesetJson(transform,region,maxAvailableLevel);
 
 File.WriteAllText("tileset.json", tileset);
 
