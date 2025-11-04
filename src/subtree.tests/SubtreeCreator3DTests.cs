@@ -385,4 +385,32 @@ public class SubtreeCreator3DTests
             }
         }
     }
+
+    [Test]
+    public void TestMissingIntermediateTiles()
+    {
+        // This test simulates the real-world issue where intermediate tiles
+        // might not be in the tiles list because the octreewriter sample
+        // doesn't add them during recursion
+        var tiles = new List<Tile3D>();
+
+        // Root - no content, just a container
+        tiles.Add(new Tile3D(0, 0, 0, 0) { Available = false });
+
+        // Skip level 1 tiles entirely (simulating what might happen in real dataset)
+        // Level 2 - has content
+        tiles.Add(new Tile3D(2, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(2, 1, 0, 0) { Available = true });
+
+        // Level 3
+        tiles.Add(new Tile3D(3, 0, 0, 0) { Available = true });
+        tiles.Add(new Tile3D(3, 2, 0, 0) { Available = true });
+
+        var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles);
+
+        // With maxLevel=3, subtreeLevel=(3+1)/2=2
+        // Should generate root and potentially child subtrees
+        Assert.That(subtreeFiles.Count, Is.GreaterThan(0));
+        Assert.That(subtreeFiles.ContainsKey(new Tile3D(0, 0, 0, 0)), "Root subtree should exist");
+    }
 }
