@@ -46,7 +46,7 @@ foreach (var kvp in subtreeFiles)
 {
     var tile = kvp.Key;
     var subtreeBytes = kvp.Value;
-    var filename = $"subtrees/{tile.Level}{tile.Z}{tile.X}{tile.Y}.subtree";
+    var filename = $"subtrees/{tile.Level}_{tile.Z}_{tile.X}_{tile.Y}.subtree";
     File.WriteAllBytes(filename, subtreeBytes);
     Console.WriteLine($"Written subtree file: {filename}");
 }
@@ -152,7 +152,7 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
         Console.WriteLine($"Generate 3D tile: {tile.Level}, {tile.X}, {tile.Y}, {tile.Z}, ");
         var boundingBox = new BoundingBox(bbox.XMin, bbox.YMin, bbox.XMax, bbox.YMax);
         var bytes = GenerateGlbFromDatabase(conn, table, geometryColumn, translation, boundingBox, epsg, bbox.ZMin, bbox.ZMax);
-        File.WriteAllBytes($"content/{tile.Level}{tile.Z}{tile.X}{tile.Y}.glb", bytes);
+        File.WriteAllBytes($"content/{tile.Level}_{tile.Z}_{tile.X}_{tile.Y}.glb", bytes);
         var t1 = new Tile3D(level, tile.X, tile.Y, tile.Z);
         t1.Available = true;
         tiles.Add(t1);
