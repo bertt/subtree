@@ -36,12 +36,21 @@ var ecefCenter = GetEcef(conn, (double)center.X, (double)center.Y, (double)cente
 
 var rootTile3D = new Tile3D(0, 0, 0, 0);
 var tiles3D = generateTiles3D(table, conn, epsg, geometry_column, ecefCenter, bbox3d, maxFeaturesPerTile, 0, rootTile3D, new List<Tile3D>());
-var mortonIndices = MortonIndex.GetMortonIndices3D(tiles3D);
-Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 
-var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability, mortonIndices.tileAvailability);
-File.WriteAllBytes($"subtrees/0_0_0_0.subtree", subtreebytes);
-Console.WriteLine("Subtree file is written, en d of program");
+// Generate subtree files using SubtreeCreator3D
+var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles3D);
+Console.WriteLine($"Generated {subtreeFiles.Count} subtree file(s)");
+
+// Write all subtree files
+foreach (var kvp in subtreeFiles)
+{
+    var tile = kvp.Key;
+    var subtreeBytes = kvp.Value;
+    var filename = $"subtrees/{tile.Level}_{tile.X}_{tile.Y}_{tile.Z}.subtree";
+    File.WriteAllBytes(filename, subtreeBytes);
+    Console.WriteLine($"Written subtree file: {filename}");
+}
+Console.WriteLine("Subtree files written, end of program");
 
 var maxAvailableLevel = tiles3D.Max(p => p.Level);
 Console.WriteLine("Max available level: " + maxAvailableLevel);
@@ -244,23 +253,4 @@ static List<Geometry> GetGeometries(NpgsqlConnection conn, Vector3 translation, 
     reader.Close();
     conn.Close();
     return geometries;
-}
-
-static byte[] GetSubtreeBytes(string contentAvailability, string tileAvailability, string subtreeAvailability = null)
-{
-    var subtree_root = new Subtree();
-    var s01_root = BitArrayCreator.FromString(tileAvailability);
-    subtree_root.TileAvailability = s01_root;
-
-    var s0_root = BitArrayCreator.FromString(contentAvailability);
-    subtree_root.ContentAvailability = s0_root;
-
-    if (subtreeAvailability != null)
-    {
-        var c0_root = BitArrayCreator.FromString(subtreeAvailability);
-        subtree_root.ChildSubtreeAvailability = c0_root;
-    }
-
-    var subtreebytes = SubtreeWriter.ToBytes(subtree_root);
-    return subtreebytes;
 }
