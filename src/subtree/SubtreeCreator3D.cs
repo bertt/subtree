@@ -9,9 +9,9 @@ public static class SubtreeCreator3D
         return subtreebytes;
     }
 
-    public static Dictionary<Tile, byte[]> GenerateSubtreefiles(List<Tile3D> tiles)
+    public static Dictionary<Tile3D, byte[]> GenerateSubtreefiles(List<Tile3D> tiles)
     {
-        var subtreeFiles = new Dictionary<Tile, byte[]>();
+        var subtreeFiles = new Dictionary<Tile3D, byte[]>();
         var maxLevel = tiles.Max(s => s.Level);
 
         // generate child subtree files at halfway the levels
@@ -21,7 +21,7 @@ public static class SubtreeCreator3D
         if (subtreeLevel == 1)
         {
             var subtreeRoot = GenerateSubtreefile(tiles);
-            subtreeFiles.Add(new Tile(0, 0, 0), subtreeRoot);
+            subtreeFiles.Add(new Tile3D(0, 0, 0, 0), subtreeRoot);
             return subtreeFiles;
         }
 
@@ -36,7 +36,7 @@ public static class SubtreeCreator3D
 
         // write the root subtree file
         var subtreeRootbytes = SubtreeWriter.ToBytes(tileAvailability, contentAvailability, childSubtreeAvailabilty);
-        subtreeFiles.Add(new Tile(0, 0, 0), subtreeRootbytes);
+        subtreeFiles.Add(new Tile3D(0, 0, 0, 0), subtreeRootbytes);
 
         // now create the subtree files
         var ba = BitArray3DCreator.GetBitArray3D(childSubtreeAvailabilty);
@@ -52,9 +52,7 @@ public static class SubtreeCreator3D
                         var subtreeTiles = GetSubtreeTiles(tiles, t);
                         var mortonIndicesSubtree = MortonIndex.GetMortonIndices3D(subtreeTiles);
                         var subtreebytes = SubtreeWriter.ToBytes(Fill(mortonIndicesSubtree.tileAvailability, availabilityLength), Fill(mortonIndicesSubtree.contentAvailability, availabilityLength));
-                        // Convert Tile3D to Tile for dictionary key - encode z in the y coordinate offset
-                        var tileKey = ConvertTile3DToTile(t);
-                        subtreeFiles.Add(tileKey, subtreebytes);
+                        subtreeFiles.Add(t, subtreebytes);
                     }
                 }
             }
@@ -99,28 +97,5 @@ public static class SubtreeCreator3D
         }
 
         return new Tile3D(deltaLevel, to.X - from.X, to.Y - from.Y, to.Z - from.Z);
-    }
-
-    /// <summary>
-    /// Converts a Tile3D (octree) to a Tile (quadtree) for use as a dictionary key.
-    /// Since the return type of GenerateSubtreefiles must be Dictionary&lt;Tile, byte[]&gt;,
-    /// we need to encode the 3D coordinates (x, y, z) into a 2D Tile structure.
-    /// 
-    /// This uses a linearized index approach: linearIndex = x + y * width + z * width * width
-    /// where width = 2^level. This creates a unique mapping from 3D coordinates to a linear index,
-    /// which is then stored in the Tile's X coordinate (with Y set to 0).
-    /// </summary>
-    /// <param name="tile3D">The 3D octree tile to convert</param>
-    /// <returns>A 2D Tile with the level preserved and coordinates encoded</returns>
-    private static Tile ConvertTile3DToTile(Tile3D tile3D)
-    {
-        // For octree, we need to encode the 3D coordinates into a 2D Tile
-        // We'll use a linearized index: linearIndex = x + y * width + z * width * width
-        // where width = 2^level for the octree
-        var width = 1 << tile3D.Level; // 2^level
-        var linearIndex = tile3D.X + tile3D.Y * width + tile3D.Z * width * width;
-        
-        // Map to 2D: use linearIndex as x, and 0 as y
-        return new Tile(tile3D.Level, linearIndex, 0);
     }
 }
