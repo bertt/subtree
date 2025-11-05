@@ -12,14 +12,10 @@
     <PackageTags>3dtiles implicit subtree</PackageTags>
     <Company>Bert Temme</Company>
     <Authors>Bert Temme</Authors>
-    <Version>1.6.0</Version>
-    <AssemblyVersion>1.6.0</AssemblyVersion>
-    <FileVersion>1.6.0</FileVersion>
+    <Version>1.7.0</Version>
+    <AssemblyVersion>1.7.0</AssemblyVersion>
+    <FileVersion>1.7.0</FileVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="BitArray3D.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
