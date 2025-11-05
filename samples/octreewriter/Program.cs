@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Numerics;
 using Wkx;
 
-var table = "ifc.v_kievitsweg";
+var table = "ifc.kievitsweg";
 var geometry_column = "geometry";
 var stopwatch = new Stopwatch();
 stopwatch.Start();
@@ -36,17 +36,26 @@ var ecefCenter = GetEcef(conn, (double)center.X, (double)center.Y, (double)cente
 
 var rootTile3D = new Tile3D(0, 0, 0, 0);
 var tiles3D = generateTiles3D(table, conn, epsg, geometry_column, ecefCenter, bbox3d, maxFeaturesPerTile, 0, rootTile3D, new List<Tile3D>());
-var mortonIndices = MortonIndex.GetMortonIndices3D(tiles3D);
-Console.WriteLine("Morton index: " + mortonIndices.contentAvailability);
 
-var subtreebytes = GetSubtreeBytes(mortonIndices.contentAvailability, mortonIndices.tileAvailability);
-File.WriteAllBytes($"subtrees/0_0_0_0.subtree", subtreebytes);
-Console.WriteLine("Subtree file is written, en d of program");
+// Generate subtree files using SubtreeCreator3D
+var subtreeFiles = SubtreeCreator3D.GenerateSubtreefiles(tiles3D);
+Console.WriteLine($"Generated {subtreeFiles.Count} subtree file(s)");
 
-var maxAvailableLevel = tiles3D.Max(p => p.Level);
+// Write all subtree files
+foreach (var kvp in subtreeFiles)
+{
+    var tile = kvp.Key;
+    var subtreeBytes = kvp.Value;
+    var filename = $"subtrees/{tile.Level}_{tile.Z}_{tile.X}_{tile.Y}.subtree";
+    File.WriteAllBytes(filename, subtreeBytes);
+    Console.WriteLine($"Written subtree file: {filename}");
+}
+Console.WriteLine("Subtree files written, end of program");
+
+var maxAvailableLevel = subtreeFiles.Max(p => p.Key.Level);
 Console.WriteLine("Max available level: " + maxAvailableLevel);
 
-Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel + 1}");
+Console.WriteLine($"In tileset.json use for subtreeLevels: {maxAvailableLevel}");
 
 var transform = new float[] {
       1.0f,
@@ -79,7 +88,7 @@ var region = new float[]
                 (float)(regionWgs84.ZMax)
             };
 
-var tileset = TilesetBuilder.CreateTilesetJson(transform,region,maxAvailableLevel + 1);
+var tileset = TilesetBuilder.CreateTilesetJson(transform,region,maxAvailableLevel);
 
 File.WriteAllText("tileset.json", tileset);
 
@@ -98,13 +107,19 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
 
     if (numberOfFeatures == 0)
     {
-        var t2 = new Tile3D(level, tile.Z, tile.X, tile.Y);
+        var t2 = new Tile3D(level, tile.X, tile.Y, tile.Z);
         t2.Available = false;
         tiles.Add(t2);
     }
     else if (numberOfFeatures > maxFeaturesPerTile)
     {
         Console.WriteLine($"Split tile in octree: {level},{tile.Z}_{tile.X}_{tile.Y} ");
+        
+        // Add the current tile as available but with no content (it's being subdivided)
+        var currentTile = new Tile3D(level, tile.X, tile.Y, tile.Z);
+        currentTile.Available = false; // No content at this level, subdivided
+        tiles.Add(currentTile);
+        
         level++;
         for (var x = 0; x < 2; x++)
         {
@@ -126,7 +141,7 @@ static List<Tile3D> generateTiles3D(string table, NpgsqlConnection conn, int eps
                     var zend = z_start + dz;
                     var bbox3d = new BoundingBox3D(xstart, ystart, z_start, xend, yend, zend);
 
-                    var new_tile = new Tile3D(level, tile.X * 2 + x, tile.Y * 2 + y, tile.Z + z);
+                    var new_tile = new Tile3D(level, tile.X * 2 + x, tile.Y * 2 + y, tile.Z * 2 + z);
                     generateTiles3D(table, conn, epsg, geometryColumn, translation, bbox3d, maxFeaturesPerTile, level, new_tile, tiles);
                 }
             }
@@ -244,23 +259,4 @@ static List<Geometry> GetGeometries(NpgsqlConnection conn, Vector3 translation, 
     reader.Close();
     conn.Close();
     return geometries;
-}
-
-static byte[] GetSubtreeBytes(string contentAvailability, string tileAvailability, string subtreeAvailability = null)
-{
-    var subtree_root = new Subtree();
-    var s01_root = BitArrayCreator.FromString(tileAvailability);
-    subtree_root.TileAvailability = s01_root;
-
-    var s0_root = BitArrayCreator.FromString(contentAvailability);
-    subtree_root.ContentAvailability = s0_root;
-
-    if (subtreeAvailability != null)
-    {
-        var c0_root = BitArrayCreator.FromString(subtreeAvailability);
-        subtree_root.ChildSubtreeAvailability = c0_root;
-    }
-
-    var subtreebytes = SubtreeWriter.ToBytes(subtree_root);
-    return subtreebytes;
 }
